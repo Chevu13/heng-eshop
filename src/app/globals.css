@@ -1,0 +1,223 @@
+/* Samo-hostovani fontovi (bez eksternih zahteva ka Google Fonts).
+   Browser preuzima isključivo latin / latin-ext podskup — ćirilica,
+   grčki i vijetnamski se nikada ne skidaju zahvaljujući unicode-range. */
+@import '@fontsource-variable/fraunces/opsz.css';
+@import '@fontsource-variable/fraunces/opsz-italic.css';
+@import '@fontsource-variable/lora/wght.css';
+@import '@fontsource-variable/lora/wght-italic.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* boje */
+    --color-maroon: #4b262d;
+    --color-maroon-deep: #33191e;
+    --color-ivory: #efeae4;
+    --color-ivory-2: #f7f4f0;
+    --color-magenta: #c6178f;
+    --color-amber: #e08a00;
+    --color-gold: #b8934f;
+    --color-ink: #1c1416;
+
+    /* tipografija */
+    --font-display: 'Fraunces Variable', 'Fraunces', Georgia, serif;
+    --font-body: 'Lora Variable', 'Lora', Georgia, serif;
+
+    /* spacing */
+    --space-xs: 4px;  --space-sm: 8px;  --space-md: 16px;
+    --space-lg: 24px; --space-xl: 32px; --space-2xl: 48px; --space-3xl: 64px;
+
+    /* radius */
+    --radius-sm: 2px; --radius-md: 4px; --radius-pill: 999px;
+
+    /* gradient akcenat */
+    --gradient-heng: linear-gradient(
+      115deg,
+      var(--color-magenta) 0%,
+      var(--color-amber) 55%,
+      var(--color-gold) 100%
+    );
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background: var(--color-ivory-2);
+    color: var(--color-ink);
+    font-family: var(--font-body);
+    font-synthesis-weight: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  h1, h2, h3, h4 {
+    font-family: var(--font-display);
+    font-variation-settings: 'opsz' 32, 'SOFT' 20;
+    text-wrap: balance;
+  }
+
+  p { text-wrap: pretty; }
+
+  ::selection {
+    background: var(--color-maroon);
+    color: var(--color-ivory);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-gold);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  /* Sakriva strelice na number inputima u admin formama */
+  input[type='number']::-webkit-outer-spin-button,
+  input[type='number']::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  input[type='number'] { -moz-appearance: textfield; }
+}
+
+@layer components {
+  .heng-container {
+    @apply mx-auto w-full max-w-[1440px] px-6 sm:px-8 lg:px-12 xl:px-16;
+  }
+
+  .heng-eyebrow {
+    @apply font-body text-[11px] font-semibold uppercase tracking-eyebrow;
+  }
+
+  .heng-rule {
+    height: 1px;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(184, 147, 79, 0.55) 18%,
+      rgba(184, 147, 79, 0.55) 82%,
+      transparent
+    );
+  }
+
+  /* Dugmad */
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-sm border
+           font-body text-[14px] font-semibold uppercase leading-none
+           transition-all duration-300 ease-heng;
+    letter-spacing: 0.04em;
+    padding: 15px 26px;
+  }
+  .btn-primary {
+    background: var(--color-maroon);
+    color: var(--color-ivory);
+    border-color: var(--color-maroon);
+  }
+  .btn-primary:hover:not(:disabled) {
+    background: var(--color-magenta);
+    border-color: var(--color-magenta);
+  }
+  .btn-outline {
+    background: transparent;
+    color: var(--color-ink);
+    border-color: rgba(28, 20, 22, 0.28);
+  }
+  .btn-outline:hover:not(:disabled) {
+    border-color: var(--color-amber);
+    color: var(--color-amber);
+  }
+  .btn-outline-light {
+    background: transparent;
+    color: var(--color-ivory);
+    border-color: rgba(239, 234, 228, 0.38);
+  }
+  .btn-outline-light:hover:not(:disabled) {
+    border-color: var(--color-amber);
+    color: var(--color-amber);
+  }
+  .btn:disabled { opacity: 0.45; cursor: not-allowed; }
+
+  /* Tekstualni link sa zlatnim podvlačenjem */
+  .link-gold {
+    @apply relative inline-block font-body;
+    color: inherit;
+  }
+  .link-gold::after {
+    content: '';
+    position: absolute;
+    left: 0; bottom: -3px;
+    height: 1px; width: 100%;
+    background: var(--color-gold);
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .link-gold:hover::after,
+  .link-gold:focus-visible::after {
+    transform: scaleX(1);
+    transform-origin: left;
+  }
+
+  /* Polja forme */
+  .field-label {
+    @apply mb-2 block font-body text-[12px] uppercase tracking-eyebrow;
+    color: rgba(28, 20, 22, 0.62);
+  }
+  .field {
+    @apply w-full rounded-sm border bg-white/70 px-4 py-3 font-body text-[15px]
+           transition-colors duration-200;
+    border-color: rgba(28, 20, 22, 0.18);
+    color: var(--color-ink);
+  }
+  .field:focus {
+    outline: none;
+    border-color: var(--color-gold);
+    box-shadow: 0 0 0 1px rgba(184, 147, 79, 0.45);
+  }
+  .field[aria-invalid='true'] {
+    border-color: var(--color-magenta);
+  }
+  .field-error {
+    @apply mt-1.5 font-body text-[13px];
+    color: var(--color-magenta);
+  }
+
+  .skeleton {
+    @apply relative overflow-hidden;
+    background: rgba(28, 20, 22, 0.06);
+  }
+  .skeleton::after {
+    content: '';
+    position: absolute; inset: 0;
+    transform: translateX(-100%);
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.5), transparent);
+    animation: shimmer 1.6s infinite;
+  }
+  @keyframes shimmer { 100% { transform: translateX(100%); } }
+}
+
+@layer utilities {
+  .text-balance { text-wrap: balance; }
+  .gradient-text {
+    background: var(--gradient-heng);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+}
+
+/* Poštovanje prefers-reduced-motion na nivou cele aplikacije */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}

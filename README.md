@@ -127,27 +127,69 @@ politike iz migracije — inače admin stranica **Mediji** prijavljuje grešku.
 
 ## Seed podaci
 
+Bira se **jedan od dva načina** — rezultat je identičan. Seed se pokreće **jednom**;
+podaci ostaju u Supabase bazi i vaš računar posle toga nema nikakvu ulogu.
+
+### Način A — SQL u Supabase Dashboard-u (preporučeno, bez Node-a)
+
+Supabase → **SQL Editor → New query** → nalepite ceo sadržaj fajla:
+
+```
+supabase/seed/seed.sql
+```
+
+→ **Run**. Gotovo.
+
+### Način B — Node skripta
+
+Zahteva `.env.local` sa `NEXT_PUBLIC_SUPABASE_URL` i `SUPABASE_SERVICE_ROLE_KEY`:
+
 ```bash
 npm run seed
 ```
 
-Skripta unosi:
+> `seed.sql` se generiše iz istog izvora kao Node skripta (`src/lib/data/fixtures.ts`).
+> Ako menjate fixtures, regenerišite ga sa `npx tsx scripts/generate-seed-sql.ts`.
+
+### Šta se unosi
 
 - 4 kategorije,
 - 3 modela (Model 01, 02, 03) sa opisima, dimenzijama i tehničkim podacima,
 - 11 varijanti završnih obrada sa uzorcima boje,
-- kompletne galerije povezane sa obradama,
+- 17 fotografija povezanih sa proizvodima i obradama,
 - 11 sekcija početne strane,
 - podešavanja sajta.
 
-Skripta je **idempotentna** — ponovno pokretanje ažurira postojeće zapise po
+Oba načina su **idempotentna** — ponovno pokretanje ažurira postojeće zapise po
 `slug`/`key` ključu i ne pravi duplikate.
+
+Provera posle pokretanja (SQL Editor):
+
+```sql
+select count(*) from products;          -- 3
+select count(*) from product_variants;  -- 11
+select count(*) from product_media;     -- 17
+select count(*) from homepage_sections; -- 11
+```
 
 Cene su namerno ostavljene kao `NULL` uz `price_on_request = true`, pa se svuda
 prikazuje **„Cena na upit”**. Kada klijent dostavi cenovnik, unosi se kroz admin
 panel — nijedan iznos nije izmišljen.
 
----
+### Prazan katalog na sajtu?
+
+Ako je sajt povezan sa bazom a kolekcija prikazuje „Kolekcija se priprema”, u
+bazi nema objavljenih proizvoda. Provera:
+
+```sql
+select count(*) from products;
+```
+
+| Rezultat | Značenje |
+|---|---|
+| greška `relation "products" does not exist` | Migracije nisu pokrenute |
+| `0` | Migracije jesu, seed nije |
+| `3` | Sve je uneto — katalog je keširan 5 min, sačekajte ili uradite Redeploy |
 
 ## Kreiranje prvog admin naloga
 
@@ -296,7 +338,11 @@ src/
     auth.ts pricing.ts orders.ts validation.ts rate-limit.ts seo.tsx
 supabase/
   migrations/           0001_init, 0002_rls, 0003_storage
-  seed/seed.ts
+  seed/
+    seed.ts             Node varijanta (npm run seed)
+    seed.sql            SQL varijanta (nalepiti u Supabase SQL Editor)
+scripts/
+  generate-seed-sql.ts  regeneriše seed.sql iz fixtures.ts
 public/assets/heng/     organizovani brend materijal
 ```
 

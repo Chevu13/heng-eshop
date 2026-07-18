@@ -18,6 +18,21 @@ import {
  */
 export const usingLocalData = !isSupabaseConfigured;
 
+/**
+ * Greške ka bazi se NIKADA ne gutaju tiho: prazan katalog i neuspeo upit
+ * izgledaju isto na ekranu, pa se razlog mora videti u logu (Vercel →
+ * Deployments → Runtime Logs).
+ */
+function logDbError(scope: string, error: { message: string; code?: string; hint?: string | null; details?: string | null }) {
+  console.error(
+    `[HENG/baza] Upit „${scope}” nije uspeo — katalog će biti prazan.\n` +
+    `  poruka: ${error.message}\n` +
+    `  kod:    ${error.code ?? '—'}\n` +
+    `  detalj: ${error.details ?? '—'}\n` +
+    `  savet:  ${error.hint ?? '—'}`,
+  );
+}
+
 const PRODUCT_SELECT = `
   *,
   category:categories(*),
@@ -39,14 +54,16 @@ export const getCategories = cache(async (): Promise<Category[]> => {
   const { data, error } = await sb
     .from('categories').select('*')
     .eq('is_published', true).order('sort_order');
-  if (error) return [];
+  if (error) { logDbError('kategorije', error); return []; }
   return (data ?? []) as Category[];
 });
 
 export const getCategory = cache(async (slug: string): Promise<Category | null> => {
   const sb = createPublicSupabase();
   if (!sb) return CATEGORIES.find((c) => c.slug === slug && c.is_published) ?? null;
-  const { data } = await sb.from('categories').select('*').eq('slug', slug).maybeSingle();
+  const { data, error } = await sb
+    .from('categories').select('*').eq('slug', slug).maybeSingle();
+  if (error) logDbError(`kategorija ${slug}`, error);
   return (data as Category) ?? null;
 });
 
@@ -57,7 +74,7 @@ export const getProducts = cache(async (): Promise<ProductFull[]> => {
     .from('products').select(PRODUCT_SELECT)
     .eq('is_published', true).eq('is_archived', false)
     .order('sort_order');
-  if (error) return [];
+  if (error) { logDbError('proizvodi', error); return []; }
   return ((data ?? []) as unknown as ProductFull[]).map(sortProduct);
 });
 
@@ -67,10 +84,11 @@ export const getProduct = cache(async (slug: string): Promise<ProductFull | null
     const p = PRODUCTS.find((x) => x.slug === slug && x.is_published && !x.is_archived);
     return p ? sortProduct(p) : null;
   }
-  const { data } = await sb
+  const { data, error } = await sb
     .from('products').select(PRODUCT_SELECT)
     .eq('slug', slug).eq('is_published', true).eq('is_archived', false)
     .maybeSingle();
+  if (error) logDbError(`proizvod ${slug}`, error);
   return data ? sortProduct(data as unknown as ProductFull) : null;
 });
 
@@ -97,6 +115,7 @@ export const getHomepageSections = cache(async (): Promise<HomepageSection[]> =>
   const { data, error } = await sb
     .from('homepage_sections').select('*')
     .eq('is_visible', true).order('sort_order');
+  if (error) logDbError('sekcije početne strane', error);
   if (error || !data?.length) return HOMEPAGE_SECTIONS.filter((s) => s.is_visible);
   return data as HomepageSection[];
 });
@@ -110,6 +129,7 @@ export const getSettings = cache(async (): Promise<SiteSettings> => {
   const sb = createPublicSupabase();
   if (!sb) return SITE_SETTINGS;
   const { data, error } = await sb.from('site_settings').select('*').eq('id', 1).maybeSingle();
+  if (error) logDbError('podešavanja sajta', error);
   if (error || !data) return SITE_SETTINGS;
   return { ...SITE_SETTINGS, ...(data as Partial<SiteSettings>) };
 });

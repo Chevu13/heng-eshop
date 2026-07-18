@@ -190,8 +190,51 @@ nestaje sa sajta, a porudžbina se evidentira bez provere zalihe.
 
 ### Prazan katalog na sajtu?
 
-Ako je sajt povezan sa bazom a kolekcija prikazuje „Kolekcija se priprema”, u
-bazi nema objavljenih proizvoda. Provera:
+**Prvo otvorite `/api/status` na sajtu** (npr. `https://vas-domen.rs/api/status`).
+Stranica u jasnom obliku kaže gde je problem — ne morate da nagađate.
+
+Primeri odgovora:
+
+```jsonc
+// Sve u redu:
+{ "rezim": "BAZA …", "tabele": { "proizvodi_objavljeni": 3, … },
+  "zakljucak": "Sve u redu — 3 objavljenih proizvoda …" }
+
+// Baza povezana ali prazna:
+{ "zakljucak": "Baza je prazna — pokrenite seed (heng-seed.sql …)." }
+
+// Upit pao (najčešće: migracije/RLS nisu primenjeni ili pogrešan anon ključ):
+{ "tabele": { "proizvodi_objavljeni": { "greska": "…", "kod": "…" } },
+  "zakljucak": "Upit ka `products` je PAO. …" }
+
+// Aplikacija uopšte ne vidi Supabase (fali/pogrešan NEXT_PUBLIC_ ključ):
+{ "rezim": "DEMO — nema NEXT_PUBLIC_SUPABASE_URL / ANON_KEY …" }
+```
+
+> Ako piše **DEMO** a očekujete bazu — promenljive `NEXT_PUBLIC_SUPABASE_URL` i
+> `NEXT_PUBLIC_SUPABASE_ANON_KEY` nisu stigle do build-a. Na Vercelu ih dodajte
+> za *Production*, pa uradite **Redeploy** (izmena env promenljive ne pokreće
+> build automatski).
+
+Dodatna dijagnostika po tabeli:
+
+
+
+Ako je sajt povezan sa bazom a kolekcija prikazuje „Kolekcija se priprema”,
+**otvorite `/api/health`** na svom domenu — vraća tačan razlog:
+
+| `status` | Značenje | Rešenje |
+|---|---|---|
+| `DEMO` | Supabase ključevi nisu postavljeni | Dodajte env promenljive na Vercel |
+| `GRESKA_UPITA` | Upit ne prolazi kroz RLS | Migracija `0002_rls.sql` nije primenjena, ili pogrešan anon ključ |
+| `PRAZNA_BAZA` | Veza radi, nema proizvoda | Pokrenite `heng-seed.sql` u SQL Editor-u |
+| `NISU_OBJAVLJENI` | Proizvodi postoje, nijedan objavljen | Uključite „Objavljen” u adminu ili ponovo pokrenite seed |
+| `OK` | Sve radi | Sačekajte keš (5 min) ili uradite Redeploy |
+
+Endpoint ne otkriva tajne — samo brojače po tabeli i status veze. Detaljne
+greške baze idu i u **Vercel → Deployments → Runtime Logs** (prefiks `[HENG/baza]`).
+
+Ručna provera u Supabase SQL Editor-u:
 
 ```sql
 select count(*) from products;

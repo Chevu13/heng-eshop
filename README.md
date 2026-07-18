@@ -216,6 +216,18 @@ Primeri odgovora:
 > za *Production*, pa uradite **Redeploy** (izmena env promenljive ne pokreće
 > build automatski).
 
+**Greška `PGRST125` / „Invalid path" u logovima?**
+PostgREST radi po zastarelom keširanju šeme (dešava se posle ručnih izmena tabela).
+Osvežite ga — Supabase → **SQL Editor**:
+
+```sql
+notify pgrst, 'reload schema';
+```
+
+Ili: Supabase → **Settings → API → Restart server**. Zatim Redeploy na Vercelu.
+(Aplikacija i bez ovoga radi — `getSettings` ima ugrađeni fallback — ali time se
+uklanja greška iz logova.)
+
 Dodatna dijagnostika po tabeli:
 
 

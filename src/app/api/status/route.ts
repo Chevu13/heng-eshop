@@ -12,9 +12,24 @@ export const dynamic = 'force-dynamic';
  * Ne otkriva ključeve niti podatke kupaca; bezbedno je za privremenu proveru.
  */
 export async function GET() {
+  // project-ref = poddomen Supabase URL-a (npr. abcd1234 iz abcd1234.supabase.co).
+  // Nije tajna; služi da se uporedi na koji projekat je Vercel povezan.
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL ?? '';
+  let projectRef = '(nema)';
+  try { projectRef = url ? new URL(url).hostname.split('.')[0] : '(nema)'; } catch { projectRef = '(neispravan URL)'; }
+
+  // Otisak anon ključa: prvih/zadnjih par znakova, da se vidi da li je isti
+  // ključ kao u Supabase-u — bez otkrivanja celog ključa.
+  const anon = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? '';
+  const anonOtisak = anon
+    ? `${anon.slice(0, 6)}…${anon.slice(-4)} (dužina ${anon.length})`
+    : '(nema)';
+
   const report: Record<string, unknown> = {
     vreme: new Date().toISOString(),
     supabase_konfigurisan: isSupabaseConfigured,
+    supabase_projekat_ref: projectRef,
+    anon_kljuc_otisak: anonOtisak,
     site_url: process.env.NEXT_PUBLIC_SITE_URL ?? '(nije postavljen)',
   };
 
@@ -47,6 +62,28 @@ export async function GET() {
       : (count ?? 0);
   }
   report.tabele = tables;
+
+  // Uzorak: da li getProducts stvarno vraća redove sa varijantama i medijima.
+  const { data: sample, error: sampleErr } = await sb
+    .from('products')
+    .select('name, slug, is_published, price_rsd, variants:product_variants(id), media:product_media(id)')
+    .eq('is_published', true).eq('is_archived', false)
+    .order('sort_order').limit(3);
+  report.uzorak_proizvoda = sampleErr
+    ? { greska: sampleErr.message, kod: sampleErr.code ?? null }
+    : (sample ?? []).map((p) => ({
+        naziv: (p as { name: string }).name,
+        cena: (p as { price_rsd: number | null }).price_rsd,
+        varijante: ((p as { variants?: unknown[] }).variants ?? []).length,
+        mediji: ((p as { media?: unknown[] }).media ?? []).length,
+      }));
+
+  // Tačno stanje site_settings (izvor PGRST125 iz logova).
+  const { data: st, error: stErr } = await sb
+    .from('site_settings').select('id, brand_name').limit(1);
+  report.site_settings = stErr
+    ? { greska: stErr.message, kod: stErr.code ?? null, savet: stErr.hint ?? null }
+    : { redova: (st ?? []).length, sadrzaj: st ?? [] };
 
   // Zaključak u ljudskom obliku.
   const objavljeni = tables.proizvodi_objavljeni;

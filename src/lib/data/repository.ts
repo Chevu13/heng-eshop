@@ -128,10 +128,16 @@ export async function getSection(key: string): Promise<HomepageSection | null> {
 export const getSettings = cache(async (): Promise<SiteSettings> => {
   const sb = createPublicSupabase();
   if (!sb) return SITE_SETTINGS;
-  const { data, error } = await sb.from('site_settings').select('*').eq('id', 1).maybeSingle();
-  if (error) logDbError('podešavanja sajta', error);
-  if (error || !data) return SITE_SETTINGS;
-  return { ...SITE_SETTINGS, ...(data as Partial<SiteSettings>) };
+  // `.limit(1)` + čitanje prvog reda je otpornije od `.eq('id',1).maybeSingle()`:
+  // izbegava PGRST125 kada je PostgREST schema-cache zastareo posle DDL-a,
+  // a i dalje radi jer je tabela singleton (jedini red je id = 1).
+  const { data, error } = await sb.from('site_settings').select('*').limit(1);
+  if (error) {
+    logDbError('podešavanja sajta', error);
+    return SITE_SETTINGS;
+  }
+  const row = data?.[0] as Partial<SiteSettings> | undefined;
+  return row ? { ...SITE_SETTINGS, ...row } : SITE_SETTINGS;
 });
 
 export const getGallery = cache(async () => {

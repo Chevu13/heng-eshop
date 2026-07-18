@@ -87,3 +87,28 @@ create policy "podesavanja: javno čitanje" on site_settings
   for select using (true);
 create policy "podesavanja: admin upis" on site_settings
   for all using (is_admin()) with check (is_admin());
+
+-- =============================================================
+-- Pristup PostgREST role-ovima (anon, authenticated).
+-- BEZ ovoga PostgREST ne vidi tabele i vraća PGRST125 „Invalid path”,
+-- čak i kada su RLS politike ispravne — grant se proverava PRE RLS-a.
+-- =============================================================
+grant usage on schema public to anon, authenticated;
+
+-- Čitanje: RLS politike iznad i dalje filtriraju šta je zaista vidljivo.
+grant select on all tables in schema public to anon, authenticated;
+
+-- Upis za prijavljene (admin provere rade RLS politike).
+grant insert, update, delete on all tables in schema public to authenticated;
+
+-- Isto važi i za tabele napravljene ubuduće.
+alter default privileges in schema public
+  grant select on tables to anon, authenticated;
+alter default privileges in schema public
+  grant insert, update, delete on tables to authenticated;
+
+-- Sekvence (za default vrednosti / brojače).
+grant usage, select on all sequences in schema public to anon, authenticated;
+
+-- Osveži PostgREST keš šeme.
+notify pgrst, 'reload schema';

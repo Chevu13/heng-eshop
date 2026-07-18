@@ -86,6 +86,7 @@ Migracije se nalaze u `supabase/migrations/` i primenjuju se **redom**:
 | `0001_init.sql` | Tabele, tipovi, indeksi, trigeri, `is_admin()` |
 | `0002_rls.sql` | Row Level Security politike |
 | `0003_storage.sql` | Storage bucket-i i politike pristupa |
+| `0004_fix_grants.sql` | GRANT pristup PostgREST role-ovima (anon/authenticated) |
 
 **Opcija A — Supabase Dashboard**
 SQL Editor → nalepite sadržaj svakog fajla redom → Run.
@@ -215,6 +216,27 @@ Primeri odgovora:
 > `NEXT_PUBLIC_SUPABASE_ANON_KEY` nisu stigle do build-a. Na Vercelu ih dodajte
 > za *Production*, pa uradite **Redeploy** (izmena env promenljive ne pokreće
 > build automatski).
+
+**Greška `PGRST125` / „Invalid path" — a `/api/status` pokazuje 0 u svim tabelama, ali `select count(*)` u SQL Editor-u vraća prave brojeve?**
+
+Klasičan simptom: tabele postoje, seed je prošao, ali PostgREST (REST sloj koji
+koristi anon ključ) **nema `GRANT` pristup** tabelama. `count` preko `head` prođe,
+a čim se traži pravi red — `permission denied` = PGRST125. Rešenje, SQL Editor:
+
+```sql
+-- Pustiti sadržaj supabase/migrations/0004_fix_grants.sql, ili direktno:
+grant usage on schema public to anon, authenticated;
+grant select on all tables in schema public to anon, authenticated;
+grant insert, update, delete on all tables in schema public to authenticated;
+alter default privileges in schema public grant select on tables to anon, authenticated;
+notify pgrst, 'reload schema';
+```
+
+Sačekajte ~30 s (osvežavanje keša) i ponovo otvorite `/api/status`.
+RLS ostaje aktivan — grant samo daje PostgREST-u da „vidi" tabele; **šta** je vidljivo
+i dalje određuju RLS politike iz `0002`.
+
+---
 
 **Greška `PGRST125` / „Invalid path" u logovima?**
 PostgREST radi po zastarelom keširanju šeme (dešava se posle ručnih izmena tabela).

@@ -49,10 +49,10 @@ export function SearchOverlay({ open, onClose }: { open: boolean; onClose: () =>
               id="pretraga" ref={inputRef} type="search" value={q}
               onChange={(e) => setQ(e.target.value)}
               placeholder="Model, obrada, dimenzija…"
-              className="w-full border-b border-ivory/25 bg-transparent pb-4 font-display text-[28px] text-ivory outline-none placeholder:text-ivory/30 focus:border-gold sm:text-[36px]"
+              className="w-full border-b border-ivory/25 bg-transparent pb-4 font-display text-[28px] text-ivory outline-none placeholder:text-ivory/45 focus:border-gold sm:text-[36px]"
               style={{ fontWeight: 600 }}
             />
-            <p className="mt-5 font-body text-[13px] text-ivory/50">
+            <p className="mt-5 font-body text-[13px] text-ivory/60">
               Pritisnite Enter za pretragu kolekcije.
             </p>
           </form>

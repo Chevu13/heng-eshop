@@ -57,7 +57,7 @@ Montaža: dva otvora za pričvršćivanje na profilu.',
   'Profil se pričvršćuje kroz dva postojeća otvora. Preporučuje se montaža u nosivu podlogu ili odgovarajući tiplovani spoj, uz proveru da ispod profila ostane dovoljno visine za čašu.',
   'Isporuka na teritoriji Srbije. Rok i trošak isporuke potvrđuju se pri obradi porudžbine.',
   'Eloksirana legura aluminijuma', '31,5 × 8,6 × 2 cm', 'MODEL-01',
-  NULL, NULL, true, 0, ARRAY['čaše', 'profil', 'podpultna montaža']::text[],
+  1500, NULL, false, 25, ARRAY['čaše', 'profil', 'podpultna montaža']::text[],
   true, true, false, 1,
   'Model 01 — nosač za vinske čaše | HENG', 'Rebrasti aluminijumski profil za vinske čaše, 31,5 × 8,6 × 2 cm. Obrade: crna mat, zlatna, saten zlatna.', '/assets/heng/products/model-01/model-01-sve-obrade.jpg'
 ) on conflict (slug) do update set
@@ -79,7 +79,7 @@ insert into product_variants (
 ) values (
   (select id from products where slug = 'model-01'),
   'Crna mat', 'crna-mat', '#1C1416', 'MODEL-01-CRNA-MAT',
-  NULL, NULL, 0, '31,5 × 8,6 × 2 cm',
+  1500, NULL, 25, '31,5 × 8,6 × 2 cm',
   '/assets/heng/products/model-01/model-01-crna-mat.jpg', ARRAY['/assets/heng/products/model-01/model-01-crna-mat.jpg', '/assets/heng/products/model-01/model-01-sve-obrade.jpg', '/assets/heng/products/model-01/model-01-dimenzije.jpg']::text[], true, 0
 ) on conflict (product_id, finish_code) do update set
   finish_name = excluded.finish_name, finish_swatch = excluded.finish_swatch,
@@ -95,7 +95,7 @@ insert into product_variants (
 ) values (
   (select id from products where slug = 'model-01'),
   'Zlatna', 'zlatna', '#C79A4A', 'MODEL-01-ZLATNA',
-  NULL, NULL, 0, '31,5 × 8,6 × 2 cm',
+  1500, NULL, 25, '31,5 × 8,6 × 2 cm',
   '/assets/heng/products/model-01/model-01-zlatna.jpg', ARRAY['/assets/heng/products/model-01/model-01-zlatna.jpg', '/assets/heng/products/model-01/model-01-sve-obrade.jpg', '/assets/heng/products/model-01/model-01-dimenzije.jpg']::text[], true, 1
 ) on conflict (product_id, finish_code) do update set
   finish_name = excluded.finish_name, finish_swatch = excluded.finish_swatch,
@@ -111,7 +111,7 @@ insert into product_variants (
 ) values (
   (select id from products where slug = 'model-01'),
   'Saten zlatna', 'saten-zlatna', '#D8B45E', 'MODEL-01-SATEN-ZLATNA',
-  NULL, NULL, 0, '31,5 × 8,6 × 2 cm',
+  1500, NULL, 25, '31,5 × 8,6 × 2 cm',
   '/assets/heng/products/model-01/model-01-saten-zlatna.jpg', ARRAY['/assets/heng/products/model-01/model-01-saten-zlatna.jpg', '/assets/heng/products/model-01/model-01-sve-obrade.jpg', '/assets/heng/products/model-01/model-01-dimenzije.jpg']::text[], true, 2
 ) on conflict (product_id, finish_code) do update set
   finish_name = excluded.finish_name, finish_swatch = excluded.finish_swatch,
@@ -173,7 +173,7 @@ Montaža: dva otvora na leđnoj strani nosača.',
   'Nosač se montira kroz dva otvora na vertikalnoj strani. Pri montaži u nizu preporučuje se obeležavanje zajedničke ose kako bi prorezi ostali poravnati.',
   'Isporuka na teritoriji Srbije. Rok i trošak isporuke potvrđuju se pri obradi porudžbine.',
   'Eloksirana legura aluminijuma', '30 × 10 × 4 cm', 'MODEL-02',
-  NULL, NULL, true, 0, ARRAY['čaše', 'ugaoni nosač', 'zidna montaža']::text[],
+  2000, NULL, false, 25, ARRAY['čaše', 'ugaoni nosač', 'zidna montaža']::text[],
   true, true, false, 2,
   'Model 02 — ugaoni nosač za vinske čaše | HENG', 'Aluminijumski ugaoni nosač za vinske čaše, 30 × 10 × 4 cm. Obrade: crna mat, grafit, zlatna, saten zlatna.', '/assets/heng/products/model-02/model-02-sve-obrade.jpg'
 ) on conflict (slug) do update set
@@ -195,7 +195,7 @@ insert into product_variants (
 ) values (
   (select id from products where slug = 'model-02'),
   'Crna mat', 'crna-mat', '#1C1416', 'MODEL-02-CRNA-MAT',
-  NULL, NULL, 0, '30 × 10 × 4 cm',
+  2000, NULL, 25, '30 × 10 × 4 cm',
   '/assets/heng/products/model-02/model-02-crna-mat.jpg', ARRAY['/assets/heng/products/model-02/model-02-crna-mat.jpg', '/assets/heng/products/model-02/model-02-sve-obrade.jpg', '/assets/heng/products/model-02/model-02-dimenzije.jpg']::text[], true, 0
 ) on conflict (product_id, finish_code) do update set
   finish_name = excluded.finish_name, finish_swatch = excluded.finish_swatch,
@@ -211,7 +211,7 @@ insert into product_variants (
 ) values (
   (select id from products where slug = 'model-02'),
   'Grafit', 'grafit', '#8C8477', 'MODEL-02-GRAFIT',
-  NULL, NULL, 0, '30 × 10 × 4 cm',
+  2000, NULL, 25, '30 × 10 × 4 cm',
   '/assets/heng/products/model-02/model-02-grafit.jpg', ARRAY['/assets/heng/products/model-02/model-02-grafit.jpg', '/assets/heng/products/model-02/model-02-sve-obrade.jpg', '/assets/heng/products/model-02/model-02-dimenzije.jpg']::text[], true, 1
 ) on conflict (product_id, finish_code) do update set
   finish_name = excluded.finish_name, finish_swatch = excluded.finish_swatch,
@@ -227,7 +227,7 @@ insert into product_variants (
 ) values (
   (select id from products where slug = 'model-02'),
   'Zlatna', 'zlatna', '#C79A4A', 'MODEL-02-ZLATNA',
-  NULL, NULL, 0, '30 × 10 × 4 cm',
+  2000, NULL, 25, '30 × 10 × 4 cm',
   '/assets/heng/products/model-02/model-02-zlatna.jpg', ARRAY['/assets/heng/products/model-02/model-02-zlatna.jpg', '/assets/heng/products/model-02/model-02-sve-obrade.jpg', '/assets/heng/products/model-02/model-02-dimenzije.jpg']::text[], true, 2
 ) on conflict (product_id, finish_code) do update set
   finish_name = excluded.finish_name, finish_swatch = excluded.finish_swatch,
@@ -243,7 +243,7 @@ insert into product_variants (
 ) values (
   (select id from products where slug = 'model-02'),
   'Saten zlatna', 'saten-zlatna', '#D8B45E', 'MODEL-02-SATEN-ZLATNA',
-  NULL, NULL, 0, '30 × 10 × 4 cm',
+  2000, NULL, 25, '30 × 10 × 4 cm',
   '/assets/heng/products/model-02/model-02-saten-zlatna.jpg', ARRAY['/assets/heng/products/model-02/model-02-saten-zlatna.jpg', '/assets/heng/products/model-02/model-02-sve-obrade.jpg', '/assets/heng/products/model-02/model-02-dimenzije.jpg']::text[], true, 3
 ) on conflict (product_id, finish_code) do update set
   finish_name = excluded.finish_name, finish_swatch = excluded.finish_swatch,
@@ -311,7 +311,7 @@ Montaža: dva otvora na leđnoj strani nosača.',
   'Nosač se pričvršćuje kroz dva otvora na leđnoj ploči. Za vinske zidove preporučuje se prethodno raspoređivanje na crtežu, kako bi vertikalni i horizontalni razmaci ostali dosledni.',
   'Isporuka na teritoriji Srbije. Rok i trošak isporuke potvrđuju se pri obradi porudžbine.',
   'Eloksirana legura aluminijuma', '27 × 10 × 4 cm', 'MODEL-03',
-  NULL, NULL, true, 0, ARRAY['flaše', 'vinski zid', 'zidna montaža']::text[],
+  4000, NULL, false, 25, ARRAY['flaše', 'vinski zid', 'zidna montaža']::text[],
   true, true, false, 3,
   'Model 03 — zidni nosač za vinske flaše | HENG', 'Aluminijumski zidni nosač za flašu vina, 27 × 10 × 4 cm. Obrade: crna mat, grafit, zlatna, saten zlatna.', '/assets/heng/products/model-03/model-03-sve-obrade.jpg'
 ) on conflict (slug) do update set
@@ -333,7 +333,7 @@ insert into product_variants (
 ) values (
   (select id from products where slug = 'model-03'),
   'Crna mat', 'crna-mat', '#1C1416', 'MODEL-03-CRNA-MAT',
-  NULL, NULL, 0, '27 × 10 × 4 cm',
+  4000, NULL, 25, '27 × 10 × 4 cm',
   '/assets/heng/products/model-03/model-03-crna-mat.jpg', ARRAY['/assets/heng/products/model-03/model-03-crna-mat.jpg', '/assets/heng/products/model-03/model-03-sve-obrade.jpg', '/assets/heng/products/model-03/model-03-dimenzije.jpg']::text[], true, 0
 ) on conflict (product_id, finish_code) do update set
   finish_name = excluded.finish_name, finish_swatch = excluded.finish_swatch,
@@ -349,7 +349,7 @@ insert into product_variants (
 ) values (
   (select id from products where slug = 'model-03'),
   'Grafit', 'grafit', '#8C8477', 'MODEL-03-GRAFIT',
-  NULL, NULL, 0, '27 × 10 × 4 cm',
+  4000, NULL, 25, '27 × 10 × 4 cm',
   '/assets/heng/products/model-03/model-03-grafit.jpg', ARRAY['/assets/heng/products/model-03/model-03-grafit.jpg', '/assets/heng/products/model-03/model-03-sve-obrade.jpg', '/assets/heng/products/model-03/model-03-dimenzije.jpg']::text[], true, 1
 ) on conflict (product_id, finish_code) do update set
   finish_name = excluded.finish_name, finish_swatch = excluded.finish_swatch,
@@ -365,7 +365,7 @@ insert into product_variants (
 ) values (
   (select id from products where slug = 'model-03'),
   'Zlatna', 'zlatna', '#C79A4A', 'MODEL-03-ZLATNA',
-  NULL, NULL, 0, '27 × 10 × 4 cm',
+  4000, NULL, 25, '27 × 10 × 4 cm',
   '/assets/heng/products/model-03/model-03-zlatna.jpg', ARRAY['/assets/heng/products/model-03/model-03-zlatna.jpg', '/assets/heng/products/model-03/model-03-sve-obrade.jpg', '/assets/heng/products/model-03/model-03-dimenzije.jpg']::text[], true, 2
 ) on conflict (product_id, finish_code) do update set
   finish_name = excluded.finish_name, finish_swatch = excluded.finish_swatch,
@@ -381,7 +381,7 @@ insert into product_variants (
 ) values (
   (select id from products where slug = 'model-03'),
   'Saten zlatna', 'saten-zlatna', '#D8B45E', 'MODEL-03-SATEN-ZLATNA',
-  NULL, NULL, 0, '27 × 10 × 4 cm',
+  4000, NULL, 25, '27 × 10 × 4 cm',
   '/assets/heng/products/model-03/model-03-saten-zlatna.jpg', ARRAY['/assets/heng/products/model-03/model-03-saten-zlatna.jpg', '/assets/heng/products/model-03/model-03-sve-obrade.jpg', '/assets/heng/products/model-03/model-03-dimenzije.jpg']::text[], true, 3
 ) on conflict (product_id, finish_code) do update set
   finish_name = excluded.finish_name, finish_swatch = excluded.finish_swatch,
@@ -438,7 +438,7 @@ on conflict (key) do update set
   sort_order = excluded.sort_order, content = excluded.content;
 
 insert into homepage_sections (key, title, is_visible, sort_order, content)
-values ('hero', 'Hero', true, 1, '{"eyebrow":"DIZAJNIRANO ZA SAVREMENE ENTERIJERE","heading":"Vino zaslužuje svoje mesto.","body":"Aluminijumski nosači za vino i čaše koji spajaju funkciju, preciznost i savremenu estetiku.","primaryLabel":"Pogledaj kolekciju","primaryHref":"/kolekcija","secondaryLabel":"Zatraži ponudu","secondaryHref":"/projekti","mediaUrl":"/assets/heng/interiors/mermerni-zid-sa-lusterom.jpg","mediaAlt":"Bar u mermeru sa HENG sistemom i dizajnerskim lusterom","videoUrl":null,"videoPoster":null}'::jsonb)
+values ('hero', 'Hero', true, 1, '{"eyebrow":"DIZAJNIRANO ZA SAVREMENE ENTERIJERE","heading":"Vino zaslužuje svoje mesto.","body":"Aluminijumski nosači za vino i čaše koji spajaju funkciju, preciznost i savremenu estetiku.","primaryLabel":"Pogledaj kolekciju","primaryHref":"/kolekcija","secondaryLabel":"Zatraži ponudu","secondaryHref":"/projekti","mediaUrl":"/assets/heng/lifestyle/zlatna-letva-sa-casama-hero.jpg","mediaAlt":"Čaše obešene na zlatnoj HENG letvi ispod kuhinjskog elementa","videoUrl":null,"videoPoster":null}'::jsonb)
 on conflict (key) do update set
   title = excluded.title, is_visible = excluded.is_visible,
   sort_order = excluded.sort_order, content = excluded.content;

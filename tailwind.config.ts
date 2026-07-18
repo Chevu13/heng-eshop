@@ -26,6 +26,12 @@ const config: Config = {
           'linear-gradient(115deg, #C6178F 0%, #E08A00 55%, #B8934F 100%)',
       },
       letterSpacing: { eyebrow: '0.18em' },
+      // Puna skala 0–100. Podrazumevana Tailwind skala ide u koracima od 5,
+      // pa vrednosti poput `text-ivory/62` ne generišu klasu i tekst tiho
+      // nasledi boju roditelja — na tamnim sekcijama to je nečitljivo.
+      opacity: Object.fromEntries(
+        Array.from({ length: 101 }, (_, i) => [i, String(i / 100)]),
+      ),
       transitionTimingFunction: { heng: 'cubic-bezier(0.16, 1, 0.3, 1)' },
       keyframes: {
         'fade-up': {

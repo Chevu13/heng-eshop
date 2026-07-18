@@ -25,6 +25,12 @@ export const ASSET_MANIFEST: AssetEntry[] = [
     alt: 'HENG wordmark preko fotografije bara sa obešenim čašama',
   },
   {
+    original: 'SnapInsta_to_486056630_17872132080323943_7946251911507019582_n.jpg',
+    path: '/assets/heng/lifestyle/zlatna-letva-sa-casama-hero.jpg',
+    group: 'lifestyle',
+    alt: 'Čaše obešene na zlatnoj HENG letvi ispod kuhinjskog elementa',
+  },
+  {
     original: 'SnapInsta_to_489016074_17873646567323943_8058702439091683174_n.jpg',
     path: '/assets/heng/lifestyle/case-nad-barom-heng.jpg',
     group: 'lifestyle',

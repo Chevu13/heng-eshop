@@ -172,9 +172,21 @@ select count(*) from product_media;     -- 17
 select count(*) from homepage_sections; -- 11
 ```
 
-Cene su namerno ostavljene kao `NULL` uz `price_on_request = true`, pa se svuda
-prikazuje **„Cena na upit”**. Kada klijent dostavi cenovnik, unosi se kroz admin
-panel — nijedan iznos nije izmišljen.
+### Cene i zalihe
+
+| Model | Cena | Zaliha po obradi |
+|---|---|---|
+| Model 01 — nosač za čaše | 1.500 RSD | 25 |
+| Model 02 — nosač za čaše | 2.000 RSD | 25 |
+| Model 03 — nosač za flaše | 4.000 RSD | 25 |
+
+Cene su dostavljene od klijenta. **Zaliha od 25 komada po obradi je pretpostavka za
+start** — čim proizvod ima cenu, server pri svakoj porudžbini proverava zalihu, pa bi
+vrednost `0` blokirala svaku kupovinu. Podesite stvarne količine u
+**/admin/proizvodi → Varijante i obrade**.
+
+Mehanika „Cena na upit” ostaje u kodu: uključivanjem prekidača na proizvodu iznos
+nestaje sa sajta, a porudžbina se evidentira bez provere zalihe.
 
 ### Prazan katalog na sajtu?
 

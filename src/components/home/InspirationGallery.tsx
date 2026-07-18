@@ -108,7 +108,7 @@ export function InspirationGallery({ items, columns = SPANS }: {
               <button onClick={() => step(-1)} className="link-gold font-body text-[12px] uppercase tracking-eyebrow text-ivory/70">
                 Prethodna
               </button>
-              <span className="font-body text-[12px] text-ivory/40 tabular-nums">
+              <span className="font-body text-[12px] text-ivory/60 tabular-nums">
                 {open + 1} / {items.length}
               </span>
               <button onClick={() => step(1)} className="link-gold font-body text-[12px] uppercase tracking-eyebrow text-ivory/70">

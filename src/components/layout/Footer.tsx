@@ -97,10 +97,10 @@ export function Footer({
         <div className="heng-rule mt-14" />
 
         <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-          <p className="font-body text-[12px] text-ivory/45">
+          <p className="font-body text-[12px] text-ivory/60">
             © {year} {settings.brand_name}. Sva prava zadržana.
           </p>
-          <p className="font-body text-[12px] text-ivory/45">
+          <p className="font-body text-[12px] text-ivory/60">
             Isporuka na teritoriji Srbije · Plaćanje pouzećem ili po predračunu
           </p>
         </div>

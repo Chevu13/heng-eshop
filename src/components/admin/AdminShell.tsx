@@ -90,7 +90,7 @@ export function AdminShell({
 
           <div className="mt-8 lg:mt-auto">
             <div className="heng-rule mb-5" />
-            <p className="truncate font-body text-[12px] text-ivory/45">{session.email}</p>
+            <p className="truncate font-body text-[12px] text-ivory/60">{session.email}</p>
             <div className="mt-3 flex items-center gap-4">
               <Link href="/" className="link-gold font-body text-[12px] text-ivory/60">Sajt</Link>
               <button onClick={logout} className="link-gold font-body text-[12px] text-ivory/60">

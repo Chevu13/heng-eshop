@@ -36,7 +36,7 @@ export function Hero({ content }: { content: HeroContent }) {
         className="absolute inset-0"
         style={{
           background:
-            'linear-gradient(to top, rgba(51,25,30,0.92) 0%, rgba(51,25,30,0.55) 34%, rgba(51,25,30,0.12) 62%, rgba(51,25,30,0.42) 100%)',
+            'linear-gradient(to top, rgba(51,25,30,0.94) 0%, rgba(51,25,30,0.78) 26%, rgba(51,25,30,0.34) 58%, rgba(51,25,30,0.10) 78%, rgba(51,25,30,0.45) 100%)',
         }}
       />
 

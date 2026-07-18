@@ -62,8 +62,12 @@ export const CATEGORIES: Category[] = [
 
 const MATERIAL = 'Eloksirana legura aluminijuma';
 
+/** Podrazumevana zaliha po obradi — vrednost za start, menja se u adminu. */
+const DEFAULT_STOCK = 25;
+
 function variant(
   productId: string, model: string, code: FinishCode, dims: string, order: number,
+  price: number,
 ): ProductVariant {
   const f = FINISHES.find((x) => x.code === code)!;
   return {
@@ -73,9 +77,9 @@ function variant(
     finish_code: f.code,
     finish_swatch: f.swatch,
     sku: `${model.toUpperCase()}-${code.toUpperCase()}`,
-    price_rsd: null,
+    price_rsd: price,
     sale_price_rsd: null,
-    stock: 0,
+    stock: DEFAULT_STOCK,
     dimensions: dims,
     main_image: `/assets/heng/products/${model}/${model}-${code}.jpg`,
     gallery: [
@@ -149,12 +153,12 @@ export const PRODUCTS: ProductFull[] = [
     material: MATERIAL,
     dimensions: '31,5 × 8,6 × 2 cm',
     sku: 'MODEL-01',
-    price_rsd: null,
+    price_rsd: 1500,
     sale_price_rsd: null,
     sale_starts_at: null,
     sale_ends_at: null,
-    price_on_request: true,
-    stock: 0,
+    price_on_request: false,
+    stock: 25,
     tags: ['čaše', 'profil', 'podpultna montaža'],
     is_featured: true,
     is_published: true,
@@ -165,7 +169,7 @@ export const PRODUCTS: ProductFull[] = [
       'Rebrasti aluminijumski profil za vinske čaše, 31,5 × 8,6 × 2 cm. Obrade: crna mat, zlatna, saten zlatna.',
     og_image: '/assets/heng/products/model-01/model-01-sve-obrade.jpg',
     category: CATEGORIES[0],
-    variants: M1_FINISHES.map((c, i) => variant('prd-model-01', 'model-01', c, '31,5 × 8,6 × 2 cm', i)),
+    variants: M1_FINISHES.map((c, i) => variant('prd-model-01', 'model-01', c, '31,5 × 8,6 × 2 cm', i, 1500)),
     media: media('prd-model-01', 'model-01', M1_FINISHES, [
       'Model 01 u crnoj mat obradi', 'Model 01 u zlatnoj obradi', 'Model 01 u saten zlatnoj obradi',
     ]),
@@ -193,12 +197,12 @@ export const PRODUCTS: ProductFull[] = [
     material: MATERIAL,
     dimensions: '30 × 10 × 4 cm',
     sku: 'MODEL-02',
-    price_rsd: null,
+    price_rsd: 2000,
     sale_price_rsd: null,
     sale_starts_at: null,
     sale_ends_at: null,
-    price_on_request: true,
-    stock: 0,
+    price_on_request: false,
+    stock: 25,
     tags: ['čaše', 'ugaoni nosač', 'zidna montaža'],
     is_featured: true,
     is_published: true,
@@ -209,7 +213,7 @@ export const PRODUCTS: ProductFull[] = [
       'Aluminijumski ugaoni nosač za vinske čaše, 30 × 10 × 4 cm. Obrade: crna mat, grafit, zlatna, saten zlatna.',
     og_image: '/assets/heng/products/model-02/model-02-sve-obrade.jpg',
     category: CATEGORIES[0],
-    variants: M2_FINISHES.map((c, i) => variant('prd-model-02', 'model-02', c, '30 × 10 × 4 cm', i)),
+    variants: M2_FINISHES.map((c, i) => variant('prd-model-02', 'model-02', c, '30 × 10 × 4 cm', i, 2000)),
     media: media('prd-model-02', 'model-02', M2_FINISHES, [
       'Model 02 u crnoj mat obradi', 'Model 02 u grafit obradi',
       'Model 02 u zlatnoj obradi', 'Model 02 u saten zlatnoj obradi',
@@ -238,12 +242,12 @@ export const PRODUCTS: ProductFull[] = [
     material: MATERIAL,
     dimensions: '27 × 10 × 4 cm',
     sku: 'MODEL-03',
-    price_rsd: null,
+    price_rsd: 4000,
     sale_price_rsd: null,
     sale_starts_at: null,
     sale_ends_at: null,
-    price_on_request: true,
-    stock: 0,
+    price_on_request: false,
+    stock: 25,
     tags: ['flaše', 'vinski zid', 'zidna montaža'],
     is_featured: true,
     is_published: true,
@@ -254,7 +258,7 @@ export const PRODUCTS: ProductFull[] = [
       'Aluminijumski zidni nosač za flašu vina, 27 × 10 × 4 cm. Obrade: crna mat, grafit, zlatna, saten zlatna.',
     og_image: '/assets/heng/products/model-03/model-03-sve-obrade.jpg',
     category: CATEGORIES[1],
-    variants: M3_FINISHES.map((c, i) => variant('prd-model-03', 'model-03', c, '27 × 10 × 4 cm', i)),
+    variants: M3_FINISHES.map((c, i) => variant('prd-model-03', 'model-03', c, '27 × 10 × 4 cm', i, 4000)),
     media: media('prd-model-03', 'model-03', M3_FINISHES, [
       'Model 03 u crnoj mat obradi', 'Model 03 u grafit obradi',
       'Model 03 u zlatnoj obradi', 'Model 03 u saten zlatnoj obradi',
@@ -285,8 +289,8 @@ export const HOMEPAGE_SECTIONS: HomepageSection[] = [
       body: 'Aluminijumski nosači za vino i čaše koji spajaju funkciju, preciznost i savremenu estetiku.',
       primaryLabel: 'Pogledaj kolekciju', primaryHref: '/kolekcija',
       secondaryLabel: 'Zatraži ponudu', secondaryHref: '/projekti',
-      mediaUrl: '/assets/heng/interiors/mermerni-zid-sa-lusterom.jpg',
-      mediaAlt: 'Bar u mermeru sa HENG sistemom i dizajnerskim lusterom',
+      mediaUrl: '/assets/heng/lifestyle/zlatna-letva-sa-casama-hero.jpg',
+      mediaAlt: 'Čaše obešene na zlatnoj HENG letvi ispod kuhinjskog elementa',
       videoUrl: null, videoPoster: null,
     },
   },

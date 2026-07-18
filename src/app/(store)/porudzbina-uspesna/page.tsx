@@ -37,7 +37,7 @@ export default async function OrderSuccessPage({
         {reference && (
           <Reveal delay={0.12}>
             <div className="mx-auto mt-10 inline-block border border-ivory/20 px-8 py-5">
-              <p className="heng-eyebrow mb-2 text-ivory/50">Broj porudžbine</p>
+              <p className="heng-eyebrow mb-2 text-ivory/60">Broj porudžbine</p>
               <p className="font-display text-[24px] tabular-nums text-ivory" style={{ fontWeight: 600 }}>
                 {reference}
               </p>

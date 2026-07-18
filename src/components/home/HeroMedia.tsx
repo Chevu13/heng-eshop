@@ -69,7 +69,7 @@ export function HeroMedia({
       quality={82}
       sizes="100vw"
       className="object-cover"
-      style={{ objectPosition: 'center 42%' }}
+      style={{ objectPosition: 'center 30%' }}
     />
   );
 }

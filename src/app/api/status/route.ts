@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { isSupabaseConfigured } from '@/lib/env';
+import { isSupabaseConfigured, SUPABASE_URL, SUPABASE_URL_RAW } from '@/lib/env';
 import { createPublicSupabase } from '@/lib/supabase/server';
 
 export const runtime = 'nodejs';
@@ -14,9 +14,19 @@ export const dynamic = 'force-dynamic';
 export async function GET() {
   // project-ref = poddomen Supabase URL-a (npr. abcd1234 iz abcd1234.supabase.co).
   // Nije tajna; služi da se uporedi na koji projekat je Vercel povezan.
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL ?? '';
   let projectRef = '(nema)';
-  try { projectRef = url ? new URL(url).hostname.split('.')[0] : '(nema)'; } catch { projectRef = '(neispravan URL)'; }
+  try { projectRef = SUPABASE_URL ? new URL(SUPABASE_URL).hostname.split('.')[0] : '(nema)'; } catch { projectRef = '(neispravan URL)'; }
+
+  // Upozorenje ako izvorni URL sadrži putanju (npr. /rest/v1) — čest uzrok PGRST125.
+  let urlUpozorenje: string | null = null;
+  try {
+    const raw = new URL(SUPABASE_URL_RAW.trim());
+    if (raw.pathname !== '/' && raw.pathname !== '') {
+      urlUpozorenje =
+        `NEXT_PUBLIC_SUPABASE_URL sadrži putanju „${raw.pathname}” — aplikacija ju je automatski uklonila. ` +
+        'Ispravite promenljivu na čist oblik: ' + raw.origin;
+    }
+  } catch { /* prazan ili neispravan — pokriveno gore */ }
 
   // Otisak anon ključa: prvih/zadnjih par znakova, da se vidi da li je isti
   // ključ kao u Supabase-u — bez otkrivanja celog ključa.
@@ -29,6 +39,8 @@ export async function GET() {
     vreme: new Date().toISOString(),
     supabase_konfigurisan: isSupabaseConfigured,
     supabase_projekat_ref: projectRef,
+    supabase_url_upotrebljen: SUPABASE_URL || '(nema)',
+    supabase_url_upozorenje: urlUpozorenje,
     anon_kljuc_otisak: anonOtisak,
     site_url: process.env.NEXT_PUBLIC_SITE_URL ?? '(nije postavljen)',
   };

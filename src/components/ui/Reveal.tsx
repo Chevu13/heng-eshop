@@ -20,7 +20,7 @@ export function Reveal({
       className={className}
       initial={{ opacity: 0, y }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: '-60px' }}
+      viewport={{ once: true, amount: 0.05 }}
       transition={{ duration: 0.75, delay, ease: [0.16, 1, 0.3, 1] }}
     >
       {children}
@@ -28,7 +28,15 @@ export function Reveal({
   );
 }
 
-/** Otkrivanje slike kroz maskirani „prelaz zavese”. */
+/**
+ * Otkrivanje fotografije.
+ *
+ * Namerno se animiraju opacity i scale, a NE clip-path: `clip-path` se u SSR
+ * HTML-u ispisuje kao `inset(0 0 100% 0)`, pa fotografija ostaje potpuno
+ * odsečena dok animacija ne odradi — a ako izostane, nikada se ne pojavi.
+ * `amount: 0.05` okida čim je 5% elementa vidljivo, što je pouzdano i za
+ * elemente više od ekrana (npr. hero kolone od 86vh).
+ */
 export function ImageReveal({
   children, className = '',
 }: { children: ReactNode; className?: string }) {
@@ -37,10 +45,10 @@ export function ImageReveal({
   return (
     <motion.div
       className={className}
-      initial={{ clipPath: 'inset(0 0 100% 0)' }}
-      whileInView={{ clipPath: 'inset(0 0 0% 0)' }}
-      viewport={{ once: true, margin: '-40px' }}
-      transition={{ duration: 1.1, ease: [0.16, 1, 0.3, 1] }}
+      initial={{ opacity: 0, scale: 1.03 }}
+      whileInView={{ opacity: 1, scale: 1 }}
+      viewport={{ once: true, amount: 0.05 }}
+      transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
     >
       {children}
     </motion.div>

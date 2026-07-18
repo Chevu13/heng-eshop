@@ -1,5 +1,5 @@
 import { cache } from 'react';
-import { createServerSupabase } from '@/lib/supabase/server';
+import { createPublicSupabase } from '@/lib/supabase/server';
 import { isSupabaseConfigured } from '@/lib/env';
 import type {
   Category, HomepageSection, ProductFull, SiteSettings,
@@ -12,6 +12,9 @@ import {
  * Jedinstvena tačka pristupa katalogu.
  * Kada je Supabase povezan — čita se baza (RLS: samo objavljeno).
  * Kada nije — vraća se lokalni seed sadržaj kao read-only demo.
+ *
+ * Namerno koristi klijent BEZ kolačića: ove funkcije pozivaju i
+ * `generateStaticParams` i `sitemap.ts`, koji se izvršavaju van zahteva.
  */
 export const usingLocalData = !isSupabaseConfigured;
 
@@ -31,7 +34,7 @@ function sortProduct(p: ProductFull): ProductFull {
 }
 
 export const getCategories = cache(async (): Promise<Category[]> => {
-  const sb = createServerSupabase();
+  const sb = createPublicSupabase();
   if (!sb) return CATEGORIES.filter((c) => c.is_published);
   const { data, error } = await sb
     .from('categories').select('*')
@@ -41,14 +44,14 @@ export const getCategories = cache(async (): Promise<Category[]> => {
 });
 
 export const getCategory = cache(async (slug: string): Promise<Category | null> => {
-  const sb = createServerSupabase();
+  const sb = createPublicSupabase();
   if (!sb) return CATEGORIES.find((c) => c.slug === slug && c.is_published) ?? null;
   const { data } = await sb.from('categories').select('*').eq('slug', slug).maybeSingle();
   return (data as Category) ?? null;
 });
 
 export const getProducts = cache(async (): Promise<ProductFull[]> => {
-  const sb = createServerSupabase();
+  const sb = createPublicSupabase();
   if (!sb) return PRODUCTS.filter((p) => p.is_published && !p.is_archived).map(sortProduct);
   const { data, error } = await sb
     .from('products').select(PRODUCT_SELECT)
@@ -59,7 +62,7 @@ export const getProducts = cache(async (): Promise<ProductFull[]> => {
 });
 
 export const getProduct = cache(async (slug: string): Promise<ProductFull | null> => {
-  const sb = createServerSupabase();
+  const sb = createPublicSupabase();
   if (!sb) {
     const p = PRODUCTS.find((x) => x.slug === slug && x.is_published && !x.is_archived);
     return p ? sortProduct(p) : null;
@@ -89,7 +92,7 @@ export const getRelatedProducts = cache(
 );
 
 export const getHomepageSections = cache(async (): Promise<HomepageSection[]> => {
-  const sb = createServerSupabase();
+  const sb = createPublicSupabase();
   if (!sb) return HOMEPAGE_SECTIONS.filter((s) => s.is_visible);
   const { data, error } = await sb
     .from('homepage_sections').select('*')
@@ -104,7 +107,7 @@ export async function getSection(key: string): Promise<HomepageSection | null> {
 }
 
 export const getSettings = cache(async (): Promise<SiteSettings> => {
-  const sb = createServerSupabase();
+  const sb = createPublicSupabase();
   if (!sb) return SITE_SETTINGS;
   const { data, error } = await sb.from('site_settings').select('*').eq('id', 1).maybeSingle();
   if (error || !data) return SITE_SETTINGS;

@@ -3,7 +3,24 @@ import { createServerClient, type CookieOptions } from '@supabase/ssr';
 import { createClient as createSupabaseClient } from '@supabase/supabase-js';
 import { SUPABASE_ANON_KEY, SUPABASE_URL, isSupabaseConfigured, serviceRoleKey } from '@/lib/env';
 
-/** Klijent vezan za sesiju korisnika (poštuje RLS). */
+/**
+ * Klijent za javni katalog — bez kolačića i bez sesije.
+ * Koristi se za sve javne čitanje-operacije (katalog, podešavanja, sekcije),
+ * pa se sme pozvati i van zahteva: iz `generateStaticParams`, `sitemap` i
+ * build-a. RLS ostaje aktivan jer se koristi anon ključ.
+ */
+export function createPublicSupabase() {
+  if (!isSupabaseConfigured) return null;
+  return createSupabaseClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+    auth: { persistSession: false, autoRefreshToken: false },
+  });
+}
+
+/**
+ * Klijent vezan za sesiju korisnika (poštuje RLS).
+ * Poziva `cookies()` — sme isključivo unutar zahteva (Server Component,
+ * Server Action, Route Handler). Nikada iz `generateStaticParams`.
+ */
 export function createServerSupabase() {
   if (!isSupabaseConfigured) return null;
   const cookieStore = cookies();

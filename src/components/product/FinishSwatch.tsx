@@ -16,7 +16,7 @@ export function FinishSwatch({
       type="button"
       onClick={onSelect}
       aria-pressed={selected}
-      className="group flex flex-col items-center gap-2 outline-offset-4"
+      className="group flex w-full flex-col items-center gap-2 outline-offset-4"
       title={name}
     >
       <span
@@ -43,7 +43,7 @@ export function FinishSwatch({
         />
       </span>
       <span
-        className="font-body text-[11px] uppercase tracking-eyebrow transition-colors duration-300"
+        className="max-w-full text-center font-body text-[10px] uppercase leading-tight tracking-eyebrow transition-colors duration-300 sm:text-[11px]"
         style={{
           color: selected
             ? 'var(--color-gold)'

@@ -33,7 +33,7 @@ export function DimensionsSection({ content, products }: {
                   alt={item.image!.alt ?? `${item.product.name} — dimenzije`}
                   fill
                   sizes="(max-width: 640px) 90vw, (max-width: 1024px) 45vw, 30vw"
-                  className="object-cover"
+                  className="object-contain"
                 />
               </ImageReveal>
               <div className="mt-5 flex items-baseline justify-between gap-4 border-t border-ink/12 pt-4">

@@ -37,7 +37,7 @@ export function FinishSelector({
             <div className="heng-rule my-10 max-w-[260px]" />
 
             <div
-              className="flex flex-wrap gap-6"
+              className="grid grid-cols-4 gap-2 sm:gap-6"
               role="group"
               aria-label="Izbor završne obrade"
             >
@@ -80,7 +80,7 @@ export function FinishSelector({
                     alt={`${product.name} u obradi ${current.finish_name.toLowerCase()}`}
                     fill
                     sizes="(max-width: 1024px) 92vw, 55vw"
-                    className="object-cover"
+                    className="object-contain"
                   />
                 </motion.div>
               </AnimatePresence>

@@ -56,7 +56,7 @@ export function ProductGallery({
                 fill
                 priority={index === 0}
                 sizes="(max-width: 1024px) 94vw, 52vw"
-                className="object-cover"
+                className="object-contain"
               />
             )}
           </motion.div>
@@ -106,7 +106,7 @@ export function ProductGallery({
                   alt=""
                   fill
                   sizes="90px"
-                  className="object-cover"
+                  className="object-contain"
                 />
               </button>
             </li>

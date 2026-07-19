@@ -72,7 +72,7 @@ export default async function HomePage() {
             return <MaterialSection key={section.id} content={section.content as never} />;
           case 'gallery':
             return (
-              <section key={section.id} className="bg-ivory-2 py-24 lg:py-32">
+              <section key={section.id} className="bg-ivory-2 pb-24 pt-14 lg:pb-32 lg:pt-20">
                 <div className="heng-container">
                   <SectionHeading
                     eyebrow={galleryContent.eyebrow}

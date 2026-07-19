@@ -127,7 +127,12 @@ export function ProductDetail({ product }: { product: ProductFull }) {
                         {variant?.finish_name}
                       </span>
                     </p>
-                    <div className="flex flex-wrap gap-5" role="group" aria-label="Izbor završne obrade">
+                    <div
+                      className="grid gap-3 sm:gap-5"
+                      style={{ gridTemplateColumns: `repeat(${Math.min(variants.length, 4)}, minmax(0, 1fr))` }}
+                      role="group"
+                      aria-label="Izbor završne obrade"
+                    >
                       {variants.map((v, i) => (
                         <FinishSwatch
                           key={v.id}

@@ -11,18 +11,18 @@ export function MaterialSection({ content }: {
   };
 }) {
   return (
-    <section className="bg-ivory-2 py-24 lg:py-32">
+    <section className="bg-ivory-2 pb-14 pt-24 lg:pb-20 lg:pt-32">
       <div className="heng-container">
         <div className="grid gap-14 lg:grid-cols-12 lg:gap-16">
           {content.mediaUrl && (
             <div className="lg:col-span-5">
-              <ImageReveal className="relative aspect-[3/4] overflow-hidden rounded-sm lg:sticky lg:top-28">
+              <ImageReveal className="relative aspect-[3/4] overflow-hidden rounded-sm bg-ivory-2 lg:sticky lg:top-28">
                 <Image
                   src={content.mediaUrl}
                   alt={content.mediaAlt ?? ''}
                   fill
                   sizes="(max-width: 1024px) 92vw, 40vw"
-                  className="object-cover"
+                  className="object-contain"
                 />
               </ImageReveal>
             </div>

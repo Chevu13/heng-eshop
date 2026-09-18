@@ -90,7 +90,7 @@ export function MaterialSection({
 
             {content.ctaLabel && content.ctaHref && (
               <Reveal delay={0.12}>
-                <Link href={content.ctaHref} className="link-arrow mt-12 text-ink/75">
+                <Link href={content.ctaHref} className="link-arrow mt-12">
                   <span>{content.ctaLabel}</span>
                   <span className="link-arrow__line" aria-hidden="true" />
                 </Link>

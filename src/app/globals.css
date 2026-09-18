@@ -187,10 +187,14 @@
   /* Tekstualni link sa strelicom — „ISTRAŽI PROIZVODE →”.
      Linija strelice raste na hover, glava strelice klizi udesno. */
   .link-arrow {
-    @apply inline-flex items-center gap-4 font-body text-[11px] font-medium
-           uppercase leading-none;
+    @apply inline-flex items-center gap-4 font-body text-[11px] font-semibold
+           uppercase leading-none transition-colors duration-300 ease-heng;
     letter-spacing: 0.2em;
-    color: inherit;
+    color: var(--color-gold);
+  }
+  .link-arrow:hover,
+  .link-arrow:focus-visible {
+    color: var(--color-amber);
   }
   .link-arrow .link-arrow__line {
     @apply relative block h-px w-[46px] shrink-0 transition-[width] duration-500 ease-heng;

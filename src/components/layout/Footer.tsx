@@ -35,7 +35,7 @@ export function Footer({
           <p className="display-caps max-w-[24ch] text-[clamp(1.6rem,2.4vw,2rem)] text-ivory">
             Recite nam kakav prostor uređujete.
           </p>
-          <Link href="/kontakt" className="link-arrow shrink-0 text-ivory/85">
+          <Link href="/kontakt" className="link-arrow shrink-0">
             <span>Pošaljite upit</span>
             <span className="link-arrow__line" aria-hidden="true" />
           </Link>

@@ -91,7 +91,7 @@ export function CategorySplit({ content }: { content: CategorySplitContent }) {
                 </p>
               )}
 
-              <Link href={item.href} className="link-arrow mt-10 text-ivory/85">
+              <Link href={item.href} className="link-arrow mt-10">
                 {/* Link pokriva ceo panel — cela pločica je klikabilna. */}
                 <span className="absolute inset-0 z-10" aria-hidden="true" />
                 <span>{item.ctaLabel ?? 'Istraži proizvode'}</span>

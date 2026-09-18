@@ -10,7 +10,7 @@ export function Wordmark({
 }: { className?: string; tone?: 'ivory' | 'maroon'; href?: string | null }) {
   const inner = (
     <span
-      className={`font-display leading-none ${className}`}
+      className={`font-brand leading-none ${className}`}
       style={{
         color: tone === 'ivory' ? 'var(--color-ivory)' : 'var(--color-maroon)',
         fontWeight: 700,

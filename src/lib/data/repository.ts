@@ -117,7 +117,14 @@ export const getHomepageSections = cache(async (): Promise<HomepageSection[]> =>
     .eq('is_visible', true).order('sort_order');
   if (error) logDbError('sekcije početne strane', error);
   if (error || !data?.length) return HOMEPAGE_SECTIONS.filter((s) => s.is_visible);
-  return data as HomepageSection[];
+
+  // Sekcije koje su dodate u kodu, a još nisu unete u bazu (npr. posle
+  // redizajna, pre `npm run seed`), prikazuju se iz seed sadržaja. Bez ovoga
+  // bi nova sekcija tiho nestala sa produkcije dok se baza ne osveži.
+  const rows = data as HomepageSection[];
+  const known = new Set(rows.map((r) => r.key));
+  const missing = HOMEPAGE_SECTIONS.filter((s) => s.is_visible && !known.has(s.key));
+  return [...rows, ...missing];
 });
 
 export async function getSection(key: string): Promise<HomepageSection | null> {

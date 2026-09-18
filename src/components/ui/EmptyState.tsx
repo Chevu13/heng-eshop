@@ -15,7 +15,7 @@ export function EmptyState({
         style={{ background: 'var(--color-gold)' }}
       />
       <h3
-        className="font-display text-[22px]"
+        className="font-display text-[26px]"
         style={{ color: light ? 'var(--color-ivory)' : 'var(--color-ink)', fontWeight: 600 }}
       >
         {title}

@@ -6,7 +6,7 @@ export default function NotFound() {
       <div className="heng-container text-center">
         <p className="heng-eyebrow mb-6" style={{ color: 'var(--color-gold)' }}>GREŠKA 404</p>
         <h1
-          className="mx-auto max-w-[18ch] font-display text-[clamp(1.9rem,5vw,2.8rem)] leading-[1.1] text-ivory"
+          className="display-caps mx-auto max-w-[18ch] text-[clamp(1.9rem,5vw,3rem)] text-ivory"
           style={{ fontWeight: 700 }}
         >
           Ova stranica nije pronađena.

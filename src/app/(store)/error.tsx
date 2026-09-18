@@ -13,7 +13,7 @@ export default function GlobalError({
       <div className="heng-container text-center">
         <p className="heng-eyebrow mb-6" style={{ color: 'var(--color-gold)' }}>GREŠKA</p>
         <h1
-          className="mx-auto max-w-[20ch] font-display text-[clamp(1.9rem,5vw,2.6rem)] leading-[1.1] text-ivory"
+          className="display-caps mx-auto max-w-[20ch] text-[clamp(1.9rem,5vw,2.8rem)] text-ivory"
           style={{ fontWeight: 700 }}
         >
           Došlo je do neočekivane greške.

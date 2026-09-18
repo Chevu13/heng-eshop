@@ -13,8 +13,9 @@ const config: Config = {
         ink: '#1C1416',
       },
       fontFamily: {
-        display: ['var(--font-display)', 'Fraunces', 'serif'],
-        body: ['var(--font-body)', 'Lora', 'serif'],
+        display: ['var(--font-display)', 'Cormorant Garamond', 'Georgia', 'serif'],
+        body: ['var(--font-body)', 'Inter', 'system-ui', 'sans-serif'],
+        brand: ['var(--font-brand)', 'Fraunces', 'Georgia', 'serif'],
       },
       borderRadius: { sm: '2px', md: '4px', pill: '999px' },
       spacing: {

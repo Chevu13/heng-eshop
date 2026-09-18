@@ -51,8 +51,7 @@ export default async function ProjectsPage({
         <div className="heng-container relative z-10 pb-14 pt-36">
           <p className="heng-eyebrow mb-5" style={{ color: 'var(--color-gold)' }}>PROJEKTI</p>
           <h1
-            className="max-w-[16ch] font-display text-[clamp(2rem,5.4vw,3.1rem)] leading-[1.08] text-ivory"
-            style={{ fontWeight: 700, letterSpacing: '-0.015em' }}
+            className="display-caps max-w-[16ch] text-[clamp(2rem,5.4vw,3.3rem)] text-ivory"
           >
             {c.heading ?? 'Za enterijere koji zahtevaju više.'}
           </h1>
@@ -85,11 +84,11 @@ export default async function ProjectsPage({
               {steps.map((s, i) => (
                 <Reveal as="li" key={s.title} delay={i * 0.07}>
                   <div className="flex gap-6 border-t border-ink/12 py-7">
-                    <span className="font-display text-[13px] tabular-nums" style={{ color: 'var(--color-gold)', fontWeight: 600 }}>
+                    <span className="font-body text-[11px] font-medium tabular-nums tracking-eyebrow" style={{ color: 'var(--color-gold)' }}>
                       {String(i + 1).padStart(2, '0')}
                     </span>
                     <div>
-                      <h3 className="font-display text-[19px]" style={{ fontWeight: 600 }}>{s.title}</h3>
+                      <h3 className="font-display text-[22px]" style={{ fontWeight: 400 }}>{s.title}</h3>
                       <p className="mt-2 max-w-[52ch] font-body text-[15px] leading-relaxed text-ink/65">{s.text}</p>
                     </div>
                   </div>

@@ -1,15 +1,12 @@
 import { CartProvider } from '@/components/cart/CartProvider';
 import { StoreShell } from '@/components/layout/StoreShell';
 import { Footer } from '@/components/layout/Footer';
-import { getCategories, getSection, getSettings } from '@/lib/data/repository';
+import { getCategories, getSettings } from '@/lib/data/repository';
 import { JsonLd } from '@/lib/seo';
 import { SITE_URL } from '@/lib/env';
 
 export default async function StoreLayout({ children }: { children: React.ReactNode }) {
-  const [settings, categories, announcement] = await Promise.all([
-    getSettings(), getCategories(), getSection('announcement'),
-  ]);
-  const a = (announcement?.content ?? {}) as { text?: string; href?: string; linkLabel?: string };
+  const [settings, categories] = await Promise.all([getSettings(), getCategories()]);
 
   const orgLd = {
     '@context': 'https://schema.org',
@@ -32,13 +29,7 @@ export default async function StoreLayout({ children }: { children: React.ReactN
       >
         Preskoči na sadržaj
       </a>
-      <StoreShell
-        announcement={
-          announcement?.is_visible && a.text
-            ? { text: a.text, href: a.href, linkLabel: a.linkLabel }
-            : null
-        }
-      />
+      <StoreShell />
       <main id="glavni-sadrzaj">{children}</main>
       <Footer settings={settings} categories={categories} />
       <JsonLd data={orgLd} />

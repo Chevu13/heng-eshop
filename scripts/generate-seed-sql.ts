@@ -165,7 +165,7 @@ w('-- Provera:');
 w('--   select count(*) from products;          -- očekivano: 3');
 w('--   select count(*) from product_variants;  -- očekivano: 11');
 w('--   select count(*) from product_media;     -- očekivano: 17');
-w('--   select count(*) from homepage_sections; -- očekivano: 11');
+w(`--   select count(*) from homepage_sections; -- očekivano: ${HOMEPAGE_SECTIONS.length}`);
 w();
 
 const target = resolve(process.cwd(), 'supabase/seed/seed.sql');

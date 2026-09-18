@@ -35,15 +35,14 @@ export function PageHeader({
         )}
         <Reveal delay={0.05}>
           <h1
-            className="max-w-[20ch] font-display text-[clamp(2rem,5vw,3rem)] leading-[1.08]"
-            style={{ fontWeight: 700, letterSpacing: '-0.015em' }}
+            className="display-caps max-w-[20ch] text-[clamp(2rem,5vw,3.1rem)]"
           >
             {title}
           </h1>
         </Reveal>
         {description && (
           <Reveal delay={0.1}>
-            <p className="mt-5 max-w-[58ch] font-body text-[16px] leading-[1.7] text-ink/65">
+            <p className="mt-6 max-w-[56ch] font-body text-[15px] font-light leading-[1.75] text-ink/62 sm:text-[16px]">
               {description}
             </p>
           </Reveal>

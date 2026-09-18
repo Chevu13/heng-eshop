@@ -6,21 +6,34 @@ import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
 import { useEffect, useState } from 'react';
 import { Wordmark } from '@/components/ui/Wordmark';
 import { useCart } from '@/components/cart/CartProvider';
-import { SearchOverlay } from './SearchOverlay';
 
+/** Navigacija prema finalnoj strukturi: Proizvodi · Inspiracija · O nama · Kontakt. */
 const NAV = [
-  { href: '/kolekcija', label: 'Kolekcija' },
+  { href: '/kolekcija', label: 'Proizvodi' },
   { href: '/inspiracija', label: 'Inspiracija' },
-  { href: '/projekti', label: 'Projekti' },
   { href: '/o-nama', label: 'O nama' },
   { href: '/kontakt', label: 'Kontakt' },
 ];
+
+/** Ikonica korpe — jedina akcija u headeru, bez tekstualnih dugmadi. */
+function BagIcon({ className = '' }: { className?: string }) {
+  return (
+    <svg
+      viewBox="0 0 24 24" aria-hidden="true" focusable="false"
+      className={className} fill="none"
+      stroke="currentColor" strokeWidth="1.2"
+      strokeLinecap="round" strokeLinejoin="round"
+    >
+      <path d="M4.5 7.5h15l-1.1 12.2a1.6 1.6 0 0 1-1.6 1.45H7.2a1.6 1.6 0 0 1-1.6-1.45L4.5 7.5Z" />
+      <path d="M8.75 10V6.6a3.25 3.25 0 0 1 6.5 0V10" />
+    </svg>
+  );
+}
 
 export function Header({
   transparentOnTop = false, scrolled = false,
 }: { transparentOnTop?: boolean; scrolled?: boolean }) {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [searchOpen, setSearchOpen] = useState(false);
   const { count, openDrawer } = useCart();
   const pathname = usePathname();
   const reduce = useReducedMotion();
@@ -47,24 +60,24 @@ export function Header({
             : solid
               ? 'rgba(247,244,240,0.94)'
               : 'transparent',
-          backdropFilter: solid && !menuOpen ? 'saturate(1.1)' : undefined,
+          backdropFilter: solid && !menuOpen ? 'saturate(1.1) blur(6px)' : undefined,
           borderBottom: solid && !menuOpen ? '1px solid rgba(28,20,22,0.08)' : '1px solid transparent',
         }}
       >
-        <div className="heng-container flex h-[68px] items-center justify-between gap-8 lg:h-[76px]">
+        <div className="heng-container flex h-[64px] items-center justify-between gap-8 lg:h-[74px]">
           <Wordmark
-            className="text-[26px] lg:text-[28px]"
+            className="text-[34px] lg:text-[40px]"
             tone={overHero || menuOpen ? 'ivory' : 'maroon'}
           />
 
           <nav aria-label="Glavna navigacija" className="hidden lg:block">
-            <ul className="flex items-center gap-9">
+            <ul className="flex items-center gap-10">
               {NAV.map((item) => (
                 <li key={item.href}>
                   <Link
                     href={item.href}
-                    className="link-gold font-body text-[13px] uppercase tracking-eyebrow"
-                    style={{ color: fg, opacity: pathname.startsWith(item.href) ? 1 : 0.78 }}
+                    className="link-gold font-body text-[11px] font-medium uppercase tracking-eyebrow"
+                    style={{ color: fg, opacity: pathname.startsWith(item.href) ? 1 : 0.72 }}
                     aria-current={pathname.startsWith(item.href) ? 'page' : undefined}
                   >
                     {item.label}
@@ -76,28 +89,54 @@ export function Header({
 
           <div className="flex items-center gap-5">
             <button
-              onClick={() => setSearchOpen(true)}
-              className="hidden font-body text-[13px] uppercase tracking-eyebrow lg:inline-block link-gold"
-              style={{ color: fg }}
-            >
-              Pretraga
-            </button>
-            <button
               onClick={openDrawer}
-              className="font-body text-[13px] uppercase tracking-eyebrow link-gold"
+              className="relative -m-2 p-2 transition-opacity duration-300 hover:opacity-70"
               style={{ color: fg }}
               aria-label={`Korpa, ${count} ${count === 1 ? 'stavka' : 'stavki'}`}
             >
-              Korpa{count > 0 && <span aria-hidden="true"> ({count})</span>}
+              <BagIcon className="h-[28px] w-[28px] lg:h-[30px] lg:w-[30px]" />
+              {count > 0 && (
+                <span
+                  aria-hidden="true"
+                  className="absolute right-0 top-0 flex h-[18px] min-w-[18px] items-center justify-center rounded-pill px-1 font-body text-[10px] font-semibold leading-none text-ivory"
+                  style={{ background: 'var(--color-maroon)' }}
+                >
+                  {count}
+                </span>
+              )}
             </button>
+
             <button
               onClick={() => setMenuOpen((v) => !v)}
-              className="font-body text-[13px] uppercase tracking-eyebrow lg:hidden"
+              className="-m-2 p-2 lg:hidden"
               style={{ color: fg }}
               aria-expanded={menuOpen}
               aria-controls="mobilni-meni"
+              aria-label={menuOpen ? 'Zatvori meni' : 'Otvori meni'}
             >
-              {menuOpen ? 'Zatvori' : 'Meni'}
+              <span className="block h-[18px] w-[28px]" aria-hidden="true">
+                <span
+                  className="block h-px w-full transition-transform duration-300 ease-heng"
+                  style={{
+                    background: 'currentColor',
+                    transform: menuOpen ? 'translateY(8px) rotate(45deg)' : 'none',
+                  }}
+                />
+                <span
+                  className="mt-[7px] block h-px w-full transition-all duration-300 ease-heng"
+                  style={{
+                    background: 'currentColor',
+                    opacity: menuOpen ? 0 : 1,
+                  }}
+                />
+                <span
+                  className="mt-[7px] block h-px w-full transition-transform duration-300 ease-heng"
+                  style={{
+                    background: 'currentColor',
+                    transform: menuOpen ? 'translateY(-8px) rotate(-45deg)' : 'none',
+                  }}
+                />
+              </span>
             </button>
           </div>
         </div>
@@ -107,7 +146,7 @@ export function Header({
         {menuOpen && (
           <motion.div
             id="mobilni-meni"
-            className="fixed inset-0 z-40 flex flex-col justify-center px-8 lg:hidden"
+            className="fixed inset-0 z-40 flex flex-col justify-start px-8 pt-[104px] lg:hidden"
             style={{ background: 'var(--color-maroon-deep)' }}
             initial={{ opacity: 0, y: reduce ? 0 : -12 }}
             animate={{ opacity: 1, y: 0 }}
@@ -123,11 +162,7 @@ export function Header({
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: reduce ? 0 : 0.08 + i * 0.06, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
                   >
-                    <Link
-                      href={item.href}
-                      className="block py-3 font-display text-[30px] text-ivory"
-                      style={{ fontWeight: 600 }}
-                    >
+                    <Link href={item.href} className="display-caps block py-3 text-[30px] text-ivory">
                       {item.label}
                     </Link>
                   </motion.li>
@@ -135,17 +170,12 @@ export function Header({
               </ul>
             </nav>
             <div className="heng-rule my-8" />
-            <button
-              onClick={() => { setMenuOpen(false); setSearchOpen(true); }}
-              className="text-left font-body text-[13px] uppercase tracking-eyebrow text-ivory/70"
-            >
-              Pretraga
-            </button>
+            <p className="font-body text-[11px] uppercase tracking-eyebrow text-ivory/55">
+              Dizajn za vino. Detalj za prostor.
+            </p>
           </motion.div>
         )}
       </AnimatePresence>
-
-      <SearchOverlay open={searchOpen} onClose={() => setSearchOpen(false)} />
     </>
   );
 }

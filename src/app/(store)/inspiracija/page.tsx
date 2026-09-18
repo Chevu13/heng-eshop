@@ -37,8 +37,7 @@ export default async function InspirationPage() {
         <div className="heng-container relative z-10 pb-14 pt-36">
           <p className="heng-eyebrow mb-5" style={{ color: 'var(--color-gold)' }}>INSPIRACIJA</p>
           <h1
-            className="max-w-[15ch] font-display text-[clamp(2rem,5.4vw,3.1rem)] leading-[1.08] text-ivory"
-            style={{ fontWeight: 700, letterSpacing: '-0.015em' }}
+            className="display-caps max-w-[15ch] text-[clamp(2rem,5.4vw,3.3rem)] text-ivory"
           >
             Postavljeno u prostor.
           </h1>
@@ -55,7 +54,7 @@ export default async function InspirationPage() {
 
           <Reveal delay={0.1}>
             <div className="mt-20 border-t border-ink/12 pt-12 text-center">
-              <h2 className="mx-auto max-w-[20ch] font-display text-[26px] leading-tight" style={{ fontWeight: 600 }}>
+              <h2 className="mx-auto max-w-[20ch] font-display text-[30px] leading-tight" style={{ fontWeight: 400 }}>
                 Imate prostor koji traži svoje rešenje?
               </h2>
               <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row sm:gap-4">

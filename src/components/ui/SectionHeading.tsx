@@ -18,11 +18,8 @@ export function SectionHeading({
       )}
       <Reveal delay={0.05}>
         <h2
-          className="font-display text-[30px] leading-[1.15] sm:text-[34px] lg:text-[36px]"
-          style={{
-            color: light ? 'var(--color-ivory)' : 'var(--color-ink)',
-            fontWeight: 600,
-          }}
+          className="display-caps text-[28px] sm:text-[32px] lg:text-[38px]"
+          style={{ color: light ? 'var(--color-ivory)' : 'var(--color-ink)' }}
         >
           {heading}
         </h2>
@@ -30,7 +27,7 @@ export function SectionHeading({
       {body && (
         <Reveal delay={0.1}>
           <p
-            className="mt-5 font-body text-[16px] leading-[1.65]"
+            className="mt-6 max-w-[46ch] font-body text-[15px] font-light leading-[1.75] sm:text-[16px]"
             style={{ color: light ? 'rgba(239,234,228,0.74)' : 'rgba(28,20,22,0.7)' }}
           >
             {body}

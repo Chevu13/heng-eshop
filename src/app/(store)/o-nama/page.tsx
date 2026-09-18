@@ -34,8 +34,7 @@ export default function AboutPage() {
         <div className="heng-container relative z-10 pb-14 pt-36">
           <p className="heng-eyebrow mb-5" style={{ color: 'var(--color-gold)' }}>O NAMA</p>
           <h1
-            className="max-w-[16ch] font-display text-[clamp(2rem,5.4vw,3.1rem)] leading-[1.08] text-ivory"
-            style={{ fontWeight: 700, letterSpacing: '-0.015em' }}
+            className="display-caps max-w-[16ch] text-[clamp(2rem,5.4vw,3.3rem)] text-ivory"
           >
             Detalji koji prostoru daju karakter.
           </h1>

@@ -7,7 +7,6 @@ import { HeroMedia } from './HeroMedia';
 export interface HeroContent {
   eyebrow?: string; heading?: string; body?: string;
   primaryLabel?: string; primaryHref?: string;
-  secondaryLabel?: string; secondaryHref?: string;
   mediaUrl?: string; mediaAlt?: string;
   videoUrl?: string | null; videoPoster?: string | null;
 }
@@ -54,10 +53,7 @@ export function Hero({ content }: { content: HeroContent }) {
             </motion.p>
           )}
 
-          <h1
-            className="font-display text-[clamp(2.25rem,7vw,3.5rem)] leading-[1.08] text-ivory"
-            style={{ fontWeight: 700, letterSpacing: '-0.015em' }}
-          >
+          <h1 className="display-caps text-[clamp(2.4rem,6.4vw,4.4rem)] text-ivory">
             {words.map((w, i) => (
               <span key={`${w}-${i}`} className="inline-block overflow-hidden align-bottom">
                 <motion.span
@@ -74,7 +70,7 @@ export function Hero({ content }: { content: HeroContent }) {
 
           {content.body && (
             <motion.p
-              className="mt-6 max-w-[46ch] font-body text-[16px] leading-[1.65] text-ivory/76 sm:text-[18px]"
+              className="mt-7 max-w-[52ch] font-body text-[15px] font-light leading-[1.75] text-ivory/78 sm:text-[17px]"
               initial={reduce ? false : { opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 0.45, ease }}
@@ -83,23 +79,19 @@ export function Hero({ content }: { content: HeroContent }) {
             </motion.p>
           )}
 
-          <motion.div
-            className="mt-9 flex flex-col gap-3 sm:flex-row sm:gap-4"
-            initial={reduce ? false : { opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.58, ease }}
-          >
-            {content.primaryLabel && content.primaryHref && (
+          {/* Jedan jedini poziv na akciju — hero ostaje čist. */}
+          {content.primaryLabel && content.primaryHref && (
+            <motion.div
+              className="mt-10"
+              initial={reduce ? false : { opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, delay: 0.58, ease }}
+            >
               <Link href={content.primaryHref} className="btn btn-primary">
                 {content.primaryLabel}
               </Link>
-            )}
-            {content.secondaryLabel && content.secondaryHref && (
-              <Link href={content.secondaryHref} className="btn btn-outline-light">
-                {content.secondaryLabel}
-              </Link>
-            )}
-          </motion.div>
+            </motion.div>
+          )}
         </div>
       </div>
     </section>

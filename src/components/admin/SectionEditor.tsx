@@ -8,17 +8,11 @@ import { Badge } from './AdminUI';
 
 /** Opis polja po sekciji — pomaže administratoru da zna šta sme da menja. */
 const HINTS: Record<string, string> = {
-  announcement: 'text — tekst trake · href, linkLabel — opcioni link.',
-  hero: 'eyebrow, heading, body · primaryLabel/primaryHref, secondaryLabel/secondaryHref · mediaUrl, mediaAlt · videoUrl, videoPoster (kada postoji video).',
-  statement: 'heading, body, note · mediaUrl, mediaAlt.',
-  featured: 'eyebrow, heading, body · productSlugs — niz slugova redosledom prikaza.',
-  finishes: 'eyebrow, heading, body · productSlug — model na kom se prikazuju obrade.',
-  material: 'eyebrow, heading, body · points — niz {title, text} · mediaUrl, mediaAlt.',
+  hero: 'eyebrow, heading, body · primaryLabel/primaryHref · mediaUrl, mediaAlt · videoUrl, videoPoster (kada postoji video).',
+  categories: 'items — niz {title, body, href, ctaLabel, mediaUrl, mediaAlt, mediaPosition}. Predviđena su dva vizuala.',
+  material: 'eyebrow, heading, body · points — niz {title, text} · mediaUrl, mediaAlt · ctaLabel, ctaHref.',
+  handles: 'ista polja kao „material”. Sekcija se prikazuje u obrnutom rasporedu (tekst levo, fotografija desno).',
   gallery: 'eyebrow, heading · items — niz {url, caption, alt}.',
-  dimensions: 'eyebrow, heading, body — mere se čitaju sa proizvoda.',
-  projects: 'eyebrow, heading, body · audience — niz oznaka · ctaLabel, ctaHref · mediaUrl, mediaAlt.',
-  instagram: 'eyebrow, heading, ctaLabel, href · items — niz putanja do fotografija.',
-  final_cta: 'heading, body · primaryLabel/primaryHref, secondaryLabel/secondaryHref.',
 };
 
 export function SectionEditor({ section, label }: { section: HomepageSection; label: string }) {

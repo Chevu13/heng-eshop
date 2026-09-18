@@ -70,7 +70,7 @@ export function ProductCard({ product, priority = false }: { product: ProductFul
         {product.category && (
           <p className="heng-eyebrow text-ink/45">{product.category.title}</p>
         )}
-        <h3 className="mt-2 font-display text-[19px] leading-tight" style={{ fontWeight: 600 }}>
+        <h3 className="mt-2 font-display text-[22px] leading-tight" style={{ fontWeight: 400 }}>
           <Link href={`/proizvod/${product.slug}`} className="link-gold">{product.name}</Link>
         </h3>
 

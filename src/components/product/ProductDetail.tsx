@@ -83,8 +83,7 @@ export function ProductDetail({ product }: { product: ProductFull }) {
                 )}
 
                 <h1
-                  className="mt-4 font-display text-[clamp(1.8rem,4vw,2.4rem)] leading-[1.1]"
-                  style={{ fontWeight: 700, letterSpacing: '-0.015em' }}
+                  className="display-caps mt-4 text-[clamp(1.8rem,4vw,2.6rem)]"
                 >
                   {product.name}
                 </h1>

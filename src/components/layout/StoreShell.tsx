@@ -3,20 +3,17 @@
 import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { Header } from './Header';
-import { AnnouncementBar } from './AnnouncementBar';
 import { CartDrawer } from '@/components/cart/CartDrawer';
 import { useCart } from '@/components/cart/CartProvider';
 
 /**
- * Fiksni gornji sloj: najava + header. Najava se pri skrolu sklapa,
- * tako da header ostaje vizuelno lagan i uvek u punom kontrastu.
+ * Fiksni gornji sloj: samo header. Iznad njega nema ničega — traka sa
+ * najavom je uklonjena po zahtevu klijenta, hero počinje od samog vrha.
  * Transparentno stanje važi samo na stranama koje otvara hero medij.
  */
 const TRANSPARENT_ROUTES = ['/', '/o-nama', '/projekti', '/inspiracija'];
 
-export interface Announcement { text: string; href?: string; linkLabel?: string }
-
-export function StoreShell({ announcement }: { announcement: Announcement | null }) {
+export function StoreShell() {
   const pathname = usePathname();
   const { lastAdded } = useCart();
   const [scrolled, setScrolled] = useState(false);
@@ -32,24 +29,11 @@ export function StoreShell({ announcement }: { announcement: Announcement | null
   return (
     <>
       <div className="fixed inset-x-0 top-0 z-50">
-        {announcement && (
-          <AnnouncementBar
-            text={announcement.text}
-            href={announcement.href}
-            linkLabel={announcement.linkLabel}
-            collapsed={scrolled}
-          />
-        )}
         <Header transparentOnTop={transparent} scrolled={scrolled} />
       </div>
 
       {/* Odstojanje za strane bez hero medija ispod headera. */}
-      {!transparent && (
-        <div
-          aria-hidden="true"
-          className={announcement ? 'h-[104px] lg:h-[112px]' : 'h-[68px] lg:h-[76px]'}
-        />
-      )}
+      {!transparent && <div aria-hidden="true" className="h-[64px] lg:h-[74px]" />}
 
       <CartDrawer />
       <p role="status" aria-live="polite" className="sr-only">

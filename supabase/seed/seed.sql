@@ -432,67 +432,25 @@ values (
 
 -- ---------- Sekcije početne strane ----------
 insert into homepage_sections (key, title, is_visible, sort_order, content)
-values ('announcement', 'Najava', true, 0, '{"text":"Dizajn za vino. Detalj za prostor.","href":"/kolekcija","linkLabel":"Kolekcija"}'::jsonb)
+values ('hero', 'Hero', true, 0, '{"heading":"Detalji koji znače.","body":"HENG proizvodi spajaju funkciju, vrhunsku izradu i savremenu estetiku — za prostor koji se izdvaja.","primaryLabel":"Pogledaj proizvode","primaryHref":"/kolekcija","mediaUrl":"/assets/heng/lifestyle/zlatna-letva-sa-casama-hero.jpg","mediaAlt":"Čaše obešene na zlatnoj HENG letvi ispod kuhinjskog elementa","videoUrl":null,"videoPoster":null}'::jsonb)
 on conflict (key) do update set
   title = excluded.title, is_visible = excluded.is_visible,
   sort_order = excluded.sort_order, content = excluded.content;
 
 insert into homepage_sections (key, title, is_visible, sort_order, content)
-values ('hero', 'Hero', true, 1, '{"eyebrow":"DIZAJNIRANO ZA SAVREMENE ENTERIJERE","heading":"Vino zaslužuje svoje mesto.","body":"Aluminijumski nosači za vino i čaše koji spajaju funkciju, preciznost i savremenu estetiku.","primaryLabel":"Pogledaj kolekciju","primaryHref":"/kolekcija","secondaryLabel":"Zatraži ponudu","secondaryHref":"/projekti","mediaUrl":"/assets/heng/lifestyle/zlatna-letva-sa-casama-hero.jpg","mediaAlt":"Čaše obešene na zlatnoj HENG letvi ispod kuhinjskog elementa","videoUrl":null,"videoPoster":null}'::jsonb)
+values ('categories', 'Kategorije', true, 1, '{"items":[{"title":"Ručke od prirodnog kamena","body":"Prirodna lepota pretvorena u sofisticiran element savremenog enterijera.","href":"/kolekcija","ctaLabel":"Istraži proizvode","mediaUrl":"/assets/heng/lifestyle/rucke-od-prirodnog-kamena-vertikalno.jpg","mediaAlt":"Okrugle ručke od prirodnog kamena na frontu kuhinjskog elementa","mediaPosition":"center 30%"},{"title":"Držači za vino i čaše","body":"Sveden dizajn i funkcionalnost koji kolekciji vina daju svoje mesto u prostoru.","href":"/kolekcija","ctaLabel":"Istraži proizvode","mediaUrl":"/assets/heng/lifestyle/case-nad-barom-heng-kadar.jpg","mediaAlt":"Čaše obešene na HENG letvi iznad barskog elementa","mediaPosition":"center top"}]}'::jsonb)
 on conflict (key) do update set
   title = excluded.title, is_visible = excluded.is_visible,
   sort_order = excluded.sort_order, content = excluded.content;
 
 insert into homepage_sections (key, title, is_visible, sort_order, content)
-values ('statement', 'Izjava brenda', true, 2, '{"heading":"Detalji koji prostoru daju karakter.","body":"HENG nastaje na granici između arhitekture i pribora. Umesto police koja zauzima prostor, ostaje linija koja ga definiše — dovoljno tiha da se uklopi, dovoljno precizna da se primeti.","note":"Dizajn koji ne zauzima prostor — već ga oblikuje.","mediaUrl":"/assets/heng/products/model-02/model-02-saten-zlatna.jpg","mediaAlt":"Model 02 u saten zlatnoj obradi"}'::jsonb)
+values ('material', 'Držači za vino i čaše', true, 2, '{"eyebrow":"MATERIJAL","heading":"Oblikovano da traje.","body":"HENG sistemi izrađeni su od eloksirane legure aluminijuma, sa završnim obradama koje se uklapaju u savremene kuhinje, vinske kutke i enterijere po meri.","points":[{"title":"Eloksirana legura aluminijuma","text":"Obrada se izvodi na samom materijalu, bez sloja koji se ljušti."},{"title":"Preciznost u svakom detalju","text":"Prorezi, radijusi i otvori za montažu izvedeni su u istoj toleranciji na svakom komadu."},{"title":"Skrivena montaža","text":"Vidljiv ostaje samo profil — pričvršćenje se povlači u pozadinu."}],"mediaUrl":"/assets/heng/products/model-01/model-01-sve-obrade.jpg","mediaAlt":"Model 01 — sve dostupne završne obrade jedna uz drugu","ctaLabel":"Istraži držače","ctaHref":"/kolekcija"}'::jsonb)
 on conflict (key) do update set
   title = excluded.title, is_visible = excluded.is_visible,
   sort_order = excluded.sort_order, content = excluded.content;
 
 insert into homepage_sections (key, title, is_visible, sort_order, content)
-values ('featured', 'Izdvojeno iz kolekcije', true, 3, '{"eyebrow":"KOLEKCIJA","heading":"Tri modela, jedna logika.","body":"Svaki model rešava jedan zadatak u prostoru — čašu, flašu ili ceo zid.","productSlugs":["model-01","model-02","model-03"]}'::jsonb)
-on conflict (key) do update set
-  title = excluded.title, is_visible = excluded.is_visible,
-  sort_order = excluded.sort_order, content = excluded.content;
-
-insert into homepage_sections (key, title, is_visible, sort_order, content)
-values ('finishes', 'Završne obrade', true, 4, '{"eyebrow":"ZAVRŠNE OBRADE","heading":"Četiri obrade, jedan materijal.","body":"Ista geometrija menja karakter zajedno sa obradom. Izaberite uzorak da vidite profil.","productSlug":"model-03"}'::jsonb)
-on conflict (key) do update set
-  title = excluded.title, is_visible = excluded.is_visible,
-  sort_order = excluded.sort_order, content = excluded.content;
-
-insert into homepage_sections (key, title, is_visible, sort_order, content)
-values ('material', 'Materijal i preciznost', true, 5, '{"eyebrow":"MATERIJAL","heading":"Oblikovano da traje.","body":"HENG sistemi izrađeni su od eloksirane legure aluminijuma, sa završnim obradama koje se uklapaju u savremene kuhinje, vinske kutke i enterijere po meri.","points":[{"title":"Eloksirana legura aluminijuma","text":"Obrada se izvodi na samom materijalu, bez sloja koji se ljušti."},{"title":"Preciznost u svakom detalju","text":"Prorezi, radijusi i otvori za montažu izvedeni su u istoj toleranciji na svakom komadu."},{"title":"Skrivena montaža","text":"Vidljiv ostaje samo profil — pričvršćenje se povlači u pozadinu."}],"mediaUrl":"/assets/heng/products/model-01/model-01-sve-obrade.jpg","mediaAlt":"Model 01 — sve dostupne završne obrade jedna uz drugu"}'::jsonb)
-on conflict (key) do update set
-  title = excluded.title, is_visible = excluded.is_visible,
-  sort_order = excluded.sort_order, content = excluded.content;
-
-insert into homepage_sections (key, title, is_visible, sort_order, content)
-values ('gallery', 'Inspiracija iz enterijera', true, 6, '{"eyebrow":"ENTERIJERI","heading":"Postavljeno u prostor.","items":[{"url":"/assets/heng/interiors/mermerni-zid-sa-lusterom.jpg","caption":"Bar u mermeru — nosači u nizu ispod osvetljene police","alt":"Bar u mermeru sa HENG sistemom i dizajnerskim lusterom"},{"url":"/assets/heng/interiors/kuhinja-vinska-nisa.jpg","caption":"Vinska niša integrisana u kuhinjski element","alt":"Osvetljena vinska niša sa zidnim nosačima za flaše u savremenoj kuhinji"},{"url":"/assets/heng/interiors/vinski-zid-sa-slikom.jpg","caption":"Simetrična postavka oko umetničkog rada","alt":"Vinski zid sa zidnim nosačima za flaše sa obe strane uljane slike"},{"url":"/assets/heng/interiors/mermer-detalj-flase-i-case.jpg","caption":"Detalj — flaše i čaše u istoj ravni","alt":"Detalj mermernog zida sa nosačima za flaše i obešenim čašama"},{"url":"/assets/heng/interiors/vitrina-sa-casama.jpg","caption":"Vitrina sa nosačima za čaše ispod police","alt":"Zatamnjena vitrina sa policama i nosačima za čaše"},{"url":"/assets/heng/interiors/mermerni-zid-flase-i-case.jpg","caption":"Vinski kutak kao produžetak zida","alt":"Mermerna niša sa nosačima za flaše i letvom za čaše"}]}'::jsonb)
-on conflict (key) do update set
-  title = excluded.title, is_visible = excluded.is_visible,
-  sort_order = excluded.sort_order, content = excluded.content;
-
-insert into homepage_sections (key, title, is_visible, sort_order, content)
-values ('dimensions', 'Dimenzije', true, 7, '{"eyebrow":"DIMENZIJE","heading":"Preciznost u svakom detalju.","body":"Mere su date u centimetrima, prema kotiranim fotografijama proizvoda."}'::jsonb)
-on conflict (key) do update set
-  title = excluded.title, is_visible = excluded.is_visible,
-  sort_order = excluded.sort_order, content = excluded.content;
-
-insert into homepage_sections (key, title, is_visible, sort_order, content)
-values ('projects', 'Projekti i saradnja', true, 8, '{"eyebrow":"PROJEKTI","heading":"Za enterijere koji zahtevaju više.","body":"Radimo sa arhitektama, dizajnerima i izvođačima na prilagođenim postavkama za privatne i komercijalne prostore.","audience":["Arhitekte","Dizajneri enterijera","Proizvođači nameštaja","Restorani","Hoteli","Vinski barovi","Vinarije","Enterijeri po meri"],"ctaLabel":"Pošalji projektni upit","ctaHref":"/projekti","mediaUrl":"/assets/heng/interiors/vinski-zid-sa-slikom.jpg","mediaAlt":"Vinski zid sa zidnim nosačima za flaše sa obe strane uljane slike"}'::jsonb)
-on conflict (key) do update set
-  title = excluded.title, is_visible = excluded.is_visible,
-  sort_order = excluded.sort_order, content = excluded.content;
-
-insert into homepage_sections (key, title, is_visible, sort_order, content)
-values ('instagram', 'Instagram', true, 9, '{"eyebrow":"INSTAGRAM","heading":"Pratite @heng.srb","ctaLabel":"Pratite @heng.srb","href":"https://www.instagram.com/heng.srb/","items":["/assets/heng/lifestyle/heng-cheers-kljucni-vizual.jpg","/assets/heng/interiors/mermer-detalj-flase-i-case.jpg","/assets/heng/products/model-03/model-03-sve-obrade.jpg","/assets/heng/interiors/vitrina-sa-casama.jpg"]}'::jsonb)
-on conflict (key) do update set
-  title = excluded.title, is_visible = excluded.is_visible,
-  sort_order = excluded.sort_order, content = excluded.content;
-
-insert into homepage_sections (key, title, is_visible, sort_order, content)
-values ('final_cta', 'Završni poziv', true, 10, '{"heading":"Početak dobrog prostora je u detaljima.","body":"Pogledajte kolekciju ili nam opišite prostor — predlog postavke pripremamo prema vašim merama.","primaryLabel":"Istraži kolekciju","primaryHref":"/kolekcija","secondaryLabel":"Kontaktiraj nas","secondaryHref":"/kontakt"}'::jsonb)
+values ('handles', 'Ručke od prirodnog kamena', true, 3, '{"eyebrow":"RUČKE OD PRIRODNOG KAMENA","heading":"Svaki komad je original.","body":"Kamen se ne proizvodi — vadi se, seče i polira. Zato nijedna ručka nije ista: šara, ton i zrno ostaju onakvi kakvim ih je blok ostavio.","points":[{"title":"Prirodni kamen, bez imitacije","text":"Mermer i travertin obrađeni do svilenog dodira, sa vidljivim tokom šare."},{"title":"Nijedna šara se ne ponavlja","text":"Svaki komad je jedinstven — kao potpis na frontu koji se svakodnevno dodiruje."},{"title":"Menja izgled nameštaja","text":"Ista kuhinja sa drugom ručkom čita se drugačije: detalj nosi ceo utisak prostora."}],"mediaUrl":"/assets/heng/lifestyle/rucke-od-prirodnog-kamena.jpg","mediaAlt":"Okrugle ručke od prirodnog kamena na frontu kuhinjskog elementa","ctaLabel":"Istraži ručke","ctaHref":"/kolekcija"}'::jsonb)
 on conflict (key) do update set
   title = excluded.title, is_visible = excluded.is_visible,
   sort_order = excluded.sort_order, content = excluded.content;
@@ -525,4 +483,4 @@ commit;
 --   select count(*) from products;          -- očekivano: 3
 --   select count(*) from product_variants;  -- očekivano: 11
 --   select count(*) from product_media;     -- očekivano: 17
---   select count(*) from homepage_sections; -- očekivano: 11
+--   select count(*) from homepage_sections; -- očekivano: 4

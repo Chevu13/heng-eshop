@@ -8,23 +8,21 @@ import { SectionEditor } from '@/components/admin/SectionEditor';
 export const metadata: Metadata = { title: 'Početna strana' };
 export const dynamic = 'force-dynamic';
 
+/**
+ * Početna strana ima tačno četiri sekcije. Galerija više nije na početnoj,
+ * ali iz nje čita strana /inspiracija. Ostali stari redovi se ne prikazuju.
+ */
 const LABELS: Record<string, string> = {
-  announcement: 'Traka sa najavom',
   hero: 'Hero sekcija',
-  statement: 'Izjava brenda',
-  featured: 'Izdvojeno iz kolekcije',
-  finishes: 'Završne obrade',
-  material: 'Materijal i preciznost',
-  gallery: 'Galerija enterijera',
-  dimensions: 'Dimenzije',
-  projects: 'Projekti i saradnja',
-  instagram: 'Instagram',
-  final_cta: 'Završni poziv',
+  categories: '01 — Kategorije',
+  material: '02 — Držači za vino i čaše',
+  handles: '03 — Ručke od prirodnog kamena',
+  gallery: 'Galerija (strana Inspiracija)',
 };
 
 export default async function AdminHomepagePage() {
   await requireAdmin();
-  const sections = await adminHomepage();
+  const sections = (await adminHomepage()).filter((s) => s.key in LABELS);
 
   return (
     <>

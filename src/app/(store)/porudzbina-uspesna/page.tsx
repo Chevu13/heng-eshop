@@ -27,7 +27,7 @@ export default async function OrderSuccessPage({
         </Reveal>
         <Reveal delay={0.06}>
           <h1
-            className="mx-auto max-w-[18ch] font-display text-[clamp(2rem,5vw,2.9rem)] leading-[1.1] text-ivory"
+            className="display-caps mx-auto max-w-[18ch] text-[clamp(2rem,5vw,3.1rem)] text-ivory"
             style={{ fontWeight: 700 }}
           >
             Hvala. Javljamo se uskoro.

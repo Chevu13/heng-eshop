@@ -125,10 +125,10 @@
   /* Dugmad */
   .btn {
     @apply inline-flex items-center justify-center gap-2 rounded-sm border
-           font-body text-[12px] font-medium uppercase leading-none
+           font-body text-[13px] font-semibold uppercase leading-none
            transition-all duration-300 ease-heng;
-    letter-spacing: 0.16em;
-    padding: 17px 30px;
+    letter-spacing: 0.14em;
+    padding: 20px 38px;
   }
   .btn-primary {
     background: var(--color-gold);
@@ -187,7 +187,7 @@
   /* Tekstualni link sa strelicom — „ISTRAŽI PROIZVODE →”.
      Linija strelice raste na hover, glava strelice klizi udesno. */
   .link-arrow {
-    @apply inline-flex items-center gap-4 font-body text-[11px] font-semibold
+    @apply inline-flex items-center gap-5 font-body text-[12px] font-semibold
            uppercase leading-none transition-colors duration-300 ease-heng;
     letter-spacing: 0.2em;
     color: var(--color-gold);
@@ -197,7 +197,7 @@
     color: var(--color-amber);
   }
   .link-arrow .link-arrow__line {
-    @apply relative block h-px w-[46px] shrink-0 transition-[width] duration-500 ease-heng;
+    @apply relative block h-px w-[52px] shrink-0 transition-[width] duration-500 ease-heng;
     background: currentColor;
     opacity: 0.75;
   }
@@ -214,7 +214,7 @@
   }
   .link-arrow:hover .link-arrow__line,
   .link-arrow:focus-visible .link-arrow__line {
-    @apply w-[62px];
+    @apply w-[70px];
     opacity: 1;
   }
 

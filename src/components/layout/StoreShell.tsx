@@ -13,7 +13,7 @@ import { useCart } from '@/components/cart/CartProvider';
  */
 const TRANSPARENT_ROUTES = ['/', '/o-nama', '/projekti', '/inspiracija'];
 
-export function StoreShell() {
+export function StoreShell({ instagramUrl = null }: { instagramUrl?: string | null }) {
   const pathname = usePathname();
   const { lastAdded } = useCart();
   const [scrolled, setScrolled] = useState(false);
@@ -29,7 +29,7 @@ export function StoreShell() {
   return (
     <>
       <div className="fixed inset-x-0 top-0 z-50">
-        <Header transparentOnTop={transparent} scrolled={scrolled} />
+        <Header transparentOnTop={transparent} scrolled={scrolled} instagramUrl={instagramUrl} />
       </div>
 
       {/* Odstojanje za strane bez hero medija ispod headera. */}

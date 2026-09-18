@@ -29,7 +29,7 @@ export default async function StoreLayout({ children }: { children: React.ReactN
       >
         Preskoči na sadržaj
       </a>
-      <StoreShell />
+      <StoreShell instagramUrl={settings.instagram_url} />
       <main id="glavni-sadrzaj">{children}</main>
       <Footer settings={settings} categories={categories} />
       <JsonLd data={orgLd} />

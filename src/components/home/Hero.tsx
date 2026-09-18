@@ -43,7 +43,7 @@ export function Hero({ content }: { content: HeroContent }) {
         <div className="max-w-[760px]">
           {content.eyebrow && (
             <motion.p
-              className="heng-eyebrow mb-6"
+              className="heng-eyebrow mb-5"
               style={{ color: 'var(--color-gold)' }}
               initial={reduce ? false : { opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
@@ -53,7 +53,10 @@ export function Hero({ content }: { content: HeroContent }) {
             </motion.p>
           )}
 
-          <h1 className="display-caps text-[clamp(2.4rem,6.4vw,4.4rem)] text-ivory">
+          <h1
+            className="display-caps text-[clamp(2.8rem,7.2vw,5.2rem)] text-ivory"
+            style={{ fontWeight: 500, lineHeight: 1.08 }}
+          >
             {words.map((w, i) => (
               <span key={`${w}-${i}`} className="inline-block overflow-hidden align-bottom">
                 <motion.span
@@ -70,7 +73,7 @@ export function Hero({ content }: { content: HeroContent }) {
 
           {content.body && (
             <motion.p
-              className="mt-7 max-w-[52ch] font-body text-[15px] font-light leading-[1.75] text-ivory/78 sm:text-[17px]"
+              className="mt-8 max-w-[52ch] font-body text-[16px] font-light leading-[1.75] text-ivory/85 sm:text-[18px]"
               initial={reduce ? false : { opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 0.45, ease }}
@@ -82,7 +85,7 @@ export function Hero({ content }: { content: HeroContent }) {
           {/* Jedan jedini poziv na akciju — hero ostaje čist. */}
           {content.primaryLabel && content.primaryHref && (
             <motion.div
-              className="mt-10"
+              className="mt-12"
               initial={reduce ? false : { opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 0.58, ease }}

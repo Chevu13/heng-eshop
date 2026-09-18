@@ -30,9 +30,25 @@ function BagIcon({ className = '' }: { className?: string }) {
   );
 }
 
+/** Ista linijska ikonografija kao BagIcon — bez fill-a, oblih krajeva. */
+function InstagramIcon({ className = '' }: { className?: string }) {
+  return (
+    <svg
+      viewBox="0 0 24 24" aria-hidden="true" focusable="false"
+      className={className} fill="none"
+      stroke="currentColor" strokeWidth="1.2"
+      strokeLinecap="round" strokeLinejoin="round"
+    >
+      <rect x="3.5" y="3.5" width="17" height="17" rx="5" />
+      <circle cx="12" cy="12" r="4.3" />
+      <circle cx="17" cy="7" r="0.9" fill="currentColor" stroke="none" />
+    </svg>
+  );
+}
+
 export function Header({
-  transparentOnTop = false, scrolled = false,
-}: { transparentOnTop?: boolean; scrolled?: boolean }) {
+  transparentOnTop = false, scrolled = false, instagramUrl = null,
+}: { transparentOnTop?: boolean; scrolled?: boolean; instagramUrl?: string | null }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const { count, openDrawer } = useCart();
   const pathname = usePathname();
@@ -77,7 +93,12 @@ export function Header({
                   <Link
                     href={item.href}
                     className="link-gold font-body text-[11px] font-medium uppercase tracking-eyebrow"
-                    style={{ color: fg, opacity: pathname.startsWith(item.href) ? 1 : 0.72 }}
+                    style={{
+                      color: fg,
+                      opacity: pathname.startsWith(item.href)
+                        ? 1
+                        : overHero || menuOpen ? 0.92 : 0.72,
+                    }}
                     aria-current={pathname.startsWith(item.href) ? 'page' : undefined}
                   >
                     {item.label}
@@ -88,6 +109,18 @@ export function Header({
           </nav>
 
           <div className="flex items-center gap-5">
+            {instagramUrl && (
+              <a
+                href={instagramUrl}
+                target="_blank" rel="noopener noreferrer"
+                className="-m-2 hidden p-2 transition-opacity duration-300 hover:opacity-70 lg:block"
+                style={{ color: fg }}
+                aria-label="HENG na Instagramu"
+              >
+                <InstagramIcon className="h-[22px] w-[22px]" />
+              </a>
+            )}
+
             <button
               onClick={openDrawer}
               className="relative -m-2 p-2 transition-opacity duration-300 hover:opacity-70"

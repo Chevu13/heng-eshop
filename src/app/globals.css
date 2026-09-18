@@ -98,7 +98,7 @@
   }
 
   .heng-eyebrow {
-    @apply font-body text-[11px] font-medium uppercase tracking-eyebrow;
+    @apply font-body text-[12px] font-medium uppercase tracking-eyebrow;
   }
 
   /* Verzalni naslov u Cormorant-u — glavni naslovni izraz brenda
@@ -131,13 +131,15 @@
     padding: 17px 30px;
   }
   .btn-primary {
-    background: var(--color-maroon);
-    color: var(--color-ivory);
-    border-color: var(--color-maroon);
+    background: var(--color-gold);
+    color: var(--color-maroon-deep);
+    border-color: var(--color-gold);
   }
   .btn-primary:hover:not(:disabled) {
-    background: var(--color-magenta);
-    border-color: var(--color-magenta);
+    background: var(--color-maroon-deep);
+    color: var(--color-ivory);
+    border-color: var(--color-gold);
+    transform: translateX(3px);
   }
   .btn-outline {
     background: transparent;
@@ -145,8 +147,9 @@
     border-color: rgba(28, 20, 22, 0.28);
   }
   .btn-outline:hover:not(:disabled) {
-    border-color: var(--color-amber);
-    color: var(--color-amber);
+    border-color: var(--color-gold);
+    color: var(--color-gold);
+    transform: translateX(3px);
   }
   .btn-outline-light {
     background: transparent;
@@ -154,8 +157,9 @@
     border-color: rgba(239, 234, 228, 0.38);
   }
   .btn-outline-light:hover:not(:disabled) {
-    border-color: var(--color-amber);
-    color: var(--color-amber);
+    border-color: var(--color-gold);
+    color: var(--color-gold);
+    transform: translateX(3px);
   }
   .btn:disabled { opacity: 0.45; cursor: not-allowed; }
 

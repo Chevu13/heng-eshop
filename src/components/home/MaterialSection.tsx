@@ -74,10 +74,10 @@ export function MaterialSection({
                           {String(i + 1).padStart(2, '0')}
                         </span>
                         <div>
-                          <h3 className="font-display text-[22px]" style={{ fontWeight: 400 }}>
+                          <h3 className="font-display text-[23px]" style={{ fontWeight: 500 }}>
                             {p.title}
                           </h3>
-                          <p className="mt-2 max-w-[54ch] font-body text-[14px] font-light leading-[1.75] text-ink/62">
+                          <p className="mt-2.5 max-w-[54ch] font-body text-[14px] font-light leading-[1.75] text-ink/60">
                             {p.text}
                           </p>
                         </div>

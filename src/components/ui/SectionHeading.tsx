@@ -18,8 +18,8 @@ export function SectionHeading({
       )}
       <Reveal delay={0.05}>
         <h2
-          className="display-caps text-[28px] sm:text-[32px] lg:text-[38px]"
-          style={{ color: light ? 'var(--color-ivory)' : 'var(--color-ink)' }}
+          className="display-caps text-[30px] sm:text-[34px] lg:text-[42px]"
+          style={{ color: light ? 'var(--color-ivory)' : 'var(--color-ink)', fontWeight: 400 }}
         >
           {heading}
         </h2>

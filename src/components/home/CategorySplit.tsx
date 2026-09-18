@@ -78,7 +78,10 @@ export function CategorySplit({ content }: { content: CategorySplitContent }) {
                 className="mt-4 block h-px w-14 bg-ivory/55"
               />
 
-              <h2 className="display-caps mt-7 max-w-[15ch] text-[1.9rem] text-ivory sm:text-[clamp(1.5rem,3.4vw,2.9rem)]">
+              <h2
+                className="display-caps mt-7 max-w-[15ch] text-[2.1rem] text-ivory sm:text-[clamp(1.6rem,3.6vw,3.1rem)]"
+                style={{ fontWeight: 500 }}
+              >
                 {item.title}
               </h2>
 

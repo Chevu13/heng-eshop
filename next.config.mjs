@@ -19,6 +19,8 @@ const nextConfig = {
       : [],
   },
   eslint: { ignoreDuringBuilds: false },
+  // Podrazumevano je 1 MB — premalo za otpremanje medija i PDF faktura.
+  experimental: { serverActions: { bodySizeLimit: '26mb' } },
   async redirects() {
     return [{ source: '/inspiracija', destination: '/u-prostoru', permanent: true }];
   },

@@ -3,7 +3,9 @@
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { requireAdmin } from '@/lib/auth';
-import { createServerSupabase } from '@/lib/supabase/server';
+import { createAdminSupabase, createServerSupabase } from '@/lib/supabase/server';
+import { sendMail } from '@/lib/mail';
+import { isEmailConfigured, SITE_URL } from '@/lib/env';
 import { sanitize, ALLOWED_MEDIA_TYPES, MAX_UPLOAD_BYTES } from '@/lib/validation';
 import { slugify } from '@/lib/format';
 import { resolveMediaUrl } from '@/lib/admin/media';
@@ -406,6 +408,101 @@ export async function updateOrder(id: string, fd: FormData): Promise<ActionResul
   revalidatePath('/admin/porudzbine');
   revalidatePath(`/admin/porudzbine/${id}`);
   return OK('Porudžbina je ažurirana.');
+}
+
+// ==================== FAKTURE ====================
+// PDF se čuva u privatnom bucket-u `heng-uploads`; upis ide preko service_role
+// klijenta (admin nema insert politiku na tom bucket-u), a tek posle provere admina.
+
+export async function uploadInvoice(orderId: string, fd: FormData): Promise<ActionResult> {
+  const sb = await client();
+  const storage = createAdminSupabase();
+  if (!storage) return FAIL('Nedostaje SUPABASE_SERVICE_ROLE_KEY na serveru.');
+
+  const file = fd.get('invoice');
+  if (!(file instanceof File) || file.size === 0) return FAIL('Izaberite PDF fakture.');
+  if (file.size > MAX_UPLOAD_BYTES) return FAIL('PDF je veći od 10 MB.');
+  const bytes = Buffer.from(await file.arrayBuffer());
+  if (bytes.subarray(0, 5).toString('latin1') !== '%PDF-') return FAIL('Fajl nije PDF.');
+
+  const { data: order } = await sb.from('orders').select('reference').eq('id', orderId).maybeSingle();
+  if (!order) return FAIL('Porudžbina nije pronađena.');
+
+  const path = `fakture/${slugify(order.reference as string)}.pdf`;
+  const { error: upErr } = await storage.storage
+    .from('heng-uploads')
+    .upload(path, bytes, { contentType: 'application/pdf', upsert: true });
+  if (upErr) return FAIL('Otpremanje fakture nije uspelo.');
+
+  const { error } = await sb
+    .from('orders').update({ invoice_path: path, invoice_sent_at: null }).eq('id', orderId);
+  if (error) return FAIL('Faktura je otpremljena, ali nije vezana za porudžbinu. Da li je pokrenuta migracija 0005_invoices.sql?');
+
+  revalidatePath(`/admin/porudzbine/${orderId}`);
+  if (bool(fd, 'send')) return sendInvoice(orderId);
+  return OK('Faktura je sačuvana.');
+}
+
+export async function sendInvoice(orderId: string): Promise<ActionResult> {
+  const sb = await client();
+  if (!isEmailConfigured) {
+    return FAIL('Slanje mejlova nije podešeno (SMTP). Faktura je sačuvana, ali nije poslata.');
+  }
+  const storage = createAdminSupabase();
+  if (!storage) return FAIL('Nedostaje SUPABASE_SERVICE_ROLE_KEY na serveru.');
+
+  const { data: order } = await sb
+    .from('orders').select('reference, full_name, email, invoice_path').eq('id', orderId).maybeSingle();
+  if (!order?.invoice_path) return FAIL('Porudžbina nema fakturu.');
+
+  const { data: blob, error: dlErr } = await storage.storage.from('heng-uploads').download(order.invoice_path);
+  if (dlErr || !blob) return FAIL('Faktura nije pronađena u skladištu.');
+
+  try {
+    await sendMail({
+      to: order.email,
+      subject: `Faktura za porudžbinu ${order.reference} — HENG`,
+      text: [
+        `Poštovani/a ${order.full_name},`,
+        '',
+        `u prilogu vam šaljemo fakturu za porudžbinu ${order.reference}.`,
+        '',
+        'Hvala vam na kupovini.',
+        '',
+        'HENG',
+        SITE_URL,
+      ].join('\n'),
+      attachments: [{
+        filename: `Faktura-${order.reference}.pdf`,
+        content: Buffer.from(await blob.arrayBuffer()),
+        contentType: 'application/pdf',
+      }],
+    });
+  } catch (err) {
+    console.error('[faktura] slanje nije uspelo', err);
+    return FAIL('Mejl nije poslat. Proverite SMTP podešavanja.');
+  }
+
+  await sb.from('orders').update({ invoice_sent_at: new Date().toISOString() }).eq('id', orderId);
+  revalidatePath(`/admin/porudzbine/${orderId}`);
+  return OK(`Faktura je poslata na ${order.email}.`);
+}
+
+export async function removeInvoice(orderId: string): Promise<ActionResult> {
+  const sb = await client();
+  const { data: order } = await sb.from('orders').select('invoice_path').eq('id', orderId).maybeSingle();
+  if (order?.invoice_path) await sb.storage.from('heng-uploads').remove([order.invoice_path]);
+  const { error } = await sb
+    .from('orders').update({ invoice_path: null, invoice_sent_at: null }).eq('id', orderId);
+  if (error) return FAIL('Faktura nije uklonjena.');
+  revalidatePath(`/admin/porudzbine/${orderId}`);
+  return OK('Faktura je uklonjena.');
+}
+
+export async function invoiceUrl(path: string): Promise<string | null> {
+  const sb = await client();
+  const { data } = await sb.storage.from('heng-uploads').createSignedUrl(path, 300);
+  return data?.signedUrl ?? null;
 }
 
 // ==================== UPITI ====================

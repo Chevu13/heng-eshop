@@ -107,6 +107,8 @@ export interface Order {
   total_rsd: number;
   has_request_items: boolean;
   internal_note: string | null;
+  invoice_path?: string | null;
+  invoice_sent_at?: string | null;
   created_at: string;
   items?: OrderItem[];
 }

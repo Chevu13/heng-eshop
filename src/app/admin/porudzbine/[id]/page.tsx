@@ -5,6 +5,7 @@ import { requireAdmin } from '@/lib/auth';
 import { adminOrder } from '@/lib/admin/queries';
 import { AdminHeading, Badge, Card } from '@/components/admin/AdminUI';
 import { OrderStatusForm } from '@/components/admin/OrderStatusForm';
+import { InvoicePanel } from '@/components/admin/InvoicePanel';
 import { formatRsd, formatDate, statusLabel, paymentLabel, CENA_NA_UPIT } from '@/lib/format';
 
 export const dynamic = 'force-dynamic';
@@ -117,7 +118,16 @@ export default async function AdminOrderPage({ params }: { params: { id: string 
           </Card>
         </div>
 
-        <div>
+        <div className="space-y-8">
+          <Card>
+            <h2 className="mb-5 font-display text-[18px]" style={{ fontWeight: 600 }}>Faktura</h2>
+            <InvoicePanel
+              orderId={order.id}
+              email={order.email}
+              path={order.invoice_path ?? null}
+              sentAt={order.invoice_sent_at ?? null}
+            />
+          </Card>
           <Card>
             <h2 className="mb-5 font-display text-[18px]" style={{ fontWeight: 600 }}>Obrada</h2>
             <OrderStatusForm

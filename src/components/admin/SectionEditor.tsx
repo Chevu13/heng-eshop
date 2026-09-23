@@ -12,7 +12,6 @@ const HINTS: Record<string, string> = {
   categories: 'items — niz {title, body, href, ctaLabel, mediaUrl, mediaAlt, mediaPosition}. Predviđena su dva vizuala.',
   material: 'eyebrow, heading, body · points — niz {title, text} · mediaUrl, mediaAlt · ctaLabel, ctaHref.',
   handles: 'ista polja kao „material”. Sekcija se prikazuje u obrnutom rasporedu (tekst levo, fotografija desno).',
-  gallery: 'eyebrow, heading · items — niz {url, caption, alt}.',
 };
 
 export function SectionEditor({ section, label }: { section: HomepageSection; label: string }) {

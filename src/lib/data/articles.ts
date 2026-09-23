@@ -1,7 +1,7 @@
 /**
  * Članci za stranu „U prostoru” — između bloga i galerije.
- * Privremeni tekstovi i fotografije; klijent šalje konačan sadržaj.
- * Novi članak = novi objekat u nizu (najnoviji ide na vrh).
+ * Uređuju se u adminu (/admin/u-prostoru); ARTICLES je samo početni sadržaj
+ * dok se u bazi ne sačuva prvi članak.
  */
 
 export const ARTICLE_CATEGORIES = [
@@ -21,7 +21,7 @@ export interface Article {
   excerpt: string;
   mediaUrl: string;
   mediaAlt: string;
-  /** Pasusi; red koji počinje sa „## ” je podnaslov. */
+  /** Pasusi; pasus koji počinje sa „## ” je podnaslov. */
   body: string[];
 }
 

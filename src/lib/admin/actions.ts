@@ -6,6 +6,8 @@ import { requireAdmin } from '@/lib/auth';
 import { createServerSupabase } from '@/lib/supabase/server';
 import { sanitize, ALLOWED_MEDIA_TYPES, MAX_UPLOAD_BYTES } from '@/lib/validation';
 import { slugify } from '@/lib/format';
+import { resolveMediaUrl } from '@/lib/admin/media';
+import { ARTICLE_CATEGORIES, ARTICLES, type Article, type ArticleCategory } from '@/lib/data/articles';
 
 export interface ActionResult { ok: boolean; message: string }
 
@@ -456,6 +458,97 @@ export async function saveSection(id: string, fd: FormData): Promise<ActionResul
   revalidateStore();
   revalidatePath('/admin/pocetna');
   return OK('Sekcija je sačuvana.');
+}
+
+// ==================== U PROSTORU (članci i galerija) ====================
+// Čuvaju se kao redovi `articles` / `gallery` u homepage_sections, pa ne treba
+// nova tabela ni RLS — važe postojeće politike „pocetna: admin upis”.
+
+type Sb = Awaited<ReturnType<typeof client>>;
+
+async function readItems<T>(sb: Sb, key: string, fallback: T[]): Promise<T[]> {
+  const { data } = await sb.from('homepage_sections').select('content').eq('key', key).maybeSingle();
+  return data ? (((data.content as { items?: T[] }).items) ?? []) : fallback;
+}
+
+async function writeItems(sb: Sb, key: string, title: string, items: unknown[]): Promise<boolean> {
+  const { error } = await sb.from('homepage_sections').upsert(
+    // Red mora biti vidljiv: javni sajt čita samo vidljive sekcije.
+    { key, title, is_visible: true, content: { items } },
+    { onConflict: 'key' },
+  );
+  if (error) return false;
+  revalidateStore();
+  revalidatePath('/admin/u-prostoru');
+  return true;
+}
+
+export async function saveArticle(originalSlug: string | null, fd: FormData): Promise<ActionResult> {
+  const sb = await client();
+
+  const title = str(fd, 'title', 160);
+  if (!title) return FAIL('Naslov je obavezan.');
+  const slug = slugify(str(fd, 'slug', 160) ?? title);
+  if (!slug) return FAIL('Slug nije ispravan.');
+  const category = String(fd.get('category') ?? '') as ArticleCategory;
+  if (!ARTICLE_CATEGORIES.some((c) => c.slug === category)) return FAIL('Izaberite kategoriju.');
+  const date = str(fd, 'date', 10);
+  if (!date || !/^\d{4}-\d{2}-\d{2}$/.test(date)) return FAIL('Datum nije ispravan.');
+  const media = str(fd, 'mediaUrl', 500);
+  if (!media) return FAIL('Fotografija je obavezna.');
+
+  // `sanitize` briše prelome redova, pa se tekst prvo deli na pasuse.
+  const body = String(fd.get('body') ?? '')
+    .split(/\r?\n\s*\r?\n/)
+    .map((p) => sanitize(p, 8000))
+    .filter(Boolean);
+
+  const article: Article = {
+    slug, category, date, title,
+    excerpt: str(fd, 'excerpt', 400) ?? '',
+    mediaUrl: resolveMediaUrl(media),
+    mediaAlt: str(fd, 'mediaAlt', 240) ?? title,
+    body,
+  };
+
+  const items = await readItems<Article>(sb, 'articles', ARTICLES);
+  if (slug !== originalSlug && items.some((a) => a.slug === slug)) return FAIL('Slug već postoji.');
+  const next = originalSlug
+    ? items.map((a) => (a.slug === originalSlug ? article : a))
+    : [article, ...items];
+
+  if (!(await writeItems(sb, 'articles', 'Članci (U prostoru)', next))) return FAIL('Članak nije sačuvan.');
+  return OK('Članak je sačuvan.');
+}
+
+export async function deleteArticle(slug: string): Promise<ActionResult> {
+  const sb = await client();
+  const items = await readItems<Article>(sb, 'articles', ARTICLES);
+  const ok = await writeItems(sb, 'articles', 'Članci (U prostoru)', items.filter((a) => a.slug !== slug));
+  return ok ? OK('Članak je obrisan.') : FAIL('Članak nije obrisan.');
+}
+
+export async function saveGallery(fd: FormData): Promise<ActionResult> {
+  const sb = await client();
+  let raw: unknown;
+  try {
+    raw = JSON.parse(String(fd.get('items') ?? '[]'));
+  } catch {
+    return FAIL('Neispravni podaci galerije.');
+  }
+  if (!Array.isArray(raw)) return FAIL('Neispravni podaci galerije.');
+
+  const items = raw
+    .map((r: Record<string, unknown>) => ({
+      url: sanitize(String(r.url ?? ''), 500),
+      alt: sanitize(String(r.alt ?? ''), 240),
+      caption: sanitize(String(r.caption ?? ''), 240) || undefined,
+    }))
+    .filter((r) => r.url)
+    .map((r) => ({ ...r, url: resolveMediaUrl(r.url), alt: r.alt || r.caption || 'HENG u prostoru' }));
+
+  if (!(await writeItems(sb, 'gallery', 'Galerija (U prostoru)', items))) return FAIL('Galerija nije sačuvana.');
+  return OK('Galerija je sačuvana.');
 }
 
 // ==================== PODEŠAVANJA ====================

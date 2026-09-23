@@ -5,18 +5,19 @@ import { notFound } from 'next/navigation';
 import { ArticleCard } from '@/components/journal/ArticleCard';
 import { breadcrumbLd, JsonLd } from '@/lib/seo';
 import { SITE_URL } from '@/lib/env';
-import { ARTICLES, categoryLabel, formatArticleDate } from '@/lib/data/articles';
+import { getArticles } from '@/lib/data/repository';
+import { categoryLabel, formatArticleDate } from '@/lib/data/articles';
 
-export const dynamicParams = false;
+export const revalidate = 600;
 
-export function generateStaticParams() {
-  return ARTICLES.map((a) => ({ slug: a.slug }));
+export async function generateStaticParams() {
+  return (await getArticles()).map((a) => ({ slug: a.slug }));
 }
 
-const find = (slug: string) => ARTICLES.find((a) => a.slug === slug);
+const find = async (slug: string) => (await getArticles()).find((a) => a.slug === slug);
 
-export function generateMetadata({ params }: { params: { slug: string } }): Metadata {
-  const a = find(params.slug);
+export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
+  const a = await find(params.slug);
   if (!a) return {};
   return {
     title: a.title,
@@ -26,13 +27,14 @@ export function generateMetadata({ params }: { params: { slug: string } }): Meta
   };
 }
 
-export default function ArticlePage({ params }: { params: { slug: string } }) {
-  const a = find(params.slug);
+export default async function ArticlePage({ params }: { params: { slug: string } }) {
+  const all = await getArticles();
+  const a = all.find((r) => r.slug === params.slug);
   if (!a) notFound();
 
   const related = [
-    ...ARTICLES.filter((r) => r.slug !== a.slug && r.category === a.category),
-    ...ARTICLES.filter((r) => r.slug !== a.slug && r.category !== a.category),
+    ...all.filter((r) => r.slug !== a.slug && r.category === a.category),
+    ...all.filter((r) => r.slug !== a.slug && r.category !== a.category),
   ].slice(0, 3);
 
   return (
@@ -49,7 +51,7 @@ export default function ArticlePage({ params }: { params: { slug: string } }) {
           '@type': 'Article',
           headline: a.title,
           description: a.excerpt,
-          image: `${SITE_URL}${a.mediaUrl}`,
+          image: a.mediaUrl.startsWith('http') ? a.mediaUrl : `${SITE_URL}${a.mediaUrl}`,
           datePublished: a.date,
           author: { '@type': 'Organization', name: 'HENG' },
           mainEntityOfPage: `${SITE_URL}/u-prostoru/${a.slug}`,

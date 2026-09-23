@@ -6,8 +6,8 @@ import { InspirationGallery } from '@/components/home/InspirationGallery';
 import { Reveal } from '@/components/ui/Reveal';
 import { SectionHeading } from '@/components/ui/SectionHeading';
 import { breadcrumbLd, JsonLd } from '@/lib/seo';
-import { getGallery } from '@/lib/data/repository';
-import { ARTICLE_CATEGORIES, ARTICLES } from '@/lib/data/articles';
+import { getArticles, getGallery } from '@/lib/data/repository';
+import { ARTICLE_CATEGORIES } from '@/lib/data/articles';
 
 export const revalidate = 600;
 
@@ -22,8 +22,8 @@ export default async function InSpacePage({
   searchParams,
 }: { searchParams: { kategorija?: string } }) {
   const active = ARTICLE_CATEGORIES.find((c) => c.slug === searchParams.kategorija)?.slug;
-  const articles = active ? ARTICLES.filter((a) => a.category === active) : ARTICLES;
-  const gallery = await getGallery();
+  const [all, gallery] = await Promise.all([getArticles(), getGallery()]);
+  const articles = active ? all.filter((a) => a.category === active) : all;
 
   const tabs = [{ slug: undefined, label: 'Sve' }, ...ARTICLE_CATEGORIES];
 

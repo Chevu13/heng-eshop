@@ -1,12 +1,11 @@
 import type { MetadataRoute } from 'next';
 import { SITE_URL } from '@/lib/env';
-import { getCategories, getProducts } from '@/lib/data/repository';
-import { ARTICLES } from '@/lib/data/articles';
+import { getArticles, getCategories, getProducts } from '@/lib/data/repository';
 
 export const revalidate = 3600;
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const [products, categories] = await Promise.all([getProducts(), getCategories()]);
+  const [products, categories, articles] = await Promise.all([getProducts(), getCategories(), getArticles()]);
   const now = new Date();
 
   const staticRoutes: MetadataRoute.Sitemap = [
@@ -29,7 +28,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: 'weekly' as const,
       priority: 0.8,
     })),
-    ...ARTICLES.map((a) => ({
+    ...articles.map((a) => ({
       url: `${SITE_URL}/u-prostoru/${a.slug}`,
       lastModified: new Date(a.date),
       changeFrequency: 'monthly' as const,

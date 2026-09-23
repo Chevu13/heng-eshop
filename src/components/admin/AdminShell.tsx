@@ -15,6 +15,7 @@ const NAV = [
   { href: '/admin/upiti', label: 'Upiti' },
   { href: '/admin/mediji', label: 'Mediji' },
   { href: '/admin/pocetna', label: 'Početna strana' },
+  { href: '/admin/u-prostoru', label: 'U prostoru' },
   { href: '/admin/podesavanja', label: 'Podešavanja' },
 ];
 

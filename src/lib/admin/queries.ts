@@ -3,7 +3,8 @@ import { createServerSupabase } from '@/lib/supabase/server';
 import type {
   Category, HomepageSection, Order, ProductFull, ProjectInquiry, SiteSettings,
 } from '@/types';
-import { SITE_SETTINGS } from '@/lib/data/fixtures';
+import { GALLERY, SITE_SETTINGS } from '@/lib/data/fixtures';
+import { ARTICLES, type Article } from '@/lib/data/articles';
 
 /**
  * Admin upiti idu kroz korisnikovu sesiju — RLS je i dalje aktivan,
@@ -66,6 +67,21 @@ export async function adminHomepage(): Promise<HomepageSection[]> {
   const { data, error } = await sb().from('homepage_sections').select('*').order('sort_order');
   if (error) throw error;
   return (data ?? []) as HomepageSection[];
+}
+
+/** Članci i galerija strane „U prostoru” (seed dok red ne postoji u bazi). */
+export async function adminInSpace(): Promise<{ articles: Article[]; gallery: typeof GALLERY }> {
+  const { data, error } = await sb()
+    .from('homepage_sections').select('key, content').in('key', ['articles', 'gallery']);
+  if (error) throw error;
+  const items = <T,>(key: string, fallback: T[]): T[] => {
+    const row = data?.find((r) => r.key === key);
+    return row ? ((row.content as { items?: T[] }).items ?? []) : fallback;
+  };
+  return {
+    articles: items<Article>('articles', ARTICLES).sort((a, b) => b.date.localeCompare(a.date)),
+    gallery: items('gallery', GALLERY),
+  };
 }
 
 export async function adminSettings(): Promise<SiteSettings> {

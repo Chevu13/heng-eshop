@@ -7,6 +7,7 @@ import type {
 import {
   CATEGORIES, GALLERY, HOMEPAGE_SECTIONS, PRODUCTS, SITE_SETTINGS,
 } from './fixtures';
+import { ARTICLES, type Article } from './articles';
 
 /**
  * Jedinstvena tačka pristupa katalogu.
@@ -147,10 +148,20 @@ export const getSettings = cache(async (): Promise<SiteSettings> => {
   return row ? { ...SITE_SETTINGS, ...row } : SITE_SETTINGS;
 });
 
+/**
+ * Galerija i članci „U prostoru” uređuju se u adminu i čuvaju kao redovi
+ * `gallery` / `articles` u homepage_sections. Dok red ne postoji u bazi,
+ * prikazuje se seed sadržaj; kada postoji, važi i prazna lista.
+ */
 export const getGallery = cache(async () => {
   const section = await getSection('gallery');
-  const items = (section?.content as { items?: typeof GALLERY })?.items;
-  return items?.length ? items : GALLERY;
+  return section ? ((section.content as { items?: typeof GALLERY }).items ?? []) : GALLERY;
+});
+
+export const getArticles = cache(async (): Promise<Article[]> => {
+  const section = await getSection('articles');
+  const items = section ? ((section.content as { items?: Article[] }).items ?? []) : ARTICLES;
+  return [...items].sort((a, b) => b.date.localeCompare(a.date));
 });
 
 // ---------- Filtriranje kataloga ----------

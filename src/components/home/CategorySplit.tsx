@@ -4,6 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { motion, useReducedMotion } from 'motion/react';
 import { useState } from 'react';
+import { SectionHeading } from '@/components/ui/SectionHeading';
 
 export interface CategoryTile {
   title: string;
@@ -24,7 +25,9 @@ export interface CategorySplitContent {
  * 01 — KATEGORIJE.
  * Na telefonu slajder (scroll-snap): kartica zauzima ~86% širine, pa se
  * sledeća nazire i poziva na prevlačenje. Od 640px dva vizuala jedan pored
- * drugog, bez razmaka: podeljen ekran sa tankom zlatnom linijom na spoju. Ceo panel je klikabilan; tekst stoji u donjem
+ * drugog, bez razmaka: podeljen ekran sa tankom zlatnom linijom na spoju.
+ * Svetla traka sa naslovom odvaja sekciju od tamnog hero-a — bez nje se
+ * dve tamne površine stapaju u jednu, naročito na telefonu. Ceo panel je klikabilan; tekst stoji u donjem
  * levom uglu, iznad kontrolisanog gradijenta koji čuva čitljivost.
  */
 export function CategorySplit({ content }: { content: CategorySplitContent }) {
@@ -34,7 +37,10 @@ export function CategorySplit({ content }: { content: CategorySplitContent }) {
   if (items.length === 0) return null;
 
   return (
-    <section aria-label="Kategorije" className="bg-maroon-deep py-8 sm:py-0">
+    <section aria-label="Kategorije" className="bg-ivory-2 pb-10 sm:pb-0">
+      <div className="heng-container pb-10 pt-16 lg:pb-14 lg:pt-24">
+        <SectionHeading eyebrow="KOLEKCIJA" heading="Izaberite svoj detalj." />
+      </div>
       <div
         className="flex snap-x snap-mandatory gap-3 overflow-x-auto px-6 [scrollbar-width:none] sm:grid sm:grid-cols-2 sm:gap-0 sm:overflow-visible sm:px-0"
         onScroll={(e) => {
@@ -118,7 +124,7 @@ export function CategorySplit({ content }: { content: CategorySplitContent }) {
           <span
             key={item.title}
             className="h-px w-8 transition-colors duration-300"
-            style={{ background: i === active ? 'var(--color-gold)' : 'rgba(239,234,228,0.3)' }}
+            style={{ background: i === active ? 'var(--color-gold)' : 'rgba(28,20,22,0.2)' }}
           />
         ))}
       </div>

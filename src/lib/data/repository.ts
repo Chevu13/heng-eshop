@@ -169,7 +169,7 @@ export interface CatalogFilters {
   category?: string;
   finish?: string;
   q?: string;
-  availability?: 'na-stanju' | 'na-upit';
+  availability?: 'na-upit';
   sort?: 'najnovije' | 'cena-rastuce' | 'cena-opadajuce' | 'izdvojeno';
 }
 
@@ -191,9 +191,7 @@ export function filterProducts(products: ProductFull[], f: CatalogFilters): Prod
     );
   }
 
-  if (f.availability === 'na-stanju') {
-    list = list.filter((p) => p.stock > 0 || p.variants.some((v) => v.stock > 0));
-  } else if (f.availability === 'na-upit') {
+  if (f.availability === 'na-upit') {
     list = list.filter((p) => p.price_on_request || p.price_rsd === null);
   }
 

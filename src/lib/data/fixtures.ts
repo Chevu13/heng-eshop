@@ -62,7 +62,7 @@ export const CATEGORIES: Category[] = [
 
 const MATERIAL = 'Eloksirana legura aluminijuma';
 
-/** Podrazumevana zaliha po obradi — vrednost za start, menja se u adminu. */
+/** Početna zaliha u seed podacima — sajt je ne koristi (lager se ne vodi). */
 const DEFAULT_STOCK = 25;
 
 function variant(

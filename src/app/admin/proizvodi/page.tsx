@@ -19,7 +19,7 @@ export default async function AdminProductsPage() {
     <>
       <AdminHeading
         title="Proizvodi"
-        description="Katalog, varijante obrada, cene, zalihe i vidljivost na sajtu."
+        description="Katalog, varijante obrada, cene i vidljivost na sajtu."
         action={<Link href="/admin/proizvodi/novi" className="btn btn-primary">Novi proizvod</Link>}
       />
 
@@ -34,7 +34,7 @@ export default async function AdminProductsPage() {
             <caption className="sr-only">Lista proizvoda u katalogu</caption>
             <thead>
               <tr className="border-b border-ink/12 text-left">
-                {['Proizvod', 'Kategorija', 'Cena', 'Zaliha', 'Obrade', 'Status', ''].map((h) => (
+                {['Proizvod', 'Kategorija', 'Cena', 'Obrade', 'Status', ''].map((h) => (
                   <th key={h} scope="col" className="px-4 py-3 font-body text-[11px] uppercase tracking-eyebrow text-ink/45">
                     {h}
                   </th>
@@ -44,9 +44,6 @@ export default async function AdminProductsPage() {
             <tbody>
               {products.map((p) => {
                 const cover = p.media?.find((m) => m.is_cover) ?? p.media?.[0];
-                const totalStock = p.variants?.length
-                  ? p.variants.reduce((s, v) => s + v.stock, 0)
-                  : p.stock;
                 return (
                   <tr key={p.id} className="border-b border-ink/8 last:border-0 align-middle">
                     <td className="px-4 py-3">
@@ -75,7 +72,6 @@ export default async function AdminProductsPage() {
                         ? <span className="text-ink/50">{CENA_NA_UPIT}</span>
                         : formatRsd(Number(p.price_rsd))}
                     </td>
-                    <td className="px-4 py-3 font-body text-[13px] tabular-nums text-ink/60">{totalStock}</td>
                     <td className="px-4 py-3">
                       <div className="flex gap-1.5">
                         {(p.variants ?? []).filter((v) => v.is_active).map((v) => (

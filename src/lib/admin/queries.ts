@@ -96,21 +96,18 @@ export interface DashboardData {
   pendingOrders: number;
   recentOrders: Order[];
   recentInquiries: ProjectInquiry[];
-  lowStock: { id: string; name: string; finish: string | null; stock: number }[];
   totalValue: number;
 }
 
 export async function adminDashboard(): Promise<DashboardData> {
   const client = sb();
 
-  const [products, categories, orders, inquiries, variants] = await Promise.all([
+  const [products, categories, orders, inquiries] = await Promise.all([
     client.from('products').select('id', { count: 'exact', head: true })
       .eq('is_published', true).eq('is_archived', false),
     client.from('categories').select('id', { count: 'exact', head: true }),
     client.from('orders').select('*').order('created_at', { ascending: false }).limit(50),
     client.from('project_inquiries').select('*').order('created_at', { ascending: false }).limit(5),
-    client.from('product_variants').select('id, stock, finish_name, product_id, products(name)')
-      .lte('stock', 3).eq('is_active', true).order('stock'),
   ]);
 
   const allOrders = (orders.data ?? []) as unknown as Order[];
@@ -121,14 +118,6 @@ export async function adminDashboard(): Promise<DashboardData> {
     pendingOrders: allOrders.filter((o) => o.status === 'nova' || o.status === 'potvrdjena').length,
     recentOrders: allOrders.slice(0, 5),
     recentInquiries: (inquiries.data ?? []) as ProjectInquiry[],
-    lowStock: ((variants.data ?? []) as unknown as {
-      id: string; stock: number; finish_name: string; products: { name: string } | null;
-    }[]).slice(0, 6).map((v) => ({
-      id: v.id,
-      name: v.products?.name ?? '—',
-      finish: v.finish_name,
-      stock: v.stock,
-    })),
     totalValue: allOrders
       .filter((o) => o.status !== 'otkazana')
       .reduce((s, o) => s + Number(o.total_rsd ?? 0), 0),

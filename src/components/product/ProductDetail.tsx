@@ -7,7 +7,7 @@ import { ProductGallery } from './ProductGallery';
 import { FinishSwatch } from './FinishSwatch';
 import { Accordion } from './Accordion';
 import { useCart } from '@/components/cart/CartProvider';
-import { resolvePrice, stockFor } from '@/lib/pricing';
+import { resolvePrice } from '@/lib/pricing';
 import { formatRsd, CENA_NA_UPIT } from '@/lib/format';
 
 export function ProductDetail({ product }: { product: ProductFull }) {
@@ -18,7 +18,6 @@ export function ProductDetail({ product }: { product: ProductFull }) {
 
   const variant = variants[variantIdx] ?? null;
   const price = resolvePrice(product, variant);
-  const stock = stockFor(product, variant);
   const sku = variant?.sku ?? product.sku;
   const dimensions = variant?.dimensions ?? product.dimensions;
 
@@ -50,12 +49,6 @@ export function ProductDetail({ product }: { product: ProductFull }) {
       quantity: qty,
     });
   }
-
-  const stockLabel = price.onRequest
-    ? 'Dostupnost se potvrđuje pri upitu'
-    : stock > 0
-      ? `Na stanju — ${stock} kom.`
-      : 'Trenutno nije na stanju';
 
   return (
     <>
@@ -166,18 +159,12 @@ export function ProductDetail({ product }: { product: ProductFull }) {
                   )}
                 </dl>
 
-                <p
-                  className="mt-6 flex items-center gap-2 font-body text-[13px]"
-                  style={{ color: stock > 0 && !price.onRequest ? 'var(--color-ink)' : 'rgba(28,20,22,0.55)' }}
-                  aria-live="polite"
-                >
-                  <span
-                    aria-hidden="true"
-                    className="block h-1.5 w-1.5 rounded-pill"
-                    style={{ background: stock > 0 && !price.onRequest ? 'var(--color-gold)' : 'rgba(28,20,22,0.3)' }}
-                  />
-                  {stockLabel}
-                </p>
+                {price.onRequest && (
+                  <p className="mt-6 flex items-center gap-2 font-body text-[13px] text-ink/55">
+                    <span aria-hidden="true" className="block h-1.5 w-1.5 rounded-pill bg-ink/30" />
+                    Dostupnost se potvrđuje pri upitu
+                  </p>
+                )}
 
                 <div className="mt-7 flex flex-wrap items-stretch gap-3">
                   <div className="flex items-center rounded-sm border border-ink/16">

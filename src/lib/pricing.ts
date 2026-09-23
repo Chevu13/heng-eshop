@@ -37,7 +37,3 @@ export function startingPrice(product: ProductFull): ResolvedPrice {
   }
   return resolvePrice(product);
 }
-
-export function stockFor(product: ProductFull, variant?: ProductVariant | null): number {
-  return variant ? variant.stock : product.stock;
-}

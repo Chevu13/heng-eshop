@@ -64,10 +64,6 @@ function VariantFields({ variant }: { variant: ProductVariant | null }) {
         />
       </div>
       <div>
-        <label className="field-label">Zaliha</label>
-        <input name="stock" type="number" min="0" className="field" defaultValue={variant?.stock ?? 0} />
-      </div>
-      <div>
         <label className="field-label">Dimenzije</label>
         <input name="dimensions" className="field" defaultValue={variant?.dimensions ?? ''} />
       </div>
@@ -108,7 +104,7 @@ export function VariantsPanel({ productId, variants }: {
         <div>
           <h2 className="font-display text-[18px]" style={{ fontWeight: 600 }}>Varijante i obrade</h2>
           <p className="mt-1 font-body text-[13px] text-ink/55">
-            Cena i zaliha varijante imaju prednost nad vrednostima proizvoda.
+            Cena varijante ima prednost nad cenom proizvoda.
           </p>
         </div>
         <button onClick={() => { setAdding((v) => !v); setEditing(null); }} className="btn btn-outline">
@@ -126,7 +122,7 @@ export function VariantsPanel({ productId, variants }: {
 
       {variants.length === 0 && !adding ? (
         <p className="rounded-sm border border-dashed border-ink/18 px-6 py-10 text-center font-body text-[14px] text-ink/50">
-          Proizvod još nema varijante. Bez njih se prikazuje samo cena i zaliha proizvoda.
+          Proizvod još nema varijante. Bez njih se prikazuje samo cena proizvoda.
         </p>
       ) : (
         <ul className="space-y-3">
@@ -149,7 +145,7 @@ export function VariantsPanel({ productId, variants }: {
                     {!v.is_active && <span className="ml-2 text-ink/40">(neaktivna)</span>}
                   </p>
                   <p className="font-body text-[12px] text-ink/50">
-                    {v.sku ?? '—'} · zaliha {v.stock} · {v.dimensions ?? 'bez dimenzija'}
+                    {v.sku ?? '—'} · {v.dimensions ?? 'bez dimenzija'}
                   </p>
                 </div>
                 <div className="flex gap-4">

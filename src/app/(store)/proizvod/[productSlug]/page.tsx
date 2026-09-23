@@ -71,9 +71,7 @@ export default async function ProductPage({ params }: PageProps) {
       '@type': 'Offer',
       priceCurrency: 'RSD',
       price: price.effective,
-      availability: product.stock > 0
-        ? 'https://schema.org/InStock'
-        : 'https://schema.org/OutOfStock',
+      availability: 'https://schema.org/InStock',
       url: `${SITE_URL}/proizvod/${product.slug}`,
     };
   }

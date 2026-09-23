@@ -144,7 +144,7 @@ export function ProductForm({ product, categories }: {
           </section>
 
           <section className="rounded-sm border border-ink/12 bg-white/60 p-6">
-            <h2 className="mb-5 font-display text-[18px]" style={{ fontWeight: 600 }}>Cena i zaliha</h2>
+            <h2 className="mb-5 font-display text-[18px]" style={{ fontWeight: 600 }}>Cena</h2>
 
             <label className="flex cursor-pointer items-start gap-3 rounded-sm border border-ink/12 p-4">
               <input
@@ -184,12 +184,6 @@ export function ProductForm({ product, categories }: {
                   name="sale_ends_at" type="datetime-local" className="field" disabled={onRequest}
                   defaultValue={product?.sale_ends_at?.slice(0, 16) ?? ''}
                 />
-              </Field>
-            </div>
-
-            <div className="mt-5">
-              <Field label="Zaliha" hint="Kada proizvod ima varijante, merodavna je zaliha varijante.">
-                <input name="stock" type="number" min="0" className="field" defaultValue={product?.stock ?? 0} />
               </Field>
             </div>
           </section>

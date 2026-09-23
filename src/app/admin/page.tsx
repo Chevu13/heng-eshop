@@ -92,27 +92,6 @@ export default async function AdminDashboard() {
         </section>
       </div>
 
-      <section className="mt-10">
-        <h2 className="mb-4 font-display text-[19px]" style={{ fontWeight: 600 }}>Niske zalihe</h2>
-        {d.lowStock.length === 0 ? (
-          <TableEmpty
-            title="Nema upozorenja o zalihama"
-            description="Ovde se prikazuju varijante sa 3 ili manje komada na stanju."
-          />
-        ) : (
-          <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-            {d.lowStock.map((v) => (
-              <li key={v.id} className="flex items-center justify-between rounded-sm border border-ink/12 bg-white/60 p-4">
-                <div>
-                  <p className="font-body text-[14px]">{v.name}</p>
-                  <p className="font-body text-[12px] text-ink/50">{v.finish}</p>
-                </div>
-                <Badge tone={v.stock === 0 ? 'magenta' : 'gold'}>{v.stock} kom.</Badge>
-              </li>
-            ))}
-          </ul>
-        )}
-      </section>
     </>
   );
 }

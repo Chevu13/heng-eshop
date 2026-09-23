@@ -14,7 +14,6 @@ const SORTS = [
 ];
 
 const AVAILABILITY = [
-  { value: 'na-stanju', label: 'Na stanju' },
   { value: 'na-upit', label: 'Na upit' },
 ];
 

@@ -30,7 +30,7 @@ export class OrderError extends Error {
 }
 
 /**
- * Ponovna provera na serveru: cena, zaliha i postojanje varijante uzimaju se
+ * Ponovna provera na serveru: cena i postojanje varijante uzimaju se
  * iz izvora istine, nikada iz podataka koje je poslao klijent.
  */
 export async function priceOrder(
@@ -67,17 +67,6 @@ export async function priceOrder(
     }
 
     const price = resolvePrice(product, variant);
-    const stock = variant ? variant.stock : product.stock;
-
-    // Zaliha se proverava samo za artikle sa poznatom cenom; modeli „na upit”
-    // se evidentiraju i potvrđuju ručno.
-    if (!price.onRequest && stock < line.quantity) {
-      throw new OrderError(
-        stock === 0
-          ? `„${product.name}” trenutno nije na stanju.`
-          : `Za „${product.name}” je dostupno još ${stock} kom.`,
-      );
-    }
 
     items.push({
       productId: product.id,

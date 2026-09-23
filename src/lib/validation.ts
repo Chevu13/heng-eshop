@@ -61,7 +61,6 @@ export const productSchema = z.object({
   price_rsd: z.number().nonnegative().nullable(),
   sale_price_rsd: z.number().nonnegative().nullable(),
   price_on_request: z.boolean(),
-  stock: z.number().int().min(0),
   is_featured: z.boolean(),
   is_published: z.boolean(),
   seo_title: z.string().max(160).optional().or(z.literal('')),

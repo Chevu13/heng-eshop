@@ -3,6 +3,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { motion, useReducedMotion } from 'motion/react';
+import { useState } from 'react';
 
 export interface CategoryTile {
   title: string;
@@ -21,22 +22,31 @@ export interface CategorySplitContent {
 
 /**
  * 01 — KATEGORIJE.
- * Dva vizuala jedan pored drugog (od 640px naviše), bez razmaka: podeljen ekran sa tankom
- * zlatnom linijom na spoju. Ceo panel je klikabilan; tekst stoji u donjem
+ * Na telefonu slajder (scroll-snap): kartica zauzima ~86% širine, pa se
+ * sledeća nazire i poziva na prevlačenje. Od 640px dva vizuala jedan pored
+ * drugog, bez razmaka: podeljen ekran sa tankom zlatnom linijom na spoju. Ceo panel je klikabilan; tekst stoji u donjem
  * levom uglu, iznad kontrolisanog gradijenta koji čuva čitljivost.
  */
 export function CategorySplit({ content }: { content: CategorySplitContent }) {
   const items = content.items ?? [];
   const reduce = useReducedMotion();
+  const [active, setActive] = useState(0);
   if (items.length === 0) return null;
 
   return (
-    <section aria-label="Kategorije" className="bg-maroon-deep">
-      <div className="grid sm:grid-cols-2">
+    <section aria-label="Kategorije" className="bg-maroon-deep py-8 sm:py-0">
+      <div
+        className="flex snap-x snap-mandatory gap-3 overflow-x-auto px-6 [scrollbar-width:none] sm:grid sm:grid-cols-2 sm:gap-0 sm:overflow-visible sm:px-0"
+        onScroll={(e) => {
+          const el = e.currentTarget;
+          const max = el.scrollWidth - el.clientWidth;
+          if (max > 0) setActive(Math.round((el.scrollLeft / max) * (items.length - 1)));
+        }}
+      >
         {items.map((item, i) => (
           <motion.article
             key={item.href + item.title}
-            className="group relative isolate min-h-[560px] overflow-hidden sm:min-h-[620px] lg:min-h-[88vh]"
+            className="group relative isolate min-h-[520px] w-[86%] shrink-0 snap-center overflow-hidden rounded-sm sm:min-h-[620px] sm:w-auto sm:rounded-none lg:min-h-[88vh]"
             initial={reduce ? false : { opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true, amount: 0.15 }}
@@ -66,7 +76,7 @@ export function CategorySplit({ content }: { content: CategorySplitContent }) {
               }}
             />
 
-            <div className="absolute inset-0 z-10 flex flex-col justify-end p-8 md:p-12 lg:p-14 xl:p-16">
+            <div className="absolute inset-0 z-10 flex flex-col justify-end p-7 md:p-12 lg:p-14 xl:p-16">
               <span
                 aria-hidden="true"
                 className="font-body text-[11px] font-medium tabular-nums tracking-eyebrow text-ivory/85"
@@ -99,6 +109,17 @@ export function CategorySplit({ content }: { content: CategorySplitContent }) {
               </Link>
             </div>
           </motion.article>
+        ))}
+      </div>
+
+      {/* Indikator slajda — samo na telefonu. */}
+      <div aria-hidden="true" className="mt-6 flex justify-center gap-2 sm:hidden">
+        {items.map((item, i) => (
+          <span
+            key={item.title}
+            className="h-px w-8 transition-colors duration-300"
+            style={{ background: i === active ? 'var(--color-gold)' : 'rgba(239,234,228,0.3)' }}
+          />
         ))}
       </div>
     </section>

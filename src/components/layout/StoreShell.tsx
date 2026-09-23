@@ -11,7 +11,7 @@ import { useCart } from '@/components/cart/CartProvider';
  * najavom je uklonjena po zahtevu klijenta, hero počinje od samog vrha.
  * Transparentno stanje važi samo na stranama koje otvara hero medij.
  */
-const TRANSPARENT_ROUTES = ['/', '/o-nama', '/projekti', '/inspiracija'];
+const TRANSPARENT_ROUTES = ['/', '/o-nama', '/projekti', '/u-prostoru'];
 
 export function StoreShell({ instagramUrl = null }: { instagramUrl?: string | null }) {
   const pathname = usePathname();

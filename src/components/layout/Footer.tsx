@@ -4,7 +4,7 @@ import type { Category, SiteSettings } from '@/types';
 
 const SITE_LINKS = [
   { href: '/kolekcija', label: 'Proizvodi' },
-  { href: '/inspiracija', label: 'Inspiracija' },
+  { href: '/u-prostoru', label: 'U prostoru' },
   { href: '/projekti', label: 'Projekti' },
   { href: '/o-nama', label: 'O nama' },
   { href: '/kontakt', label: 'Kontakt' },

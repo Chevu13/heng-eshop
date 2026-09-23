@@ -7,10 +7,10 @@ import { useEffect, useState } from 'react';
 import { Wordmark } from '@/components/ui/Wordmark';
 import { useCart } from '@/components/cart/CartProvider';
 
-/** Navigacija prema finalnoj strukturi: Proizvodi · Inspiracija · O nama · Kontakt. */
+/** Navigacija prema finalnoj strukturi: Proizvodi · U prostoru · O nama · Kontakt. */
 const NAV = [
   { href: '/kolekcija', label: 'Proizvodi' },
-  { href: '/inspiracija', label: 'Inspiracija' },
+  { href: '/u-prostoru', label: 'U prostoru' },
   { href: '/o-nama', label: 'O nama' },
   { href: '/kontakt', label: 'Kontakt' },
 ];

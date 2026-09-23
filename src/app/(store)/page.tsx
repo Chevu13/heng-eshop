@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Hero, type HeroContent } from '@/components/home/Hero';
 import { CategorySplit, type CategorySplitContent } from '@/components/home/CategorySplit';
 import { MaterialSection, type MaterialContent } from '@/components/home/MaterialSection';
+import { Testimonials } from '@/components/home/Testimonials';
 import { getHomepageSections, getSettings } from '@/lib/data/repository';
 import { HOMEPAGE_SECTIONS } from '@/lib/data/fixtures';
 
@@ -20,7 +21,7 @@ export async function generateMetadata(): Promise<Metadata> {
 
 /**
  * Početna strana ima fiksnu strukturu od četiri sekcije (+ footer iz layouta):
- * HERO → 01 KATEGORIJE → 02 DRŽAČI ZA VINO I ČAŠE → 03 RUČKE OD PRIRODNOG KAMENA.
+ * HERO → 01 KATEGORIJE → 02 DRŽAČI ZA VINO I ČAŠE → 03 RUČKE OD PRIRODNOG KAMENA → UTISCI.
  * Redosled je u kodu, a ne iz `sort_order`, da stari redovi u bazi ne mogu
  * da ga poremete. Tekstovi i fotografije i dalje se menjaju iz admina.
  */
@@ -51,6 +52,7 @@ export default async function HomePage() {
           tone="shade"
         />
       )}
+      <Testimonials />
     </>
   );
 }

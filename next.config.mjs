@@ -19,6 +19,9 @@ const nextConfig = {
       : [],
   },
   eslint: { ignoreDuringBuilds: false },
+  async redirects() {
+    return [{ source: '/inspiracija', destination: '/u-prostoru', permanent: true }];
+  },
 };
 
 export default nextConfig;

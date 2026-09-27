@@ -146,7 +146,8 @@ export function MediaLibrary({ files, error, local }: {
                   <p className="truncate font-body text-[12px]" title={f.name}>{f.name}</p>
                   <p className="mt-0.5 font-body text-[11px] text-ink/40">{kb(f.size)}</p>
                   <div className="mt-3 flex flex-wrap gap-3">
-                    <CopyPath path={f.path} />
+                    {/* Puna adresa — radi u svakom polju, i na sajtu i u JSON sadržaju. */}
+                    <CopyPath path={publicMediaUrl(f.path)} />
                     <ActionButton
                       action={() => deleteMediaFile(f.path)}
                       label="Obriši" tone="link" pendingLabel="Brisanje…"

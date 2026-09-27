@@ -1,6 +1,7 @@
 import { cache } from 'react';
 import { createPublicSupabase } from '@/lib/supabase/server';
 import { isSupabaseConfigured } from '@/lib/env';
+import { resolveMediaUrl } from '@/lib/admin/media';
 import type {
   Category, HomepageSection, ProductFull, SiteSettings,
 } from '@/types';
@@ -41,11 +42,24 @@ const PRODUCT_SELECT = `
   media:product_media(*)
 `;
 
+/**
+ * Admin dozvoljava i kratku Storage putanju („katalog/x.jpg”) — sajt joj
+ * mora dati punu javnu adresu, inače se slika ne prikaže.
+ */
+const src = (v: string | null) => (v ? resolveMediaUrl(v) : v);
+const withCover = (c: Category): Category => ({ ...c, cover_image: src(c.cover_image) });
+
 function sortProduct(p: ProductFull): ProductFull {
   return {
     ...p,
-    variants: [...(p.variants ?? [])].sort((a, b) => a.sort_order - b.sort_order),
-    media: [...(p.media ?? [])].sort((a, b) => a.sort_order - b.sort_order),
+    og_image: src(p.og_image),
+    category: p.category ? withCover(p.category) : null,
+    variants: [...(p.variants ?? [])]
+      .sort((a, b) => a.sort_order - b.sort_order)
+      .map((v) => ({ ...v, main_image: src(v.main_image) })),
+    media: [...(p.media ?? [])]
+      .sort((a, b) => a.sort_order - b.sort_order)
+      .map((m) => ({ ...m, url: resolveMediaUrl(m.url), poster_url: src(m.poster_url) })),
   };
 }
 
@@ -56,7 +70,7 @@ export const getCategories = cache(async (): Promise<Category[]> => {
     .from('categories').select('*')
     .eq('is_published', true).order('sort_order');
   if (error) { logDbError('kategorije', error); return []; }
-  return (data ?? []) as Category[];
+  return ((data ?? []) as Category[]).map(withCover);
 });
 
 export const getCategory = cache(async (slug: string): Promise<Category | null> => {
@@ -65,7 +79,7 @@ export const getCategory = cache(async (slug: string): Promise<Category | null> 
   const { data, error } = await sb
     .from('categories').select('*').eq('slug', slug).maybeSingle();
   if (error) logDbError(`kategorija ${slug}`, error);
-  return (data as Category) ?? null;
+  return data ? withCover(data as Category) : null;
 });
 
 export const getProducts = cache(async (): Promise<ProductFull[]> => {

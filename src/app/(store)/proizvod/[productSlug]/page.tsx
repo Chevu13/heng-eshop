@@ -62,7 +62,7 @@ export default async function ProductPage({ params }: PageProps) {
     brand: { '@type': 'Brand', name: 'HENG' },
     image: product.media
       .filter((m) => m.kind === 'image')
-      .map((m) => `${SITE_URL}${m.url}`),
+      .map((m) => (m.url.startsWith('http') ? m.url : `${SITE_URL}${m.url}`)),
     url: `${SITE_URL}/proizvod/${product.slug}`,
   };
 

@@ -188,7 +188,9 @@ export function filterProducts(products: ProductFull[], f: CatalogFilters): Prod
   if (f.category) list = list.filter((p) => p.category?.slug === f.category);
 
   if (f.finish) {
-    list = list.filter((p) => p.variants.some((v) => v.is_active && v.finish_code === f.finish));
+    // Više obrada odjednom: ?finish=crna-mat,zlatna — proizvod prolazi ako ima bar jednu.
+    const codes = f.finish.split(',');
+    list = list.filter((p) => p.variants.some((v) => v.is_active && codes.includes(v.finish_code)));
   }
 
   if (f.q) {

@@ -2,7 +2,8 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { Suspense } from 'react';
 import type { Category, ProductFull } from '@/types';
-import { CatalogFilters } from './CatalogFilters';
+import { FINISHES } from '@/lib/data/fixtures';
+import { CatalogFilters, type Facet } from './CatalogFilters';
 import { CatalogGrid } from './CatalogGrid';
 
 /**
@@ -11,11 +12,31 @@ import { CatalogGrid } from './CatalogGrid';
  * traka sa filterima i sortiranjem → mreža od 4 proizvoda u redu.
  */
 export function CollectionLayout({
-  title, description, image, imageAlt, categories, products, activeCategory, filtered,
+  title, description, image, imageAlt, categories, scope, products, activeCategory, filtered,
 }: {
   title: string; description?: string | null; image: string; imageAlt: string;
-  categories: Category[]; products: ProductFull[]; activeCategory?: string; filtered: boolean;
+  categories: Category[];
+  /** Svi proizvodi strane (pre filtera) — za broj pored svake opcije. */
+  scope: ProductFull[];
+  products: ProductFull[]; activeCategory?: string; filtered: boolean;
 }) {
+  const facets: Facet[] = [
+    {
+      key: 'finish', label: 'Završna obrada',
+      options: FINISHES.map((f) => ({
+        value: f.code, label: f.name, swatch: f.swatch,
+        count: scope.filter((p) => p.variants.some((v) => v.is_active && v.finish_code === f.code)).length,
+      })),
+    },
+    {
+      key: 'availability', label: 'Cena',
+      options: [{
+        value: 'na-upit', label: 'Cena na upit',
+        count: scope.filter((p) => p.price_on_request || p.price_rsd === null).length,
+      }],
+    },
+  ];
+
   return (
     <>
       <section className="grid bg-maroon-deep md:min-h-[440px] md:grid-cols-2 lg:min-h-[540px]">
@@ -34,8 +55,8 @@ export function CollectionLayout({
         </div>
       </section>
 
-      <nav aria-label="Kategorije" className="bg-ivory-2 pt-12 lg:pt-14">
-        <ul className="heng-container flex gap-6 overflow-x-auto pb-2 [scrollbar-width:none] sm:justify-center lg:gap-12">
+      <nav aria-label="Kategorije" className="bg-ivory-2 pt-10 lg:pt-12">
+        <ul className="heng-container flex gap-4 overflow-x-auto pb-2 [scrollbar-width:none] sm:justify-center sm:gap-6 lg:gap-8">
           {categories.map((c) => {
             const active = c.slug === activeCategory;
             return (
@@ -43,10 +64,10 @@ export function CollectionLayout({
                 <Link
                   href={active ? '/kolekcija' : `/kolekcija/${c.slug}`}
                   aria-current={active ? 'page' : undefined}
-                  className="group flex w-[96px] flex-col items-center text-center sm:w-[150px]"
+                  className="group flex w-[84px] flex-col items-center text-center sm:w-[150px]"
                 >
                   <span
-                    className="relative block h-[96px] w-[96px] overflow-hidden rounded-full bg-ivory transition sm:h-[150px] sm:w-[150px]"
+                    className="relative block h-[76px] w-[76px] overflow-hidden rounded-full bg-ivory transition sm:h-[150px] sm:w-[150px]"
                     style={{ boxShadow: active ? '0 0 0 2px var(--color-gold)' : undefined }}
                   >
                     {c.cover_image && (
@@ -57,8 +78,8 @@ export function CollectionLayout({
                     )}
                   </span>
                   <span
-                    className="mt-3 font-body text-[13px] leading-snug sm:text-[15px]"
-                    style={{ color: active ? 'var(--color-maroon)' : 'var(--color-ink)', fontWeight: active ? 600 : 400 }}
+                    className="mt-3 font-body text-[13px] leading-snug sm:text-[14px]"
+                    style={{ fontWeight: active ? 600 : 500, textDecoration: active ? 'underline' : undefined, textUnderlineOffset: 4 }}
                   >
                     {c.title}
                   </span>
@@ -69,12 +90,12 @@ export function CollectionLayout({
         </ul>
       </nav>
 
-      <section className="bg-ivory-2 pb-28 pt-10 lg:pt-12">
+      <section className="bg-ivory-2 pb-24 pt-10 lg:pt-12">
         <div className="heng-container">
-          <Suspense fallback={<div className="h-14" />}>
-            <CatalogFilters total={products.length} />
+          <Suspense fallback={<div className="h-8" />}>
+            <CatalogFilters facets={facets} total={products.length} />
           </Suspense>
-          <div className="mt-8">
+          <div className="mt-6">
             <CatalogGrid products={products} filtered={filtered} />
           </div>
         </div>

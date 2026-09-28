@@ -68,6 +68,7 @@ export default async function CategoryPage({ params, searchParams }: PageProps) 
         image={category.cover_image ?? fallbackImage ?? '/assets/heng/lifestyle/case-nad-barom-heng.jpg'}
         imageAlt={category.title}
         categories={categories}
+        scope={products.filter((p) => p.category?.slug === category.slug)}
         products={filterProducts(products, filters)}
         activeCategory={category.slug}
         filtered={hasFilters}

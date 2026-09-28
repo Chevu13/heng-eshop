@@ -1,8 +1,8 @@
 'use client';
 
-import Image from 'next/image';
 import { useEffect, useRef, useState } from 'react';
 import { useReducedMotion } from 'motion/react';
+import { ArtImage } from '@/components/ui/ArtImage';
 
 /**
  * Hero medij. Video se koristi samo kada je zaista isporučen i kada
@@ -10,9 +10,9 @@ import { useReducedMotion } from 'motion/react';
  * vezama prikazuje se poster/fotografija — bez skidanja video fajla.
  */
 export function HeroMedia({
-  imageUrl, imageAlt, videoUrl, videoPoster,
+  imageUrl, imageUrlMobile, imageAlt, videoUrl, videoPoster,
 }: {
-  imageUrl?: string; imageAlt: string;
+  imageUrl?: string; imageUrlMobile?: string | null; imageAlt: string;
   videoUrl: string | null; videoPoster: string | null;
 }) {
   const reduce = useReducedMotion();
@@ -61,15 +61,14 @@ export function HeroMedia({
   if (!imageUrl) return null;
 
   return (
-    <Image
+    <ArtImage
       src={imageUrl}
+      mobileSrc={imageUrlMobile}
       alt={imageAlt}
-      fill
       priority
-      quality={82}
       sizes="100vw"
       className="object-cover"
-      style={{ objectPosition: 'center 30%' }}
+      style={{ objectPosition: imageUrlMobile ? 'center' : 'center 30%' }}
     />
   );
 }

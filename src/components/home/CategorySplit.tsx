@@ -1,10 +1,10 @@
 'use client';
 
-import Image from 'next/image';
 import Link from 'next/link';
 import { motion, useReducedMotion } from 'motion/react';
 import { useState } from 'react';
 import { SectionHeading } from '@/components/ui/SectionHeading';
+import { ArtImage } from '@/components/ui/ArtImage';
 
 export interface CategoryTile {
   title: string;
@@ -12,6 +12,8 @@ export interface CategoryTile {
   href: string;
   ctaLabel?: string;
   mediaUrl: string;
+  /** Opciona slika za telefon (1080 × 1680, uspravna). */
+  mediaUrlMobile?: string | null;
   mediaAlt?: string;
   /** Fokus fotografije, npr. „center 35%”. Podrazumevano je centar. */
   mediaPosition?: string;
@@ -63,12 +65,12 @@ export function CategorySplit({ content }: { content: CategorySplitContent }) {
                 : undefined
             }
           >
-            <Image
+            <ArtImage
               src={item.mediaUrl}
+              mobileSrc={item.mediaUrlMobile}
+              breakpoint={639}
               alt={item.mediaAlt ?? ''}
-              fill
-              sizes="(max-width: 640px) 100vw, 50vw"
-              quality={82}
+              sizes="(max-width: 640px) 86vw, 50vw"
               className="object-cover transition-transform duration-[1.4s] ease-heng group-hover:scale-[1.04]"
               style={{ objectPosition: item.mediaPosition ?? 'center' }}
             />

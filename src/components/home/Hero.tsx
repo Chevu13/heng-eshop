@@ -8,6 +8,8 @@ export interface HeroContent {
   eyebrow?: string; heading?: string; body?: string;
   primaryLabel?: string; primaryHref?: string;
   mediaUrl?: string; mediaAlt?: string;
+  /** Opciona uspravna slika za telefon (1080 × 1920). */
+  mediaUrlMobile?: string | null;
   videoUrl?: string | null; videoPoster?: string | null;
 }
 
@@ -24,6 +26,7 @@ export function Hero({ content }: { content: HeroContent }) {
     >
       <HeroMedia
         imageUrl={content.mediaUrl}
+        imageUrlMobile={content.mediaUrlMobile}
         imageAlt={content.mediaAlt ?? ''}
         videoUrl={content.videoUrl ?? null}
         videoPoster={content.videoPoster ?? null}

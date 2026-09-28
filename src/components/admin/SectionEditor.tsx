@@ -8,8 +8,8 @@ import { Badge } from './AdminUI';
 
 /** Opis polja po sekciji — pomaže administratoru da zna šta sme da menja. */
 const HINTS: Record<string, string> = {
-  hero: 'eyebrow, heading, body · primaryLabel/primaryHref · mediaUrl, mediaAlt · videoUrl, videoPoster (kada postoji video).',
-  categories: 'items — niz {title, body, href, ctaLabel, mediaUrl, mediaAlt, mediaPosition}. Predviđena su dva vizuala.',
+  hero: 'eyebrow, heading, body · primaryLabel/primaryHref · mediaUrl, mediaAlt · mediaUrlMobile (opciono, slika za telefon 1080 × 1920) · videoUrl, videoPoster (kada postoji video).',
+  categories: 'items — niz {title, body, href, ctaLabel, mediaUrl, mediaUrlMobile (opciono, za telefon 1080 × 1680), mediaAlt, mediaPosition}. Predviđena su dva vizuala.',
   material: 'eyebrow, heading, body · points — niz {title, text} · mediaUrl, mediaAlt · ctaLabel, ctaHref.',
   handles: 'ista polja kao „material”. Sekcija se prikazuje u obrnutom rasporedu (tekst levo, fotografija desno).',
 };

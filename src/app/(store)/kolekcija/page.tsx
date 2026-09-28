@@ -1,9 +1,5 @@
 import type { Metadata } from 'next';
-import { Suspense } from 'react';
-import { PageHeader } from '@/components/layout/PageHeader';
-import { CatalogFilters } from '@/components/catalog/CatalogFilters';
-import { CatalogGrid } from '@/components/catalog/CatalogGrid';
-import { ProductCardSkeleton } from '@/components/ui/Skeleton';
+import { CollectionLayout } from '@/components/catalog/CollectionLayout';
 import { breadcrumbLd, JsonLd } from '@/lib/seo';
 import {
   filterProducts, getCategories, getProducts, type CatalogFilters as Filters,
@@ -36,38 +32,19 @@ export default async function CollectionPage({ searchParams }: PageProps) {
     availability: param(searchParams, 'availability') as Filters['availability'],
     sort: param(searchParams, 'sort') as Filters['sort'],
   };
-  const filtered = filterProducts(products, filters);
-  const hasFilters = Object.values(filters).some(Boolean);
 
   return (
     <>
       <JsonLd data={breadcrumbLd([{ name: 'Kolekcija', url: '/kolekcija' }])} />
-      <PageHeader
-        eyebrow="KOLEKCIJA"
-        title="Tri modela, jedna logika."
-        description="Svaki model rešava jedan zadatak u prostoru — čašu, flašu ili ceo zid. Ista geometrija, četiri završne obrade."
-        crumbs={[{ label: 'Kolekcija' }]}
+      <CollectionLayout
+        title="Svi proizvodi"
+        description="Nosači za vinske flaše i čaše i ručke od prirodnog kamena — ista geometrija, pažljivo birane završne obrade, za kuhinje, barove i enterijere po meri."
+        image="/assets/heng/lifestyle/case-nad-barom-heng.jpg"
+        imageAlt="Čaše za vino obešene na HENG nosaču iznad kućnog bara"
+        categories={categories}
+        products={filterProducts(products, filters)}
+        filtered={Object.values(filters).some(Boolean)}
       />
-
-      <section className="bg-ivory-2 pb-28">
-        <div className="heng-container">
-          <Suspense fallback={<div className="h-40" />}>
-            <CatalogFilters categories={categories} total={filtered.length} />
-          </Suspense>
-
-          <div className="heng-rule my-12" />
-
-          <Suspense
-            fallback={
-              <ul className="grid gap-x-6 gap-y-14 sm:grid-cols-2 lg:grid-cols-3">
-                {[0, 1, 2].map((i) => <li key={i}><ProductCardSkeleton /></li>)}
-              </ul>
-            }
-          >
-            <CatalogGrid products={filtered} filtered={hasFilters} />
-          </Suspense>
-        </div>
-      </section>
     </>
   );
 }

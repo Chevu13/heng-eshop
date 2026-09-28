@@ -1,9 +1,6 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { Suspense } from 'react';
-import { PageHeader } from '@/components/layout/PageHeader';
-import { CatalogFilters } from '@/components/catalog/CatalogFilters';
-import { CatalogGrid } from '@/components/catalog/CatalogGrid';
+import { CollectionLayout } from '@/components/catalog/CollectionLayout';
 import { breadcrumbLd, JsonLd } from '@/lib/seo';
 import {
   filterProducts, getCategories, getCategory, getProducts, type CatalogFilters as Filters,
@@ -54,8 +51,8 @@ export default async function CategoryPage({ params, searchParams }: PageProps) 
     availability: param(searchParams, 'availability') as Filters['availability'],
     sort: param(searchParams, 'sort') as Filters['sort'],
   };
-  const filtered = filterProducts(products, filters);
   const hasFilters = Boolean(filters.q || filters.finish || filters.availability || filters.sort);
+  const fallbackImage = products.find((p) => p.category_id === category.id)?.media[0]?.url;
 
   return (
     <>
@@ -65,26 +62,16 @@ export default async function CategoryPage({ params, searchParams }: PageProps) 
           { name: category.title, url: `/kolekcija/${category.slug}` },
         ])}
       />
-      <PageHeader
-        eyebrow="KOLEKCIJA"
+      <CollectionLayout
         title={category.title}
-        description={category.description ?? undefined}
-        crumbs={[{ label: 'Kolekcija', href: '/kolekcija' }, { label: category.title }]}
+        description={category.description}
+        image={category.cover_image ?? fallbackImage ?? '/assets/heng/lifestyle/case-nad-barom-heng.jpg'}
+        imageAlt={category.title}
+        categories={categories}
+        products={filterProducts(products, filters)}
+        activeCategory={category.slug}
+        filtered={hasFilters}
       />
-
-      <section className="bg-ivory-2 pb-28">
-        <div className="heng-container">
-          <Suspense fallback={<div className="h-40" />}>
-            <CatalogFilters
-              categories={categories}
-              activeCategory={category.slug}
-              total={filtered.length}
-            />
-          </Suspense>
-          <div className="heng-rule my-12" />
-          <CatalogGrid products={filtered} filtered={hasFilters} />
-        </div>
-      </section>
     </>
   );
 }

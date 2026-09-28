@@ -1,0 +1,84 @@
+import Image from 'next/image';
+import Link from 'next/link';
+import { Suspense } from 'react';
+import type { Category, ProductFull } from '@/types';
+import { CatalogFilters } from './CatalogFilters';
+import { CatalogGrid } from './CatalogGrid';
+
+/**
+ * Zajednički raspored za /kolekcija i /kolekcija/[kategorija]:
+ * baner (tekst levo, fotografija desno) → kategorije u krugovima →
+ * traka sa filterima i sortiranjem → mreža od 4 proizvoda u redu.
+ */
+export function CollectionLayout({
+  title, description, image, imageAlt, categories, products, activeCategory, filtered,
+}: {
+  title: string; description?: string | null; image: string; imageAlt: string;
+  categories: Category[]; products: ProductFull[]; activeCategory?: string; filtered: boolean;
+}) {
+  return (
+    <>
+      <section className="grid bg-maroon-deep md:min-h-[440px] md:grid-cols-2 lg:min-h-[540px]">
+        <div className="flex flex-col justify-center px-6 py-12 sm:px-8 md:py-16 lg:px-12 xl:px-16">
+          <h1 className="display-caps text-[clamp(1.9rem,3.6vw,2.9rem)] text-ivory" style={{ fontWeight: 500 }}>
+            {title}
+          </h1>
+          {description && (
+            <p className="mt-5 max-w-[46ch] font-body text-[15px] font-light leading-[1.75] text-ivory/80 sm:text-[16px]">
+              {description}
+            </p>
+          )}
+        </div>
+        <div className="relative aspect-[4/3] md:aspect-auto">
+          <Image src={image} alt={imageAlt} fill priority quality={82} sizes="(max-width: 768px) 100vw, 50vw" className="object-cover" />
+        </div>
+      </section>
+
+      <nav aria-label="Kategorije" className="bg-ivory-2 pt-12 lg:pt-14">
+        <ul className="heng-container flex gap-6 overflow-x-auto pb-2 [scrollbar-width:none] sm:justify-center lg:gap-12">
+          {categories.map((c) => {
+            const active = c.slug === activeCategory;
+            return (
+              <li key={c.id} className="shrink-0">
+                <Link
+                  href={active ? '/kolekcija' : `/kolekcija/${c.slug}`}
+                  aria-current={active ? 'page' : undefined}
+                  className="group flex w-[96px] flex-col items-center text-center sm:w-[150px]"
+                >
+                  <span
+                    className="relative block h-[96px] w-[96px] overflow-hidden rounded-full bg-ivory transition sm:h-[150px] sm:w-[150px]"
+                    style={{ boxShadow: active ? '0 0 0 2px var(--color-gold)' : undefined }}
+                  >
+                    {c.cover_image && (
+                      <Image
+                        src={c.cover_image} alt="" fill sizes="150px"
+                        className="object-cover transition-transform duration-700 ease-heng group-hover:scale-[1.06]"
+                      />
+                    )}
+                  </span>
+                  <span
+                    className="mt-3 font-body text-[13px] leading-snug sm:text-[15px]"
+                    style={{ color: active ? 'var(--color-maroon)' : 'var(--color-ink)', fontWeight: active ? 600 : 400 }}
+                  >
+                    {c.title}
+                  </span>
+                </Link>
+              </li>
+            );
+          })}
+        </ul>
+      </nav>
+
+      <section className="bg-ivory-2 pb-28 pt-10 lg:pt-12">
+        <div className="heng-container">
+          <Suspense fallback={<div className="h-14" />}>
+            <CatalogFilters total={products.length} />
+          </Suspense>
+          <div className="mt-8">
+            <CatalogGrid products={products} filtered={filtered} />
+          </div>
+        </div>
+      </section>
+    </>
+  );
+}

@@ -22,7 +22,7 @@ export function ProductCard({ product, priority = false }: { product: ProductFul
       className="group"
     >
       <Link href={`/proizvod/${product.slug}`} className="block">
-        <div className="relative aspect-[3/4] overflow-hidden rounded-sm bg-ivory">
+        <div className="relative aspect-square overflow-hidden rounded-sm bg-ivory">
           {cover ? (
             <>
               <Image
@@ -30,7 +30,7 @@ export function ProductCard({ product, priority = false }: { product: ProductFul
                 alt={cover.alt ?? product.name}
                 fill
                 priority={priority}
-                sizes="(max-width: 640px) 88vw, (max-width: 1024px) 45vw, 30vw"
+                sizes="(max-width: 768px) 48vw, (max-width: 1024px) 32vw, 24vw"
                 className="object-contain transition-[opacity,transform] duration-[900ms] ease-heng"
                 style={{
                   opacity: hover && secondary ? 0 : 1,
@@ -43,7 +43,7 @@ export function ProductCard({ product, priority = false }: { product: ProductFul
                   alt=""
                   fill
                   aria-hidden="true"
-                  sizes="(max-width: 640px) 88vw, (max-width: 1024px) 45vw, 30vw"
+                  sizes="(max-width: 768px) 48vw, (max-width: 1024px) 32vw, 24vw"
                   className="object-contain transition-[opacity,transform] duration-[900ms] ease-heng"
                   style={{ opacity: hover ? 1 : 0, transform: hover ? 'scale(1.035)' : 'scale(1)' }}
                 />
@@ -66,20 +66,18 @@ export function ProductCard({ product, priority = false }: { product: ProductFul
         </div>
       </Link>
 
-      <div className="pt-4">
-        {product.category && (
-          <p className="heng-eyebrow text-ink/45">{product.category.title}</p>
-        )}
-        <h3 className="mt-2 font-display text-[22px] leading-tight" style={{ fontWeight: 400 }}>
+      {/* Naziv levo, cena desno — kao u katalozima okova. */}
+      <div className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1 pt-4">
+        <h3 className="font-display text-[19px] leading-tight sm:text-[22px]" style={{ fontWeight: 500 }}>
           <Link href={`/proizvod/${product.slug}`} className="link-gold">{product.name}</Link>
         </h3>
 
-        <div className="mt-2 flex items-baseline gap-3">
+        <div className="flex items-baseline gap-2">
           {price.onRequest ? (
             <span className="font-body text-[14px] text-ink/65">{CENA_NA_UPIT}</span>
           ) : (
             <>
-              <span className="font-body text-[14px]">
+              <span className="font-body text-[14px] sm:text-[15px]">
                 {product.variants.length > 1 && 'od '}{formatRsd(price.effective)}
               </span>
               {price.sale !== null && price.regular !== null && (
@@ -90,13 +88,14 @@ export function ProductCard({ product, priority = false }: { product: ProductFul
             </>
           )}
         </div>
+      </div>
 
-        {finishes.length > 0 && (
-          <ul className="mt-3 flex items-center gap-2" aria-label="Dostupne završne obrade">
+      {finishes.length > 0 && (
+          <ul className="mt-3 flex flex-wrap items-center gap-2" aria-label="Dostupne završne obrade">
             {finishes.map((v) => (
               <li key={v.id} title={v.finish_name}>
                 <span
-                  className="block h-[11px] w-[11px] rounded-sm ring-1 ring-inset ring-ink/15"
+                  className="block h-[18px] w-[18px] rounded-full ring-1 ring-inset ring-ink/20"
                   style={{ background: v.finish_swatch ?? '#8C8477' }}
                 />
                 <span className="sr-only">{v.finish_name}</span>
@@ -104,7 +103,6 @@ export function ProductCard({ product, priority = false }: { product: ProductFul
             ))}
           </ul>
         )}
-      </div>
     </article>
   );
 }

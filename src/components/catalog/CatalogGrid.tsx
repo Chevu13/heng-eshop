@@ -23,10 +23,10 @@ export function CatalogGrid({ products, filtered }: { products: ProductFull[]; f
   }
 
   return (
-    <ul className="grid gap-x-6 gap-y-14 sm:grid-cols-2 lg:grid-cols-3">
+    <ul className="grid grid-cols-2 gap-x-4 gap-y-10 md:grid-cols-3 lg:grid-cols-4 lg:gap-x-5 lg:gap-y-12">
       {products.map((p, i) => (
-        <Reveal as="li" key={p.id} delay={(i % 3) * 0.06}>
-          <ProductCard product={p} priority={i < 3} />
+        <Reveal as="li" key={p.id} delay={(i % 4) * 0.05}>
+          <ProductCard product={p} priority={i < 4} />
         </Reveal>
       ))}
     </ul>

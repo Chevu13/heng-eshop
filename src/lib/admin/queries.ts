@@ -3,7 +3,7 @@ import { createServerSupabase } from '@/lib/supabase/server';
 import type {
   Category, HomepageSection, Order, ProductFull, ProjectInquiry, SiteSettings,
 } from '@/types';
-import { GALLERY, SITE_SETTINGS } from '@/lib/data/fixtures';
+import { SITE_SETTINGS } from '@/lib/data/fixtures';
 import { ARTICLES, type Article } from '@/lib/data/articles';
 
 /**
@@ -69,10 +69,10 @@ export async function adminHomepage(): Promise<HomepageSection[]> {
   return (data ?? []) as HomepageSection[];
 }
 
-/** Članci i galerija strane „U prostoru” (seed dok red ne postoji u bazi). */
-export async function adminInSpace(): Promise<{ articles: Article[]; gallery: typeof GALLERY }> {
+/** Članci strane „U prostoru” (seed dok red ne postoji u bazi). */
+export async function adminInSpace(): Promise<{ articles: Article[] }> {
   const { data, error } = await sb()
-    .from('homepage_sections').select('key, content').in('key', ['articles', 'gallery']);
+    .from('homepage_sections').select('key, content').eq('key', 'articles');
   if (error) throw error;
   const items = <T,>(key: string, fallback: T[]): T[] => {
     const row = data?.find((r) => r.key === key);
@@ -80,7 +80,6 @@ export async function adminInSpace(): Promise<{ articles: Article[]; gallery: ty
   };
   return {
     articles: items<Article>('articles', ARTICLES).sort((a, b) => b.date.localeCompare(a.date)),
-    gallery: items('gallery', GALLERY),
   };
 }
 

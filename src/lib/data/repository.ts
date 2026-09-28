@@ -6,7 +6,7 @@ import type {
   Category, HomepageSection, ProductFull, SiteSettings,
 } from '@/types';
 import {
-  CATEGORIES, GALLERY, HOMEPAGE_SECTIONS, PRODUCTS, SITE_SETTINGS,
+  CATEGORIES, HOMEPAGE_SECTIONS, PRODUCTS, SITE_SETTINGS,
 } from './fixtures';
 import { ARTICLES, type Article } from './articles';
 
@@ -163,15 +163,10 @@ export const getSettings = cache(async (): Promise<SiteSettings> => {
 });
 
 /**
- * Galerija i članci „U prostoru” uređuju se u adminu i čuvaju kao redovi
- * `gallery` / `articles` u homepage_sections. Dok red ne postoji u bazi,
- * prikazuje se seed sadržaj; kada postoji, važi i prazna lista.
+ * Članci „U prostoru” uređuju se u adminu i čuvaju kao red `articles` u
+ * homepage_sections. Dok red ne postoji u bazi, prikazuje se seed sadržaj;
+ * kada postoji, važi i prazna lista.
  */
-export const getGallery = cache(async () => {
-  const section = await getSection('gallery');
-  return section ? ((section.content as { items?: typeof GALLERY }).items ?? []) : GALLERY;
-});
-
 export const getArticles = cache(async (): Promise<Article[]> => {
   const section = await getSection('articles');
   const items = section ? ((section.content as { items?: Article[] }).items ?? []) : ARTICLES;

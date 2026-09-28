@@ -2,11 +2,9 @@ import type { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
 import { ArticleCard } from '@/components/journal/ArticleCard';
-import { InspirationGallery } from '@/components/home/InspirationGallery';
 import { Reveal } from '@/components/ui/Reveal';
-import { SectionHeading } from '@/components/ui/SectionHeading';
 import { breadcrumbLd, JsonLd } from '@/lib/seo';
-import { getArticles, getGallery } from '@/lib/data/repository';
+import { getArticles } from '@/lib/data/repository';
 import { ARTICLE_CATEGORIES } from '@/lib/data/articles';
 
 export const revalidate = 600;
@@ -22,7 +20,7 @@ export default async function InSpacePage({
   searchParams,
 }: { searchParams: { kategorija?: string } }) {
   const active = ARTICLE_CATEGORIES.find((c) => c.slug === searchParams.kategorija)?.slug;
-  const [all, gallery] = await Promise.all([getArticles(), getGallery()]);
+  const all = await getArticles();
   const articles = active ? all.filter((a) => a.category === active) : all;
 
   const tabs = [{ slug: undefined, label: 'Sve' }, ...ARTICLE_CATEGORIES];
@@ -94,11 +92,8 @@ export default async function InSpacePage({
 
       <section className="bg-ivory py-20 lg:py-24">
         <div className="heng-container">
-          <SectionHeading eyebrow="GALERIJA" heading="Postavljeno u prostor." className="mb-12" />
-          <InspirationGallery items={gallery} />
-
-          <Reveal delay={0.1}>
-            <div className="mt-20 border-t border-ink/12 pt-12 text-center">
+          <Reveal>
+            <div className="text-center">
               <h2 className="mx-auto max-w-[20ch] font-display text-[30px] leading-tight" style={{ fontWeight: 400 }}>
                 Imate prostor koji traži svoje rešenje?
               </h2>

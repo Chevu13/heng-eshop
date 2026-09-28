@@ -8,10 +8,11 @@ import { sendMail } from '@/lib/mail';
 import { isEmailConfigured, SITE_URL } from '@/lib/env';
 import { sanitize, ALLOWED_MEDIA_TYPES, MAX_UPLOAD_BYTES } from '@/lib/validation';
 import { slugify } from '@/lib/format';
-import { resolveMediaUrl } from '@/lib/admin/media';
+import { publicMediaUrl, resolveMediaUrl } from '@/lib/admin/media';
+import { ASSET_MANIFEST } from '@/lib/data/asset-manifest';
 import { ARTICLE_CATEGORIES, ARTICLES, type Article, type ArticleCategory } from '@/lib/data/articles';
 
-export interface ActionResult { ok: boolean; message: string }
+export interface ActionResult { ok: boolean; message: string; urls?: string[] }
 
 const OK = (message: string): ActionResult => ({ ok: true, message });
 const FAIL = (message: string): ActionResult => ({ ok: false, message });
@@ -253,6 +254,7 @@ export async function uploadMedia(fd: FormData): Promise<ActionResult> {
   const sb = await client();
   const files = fd.getAll('files').filter((f): f is File => f instanceof File && f.size > 0);
   if (!files.length) return FAIL('Nije izabran nijedan fajl.');
+  const urls: string[] = [];
 
   for (const file of files) {
     if (file.size > MAX_UPLOAD_BYTES * 2.5) {
@@ -269,10 +271,29 @@ export async function uploadMedia(fd: FormData): Promise<ActionResult> {
       .from('heng-media')
       .upload(path, await file.arrayBuffer(), { contentType: file.type, upsert: false });
     if (error) return FAIL(`Otpremanje „${file.name}” nije uspelo.`);
+    urls.push(publicMediaUrl(path));
   }
 
   revalidatePath('/admin/mediji');
-  return OK(`Otpremljeno: ${files.length} ${files.length === 1 ? 'fajl' : 'fajla'}.`);
+  return { ...OK(`Otpremljeno: ${files.length} ${files.length === 1 ? 'fajl' : 'fajla'}.`), urls };
+}
+
+export interface PickerImage { url: string; name: string }
+
+/** Sve fotografije za birač slika: otpremljene (najnovije prve) + brend materijal. */
+export async function listMedia(): Promise<{ uploaded: PickerImage[]; brand: PickerImage[] }> {
+  const sb = await client();
+  const { data } = await sb.storage
+    .from('heng-media')
+    .list('katalog', { limit: 500, sortBy: { column: 'created_at', order: 'desc' } });
+  return {
+    uploaded: (data ?? [])
+      .filter((f) => f.id && String(f.metadata?.mimetype ?? '').startsWith('image/'))
+      .map((f) => ({ url: publicMediaUrl(`katalog/${f.name}`), name: f.name })),
+    brand: ASSET_MANIFEST
+      .filter((a) => /\.(jpe?g|png|webp|avif)$/i.test(a.path))
+      .map((a) => ({ url: a.path, name: a.alt })),
+  };
 }
 
 export async function deleteMediaFile(path: string): Promise<ActionResult> {
@@ -555,8 +576,8 @@ export async function saveSection(id: string, fd: FormData): Promise<ActionResul
   return OK('Sekcija je sačuvana.');
 }
 
-// ==================== U PROSTORU (članci i galerija) ====================
-// Čuvaju se kao redovi `articles` / `gallery` u homepage_sections, pa ne treba
+// ==================== U PROSTORU (članci) ====================
+// Čuvaju se kao red `articles` u homepage_sections, pa ne treba
 // nova tabela ni RLS — važe postojeće politike „pocetna: admin upis”.
 
 type Sb = Awaited<ReturnType<typeof client>>;
@@ -621,29 +642,6 @@ export async function deleteArticle(slug: string): Promise<ActionResult> {
   const items = await readItems<Article>(sb, 'articles', ARTICLES);
   const ok = await writeItems(sb, 'articles', 'Članci (U prostoru)', items.filter((a) => a.slug !== slug));
   return ok ? OK('Članak je obrisan.') : FAIL('Članak nije obrisan.');
-}
-
-export async function saveGallery(fd: FormData): Promise<ActionResult> {
-  const sb = await client();
-  let raw: unknown;
-  try {
-    raw = JSON.parse(String(fd.get('items') ?? '[]'));
-  } catch {
-    return FAIL('Neispravni podaci galerije.');
-  }
-  if (!Array.isArray(raw)) return FAIL('Neispravni podaci galerije.');
-
-  const items = raw
-    .map((r: Record<string, unknown>) => ({
-      url: sanitize(String(r.url ?? ''), 500),
-      alt: sanitize(String(r.alt ?? ''), 240),
-      caption: sanitize(String(r.caption ?? ''), 240) || undefined,
-    }))
-    .filter((r) => r.url)
-    .map((r) => ({ ...r, url: resolveMediaUrl(r.url), alt: r.alt || r.caption || 'HENG u prostoru' }));
-
-  if (!(await writeItems(sb, 'gallery', 'Galerija (U prostoru)', items))) return FAIL('Galerija nije sačuvana.');
-  return OK('Galerija je sačuvana.');
 }
 
 // ==================== PODEŠAVANJA ====================

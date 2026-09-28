@@ -266,16 +266,6 @@ export const PRODUCTS: ProductFull[] = [
   },
 ];
 
-export const GALLERY = [
-  { url: '/assets/heng/interiors/mermerni-zid-sa-lusterom.jpg', caption: 'Bar u mermeru — nosači u nizu ispod osvetljene police', alt: 'Bar u mermeru sa HENG sistemom i dizajnerskim lusterom' },
-  { url: '/assets/heng/interiors/kuhinja-vinska-nisa.jpg', caption: 'Vinska niša integrisana u kuhinjski element', alt: 'Osvetljena vinska niša sa zidnim nosačima za flaše u savremenoj kuhinji' },
-  { url: '/assets/heng/interiors/vinski-zid-sa-slikom.jpg', caption: 'Simetrična postavka oko umetničkog rada', alt: 'Vinski zid sa zidnim nosačima za flaše sa obe strane uljane slike' },
-  { url: '/assets/heng/interiors/mermer-detalj-flase-i-case.jpg', caption: 'Detalj — flaše i čaše u istoj ravni', alt: 'Detalj mermernog zida sa nosačima za flaše i obešenim čašama' },
-  { url: '/assets/heng/interiors/vitrina-sa-casama.jpg', caption: 'Vitrina sa nosačima za čaše ispod police', alt: 'Zatamnjena vitrina sa policama i nosačima za čaše' },
-  { url: '/assets/heng/interiors/mermerni-zid-flase-i-case.jpg', caption: 'Vinski kutak kao produžetak zida', alt: 'Mermerna niša sa nosačima za flaše i letvom za čaše' },
-  { url: '/assets/heng/lifestyle/case-nad-barom-heng.jpg', caption: 'Čaše obešene iznad radne ploče', alt: 'Čaše za vino obešene na HENG nosaču iznad kućnog bara' },
-];
-
 export const HOMEPAGE_SECTIONS: HomepageSection[] = [
   {
     id: 'hs-hero', key: 'hero', title: 'Hero', is_visible: true, sort_order: 0,

@@ -1,6 +1,5 @@
 import type { ProductFull } from '@/types';
 import { ProductCard } from '@/components/product/ProductCard';
-import { Reveal } from '@/components/ui/Reveal';
 import { EmptyState } from '@/components/ui/EmptyState';
 
 export function CatalogGrid({ products, filtered }: { products: ProductFull[]; filtered: boolean }) {
@@ -23,11 +22,11 @@ export function CatalogGrid({ products, filtered }: { products: ProductFull[]; f
   }
 
   return (
-    <ul className="grid grid-cols-2 gap-x-3 gap-y-8 md:grid-cols-3 md:gap-x-4 lg:grid-cols-4 lg:gap-y-10">
+    <ul className="grid grid-cols-2 gap-x-3 gap-y-8 md:grid-cols-3 md:gap-x-5 lg:grid-cols-4 lg:gap-y-10">
       {products.map((p, i) => (
-        <Reveal as="li" key={p.id} delay={(i % 4) * 0.05}>
+        <li key={p.id}>
           <ProductCard product={p} priority={i < 4} />
-        </Reveal>
+        </li>
       ))}
     </ul>
   );

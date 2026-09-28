@@ -67,7 +67,7 @@ export function ProductCard({ product, priority = false }: { product: ProductFul
       </Link>
 
       {/* Naziv levo, cena desno — kao u katalozima okova. */}
-      <div className="flex flex-col gap-1 pt-3 font-body md:flex-row md:items-baseline md:justify-between md:gap-3">
+      <div className="flex flex-col gap-1 px-1 pt-3 font-body md:flex-row md:items-baseline md:justify-between md:gap-3 md:px-0">
         <h3 className="font-body text-[14px] font-normal leading-snug md:text-[15px]" style={{ letterSpacing: 0 }}>
           <Link href={`/proizvod/${product.slug}`} className="hover:underline hover:underline-offset-4">{product.name}</Link>
         </h3>
@@ -91,7 +91,7 @@ export function ProductCard({ product, priority = false }: { product: ProductFul
       </div>
 
       {finishes.length > 0 && (
-          <ul className="mt-2.5 flex flex-wrap items-center gap-1.5" aria-label="Dostupne završne obrade">
+          <ul className="mt-2.5 flex flex-wrap items-center gap-1.5 px-1 md:px-0" aria-label="Dostupne završne obrade">
             {finishes.map((v) => (
               <li key={v.id} title={v.finish_name}>
                 <span

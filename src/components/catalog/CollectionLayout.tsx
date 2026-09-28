@@ -56,7 +56,7 @@ export function CollectionLayout({
       </section>
 
       <nav aria-label="Kategorije" className="bg-ivory-2 pt-10 lg:pt-12">
-        <ul className="heng-container flex gap-4 overflow-x-auto pb-2 [scrollbar-width:none] sm:justify-center sm:gap-6 lg:gap-8">
+        <ul className="flex gap-3 overflow-x-auto px-5 pb-2 [scrollbar-width:none] sm:justify-center sm:gap-6 lg:gap-8">
           {categories.map((c) => {
             const active = c.slug === activeCategory;
             return (
@@ -91,11 +91,12 @@ export function CollectionLayout({
       </nav>
 
       <section className="bg-ivory-2 pb-24 pt-10 lg:pt-12">
-        <div className="heng-container">
+        {/* Puna širina sa 20 px sa strane (na telefonu mreža ide do ivice). */}
+        <div className="px-5">
           <Suspense fallback={<div className="h-8" />}>
             <CatalogFilters facets={facets} total={products.length} />
           </Suspense>
-          <div className="mt-6">
+          <div className="-mx-5 mt-6 md:mx-0">
             <CatalogGrid products={products} filtered={filtered} />
           </div>
         </div>

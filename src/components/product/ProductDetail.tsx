@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import type { ProductFull } from '@/types';
 import { ProductGallery } from './ProductGallery';
 import { FinishSwatch } from './FinishSwatch';
@@ -13,6 +13,12 @@ import { formatRsd, CENA_NA_UPIT } from '@/lib/format';
 export function ProductDetail({ product }: { product: ProductFull }) {
   const variants = product.variants.filter((v) => v.is_active);
   const [variantIdx, setVariantIdx] = useState(0);
+  // ?obrada=zlatna (klik na kružić u katalogu) otvara tu obradu.
+  useEffect(() => {
+    const code = new URLSearchParams(window.location.search).get('obrada');
+    const i = variants.findIndex((v) => v.finish_code === code);
+    if (i > 0) setVariantIdx(i);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
   const [qty, setQty] = useState(1);
   const { add } = useCart();
 
@@ -21,13 +27,22 @@ export function ProductDetail({ product }: { product: ProductFull }) {
   const sku = variant?.sku ?? product.sku;
   const dimensions = variant?.dimensions ?? product.dimensions;
 
-  // Fotografije varijante idu prve, ostali mediji zadržavaju svoj redosled.
+  // Izabrana obrada: prvo njena glavna fotografija, pa ostale fotografije te
+  // obrade, pa zajedničke. Fotografije drugih obrada se ne prikazuju.
   const media = useMemo(() => {
     if (!variant) return product.media;
     const own = product.media.filter((m) => m.variant_id === variant.id);
-    const rest = product.media.filter((m) => m.variant_id !== variant.id && !m.variant_id);
-    return [...own, ...rest];
-  }, [product.media, variant]);
+    const rest = product.media.filter((m) => !m.variant_id);
+    const main = variant.main_image;
+    if (!main) return [...own, ...rest];
+    const inList = [...own, ...rest].find((m) => m.url === main);
+    const first = inList ?? {
+      id: `main-${variant.id}`, product_id: product.id, variant_id: variant.id, url: main,
+      kind: 'image' as const, poster_url: null, alt: `${product.name} — ${variant.finish_name}`,
+      is_cover: false, sort_order: -1,
+    };
+    return [first, ...[...own, ...rest].filter((m) => m !== first)];
+  }, [product.id, product.name, product.media, variant]);
 
   const details = [
     product.description && { title: 'Opis', body: product.description },
@@ -56,11 +71,8 @@ export function ProductDetail({ product }: { product: ProductFull }) {
         <div className="heng-container">
           <div className="grid gap-10 lg:grid-cols-12 lg:gap-14">
             <div className="lg:col-span-7">
-              <ProductGallery
-                media={media}
-                activeUrl={variant?.main_image ?? null}
-                productName={product.name}
-              />
+              {/* key: nova obrada = galerija kreće od prve (njene) fotografije. */}
+              <ProductGallery key={variant?.id ?? 'bez-obrade'} media={media} productName={product.name} />
             </div>
 
             <div className="lg:col-span-5">

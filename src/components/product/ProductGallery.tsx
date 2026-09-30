@@ -1,23 +1,15 @@
 'use client';
 
 import Image from 'next/image';
-import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
-import { useEffect, useState } from 'react';
+import { useRef, useState } from 'react';
 import type { ProductMedia } from '@/types';
 
-/** Galerija: strelice i tastatura na desktopu, prevlačenje na mobilnom. */
+/** Galerija: prevlačenje prstom (scroll-snap), strelice samo na računaru. */
 export function ProductGallery({
-  media, activeUrl, productName,
-}: { media: ProductMedia[]; activeUrl: string | null; productName: string }) {
+  media, productName,
+}: { media: ProductMedia[]; productName: string }) {
   const [index, setIndex] = useState(0);
-  const reduce = useReducedMotion();
-
-  // Promena obrade pomera galeriju na odgovarajuću fotografiju.
-  useEffect(() => {
-    if (!activeUrl) return;
-    const i = media.findIndex((m) => m.url === activeUrl);
-    if (i >= 0) setIndex(i);
-  }, [activeUrl, media]);
+  const track = useRef<HTMLDivElement>(null);
 
   if (!media.length) {
     return (
@@ -27,58 +19,66 @@ export function ProductGallery({
     );
   }
 
-  const current = media[Math.min(index, media.length - 1)];
+  const go = (i: number) => {
+    const el = track.current;
+    if (el) el.scrollTo({ left: ((i + media.length) % media.length) * el.clientWidth, behavior: 'smooth' });
+  };
 
   return (
     <div>
       <div className="relative aspect-[4/5] overflow-hidden rounded-sm bg-ivory">
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={current.id}
-            className="absolute inset-0"
-            initial={reduce ? false : { opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={reduce ? undefined : { opacity: 0 }}
-            transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
-          >
-            {current.kind === 'video' ? (
-              <video
-                className="h-full w-full object-cover"
-                src={current.url}
-                poster={current.poster_url ?? undefined}
-                autoPlay muted loop playsInline preload="metadata"
-                aria-label={current.alt ?? productName}
-              />
-            ) : (
-              <Image
-                src={current.url}
-                alt={current.alt ?? productName}
-                fill
-                priority={index === 0}
-                sizes="(max-width: 1024px) 94vw, 52vw"
-                className="object-contain"
-              />
-            )}
-          </motion.div>
-        </AnimatePresence>
+        <div
+          ref={track}
+          onScroll={(e) => setIndex(Math.round(e.currentTarget.scrollLeft / e.currentTarget.clientWidth))}
+          className="flex h-full snap-x snap-mandatory overflow-x-auto overscroll-x-contain [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+        >
+          {media.map((m, i) => (
+            <div key={m.id} className="relative h-full w-full shrink-0 snap-center">
+              {m.kind === 'video' ? (
+                <video
+                  className="h-full w-full object-cover"
+                  src={m.url}
+                  poster={m.poster_url ?? undefined}
+                  autoPlay muted loop playsInline preload="metadata"
+                  aria-label={m.alt ?? productName}
+                />
+              ) : (
+                <Image
+                  src={m.url}
+                  alt={m.alt ?? productName}
+                  fill
+                  priority={i === 0}
+                  sizes="(max-width: 1024px) 94vw, 52vw"
+                  className="object-contain"
+                />
+              )}
+            </div>
+          ))}
+        </div>
 
         {media.length > 1 && (
           <>
             <button
-              onClick={() => setIndex((i) => (i - 1 + media.length) % media.length)}
-              className="absolute left-3 top-1/2 -translate-y-1/2 rounded-sm border border-ink/12 bg-ivory-2/85 px-3 py-2 font-body text-[12px] transition-colors hover:border-gold"
+              onClick={() => go(index - 1)}
+              className="absolute left-3 top-1/2 hidden -translate-y-1/2 rounded-sm border border-ink/12 bg-ivory-2/85 px-3 py-2 font-body text-[12px] transition-colors hover:border-gold md:block"
               aria-label="Prethodna fotografija"
             >
               ←
             </button>
             <button
-              onClick={() => setIndex((i) => (i + 1) % media.length)}
-              className="absolute right-3 top-1/2 -translate-y-1/2 rounded-sm border border-ink/12 bg-ivory-2/85 px-3 py-2 font-body text-[12px] transition-colors hover:border-gold"
+              onClick={() => go(index + 1)}
+              className="absolute right-3 top-1/2 hidden -translate-y-1/2 rounded-sm border border-ink/12 bg-ivory-2/85 px-3 py-2 font-body text-[12px] transition-colors hover:border-gold md:block"
               aria-label="Sledeća fotografija"
             >
               →
             </button>
-            <p className="absolute bottom-3 right-3 rounded-sm bg-ivory-2/85 px-2.5 py-1 font-body text-[11px] tabular-nums text-ink/55">
+            {/* Tačkice na telefonu, brojač na računaru. */}
+            <div className="pointer-events-none absolute inset-x-0 bottom-3 flex justify-center gap-1.5 md:hidden" aria-hidden="true">
+              {media.map((m, i) => (
+                <span key={m.id} className="h-1.5 w-1.5 rounded-full transition-colors" style={{ background: i === index ? 'var(--color-ink)' : 'rgba(28,20,22,0.25)' }} />
+              ))}
+            </div>
+            <p className="absolute bottom-3 right-3 hidden rounded-sm bg-ivory-2/85 px-2.5 py-1 font-body text-[11px] tabular-nums text-ink/55 md:block">
               {index + 1} / {media.length}
             </p>
           </>
@@ -90,7 +90,7 @@ export function ProductGallery({
           {media.map((m, i) => (
             <li key={m.id}>
               <button
-                onClick={() => setIndex(i)}
+                onClick={() => go(i)}
                 aria-label={`Prikaži fotografiju ${i + 1}`}
                 aria-current={i === index}
                 className="relative block aspect-square w-full overflow-hidden rounded-sm bg-ivory transition-all duration-300"

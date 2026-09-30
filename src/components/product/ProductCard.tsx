@@ -9,11 +9,18 @@ import { formatRsd, CENA_NA_UPIT } from '@/lib/format';
 
 export function ProductCard({ product, priority = false }: { product: ProductFull; priority?: boolean }) {
   const [hover, setHover] = useState(false);
+  const [picked, setPicked] = useState<string | null>(null);
 
-  const cover = product.media.find((m) => m.is_cover) ?? product.media[0];
-  const secondary = product.media.find((m) => m.id !== cover?.id && m.kind === 'image');
   const price = startingPrice(product);
   const finishes = product.variants.filter((v) => v.is_active);
+  const chosen = finishes.find((v) => v.id === picked);
+  const baseCover = product.media.find((m) => m.is_cover) ?? product.media[0];
+  // Izabrana obrada menja fotografiju; bez izbora važi naslovna.
+  const cover = chosen?.main_image
+    ? { ...baseCover, id: chosen.id, url: chosen.main_image, alt: `${product.name} — ${chosen.finish_name}` }
+    : baseCover;
+  const secondary = chosen ? undefined : product.media.find((m) => m.id !== cover?.id && m.kind === 'image');
+  const href = chosen ? `/proizvod/${product.slug}?obrada=${chosen.finish_code}` : `/proizvod/${product.slug}`;
 
   return (
     <article
@@ -21,7 +28,7 @@ export function ProductCard({ product, priority = false }: { product: ProductFul
       onMouseLeave={() => setHover(false)}
       className="group"
     >
-      <Link href={`/proizvod/${product.slug}`} className="block">
+      <Link href={href} className="block">
         <div className="relative aspect-square overflow-hidden rounded-sm bg-ivory">
           {cover ? (
             <>
@@ -69,7 +76,7 @@ export function ProductCard({ product, priority = false }: { product: ProductFul
       {/* Naziv levo, cena desno — kao u katalozima okova. */}
       <div className="flex flex-col gap-1 px-1 pt-3 font-body md:flex-row md:items-baseline md:justify-between md:gap-3 md:px-0">
         <h3 className="font-body text-[14px] font-normal leading-snug md:text-[15px]" style={{ letterSpacing: 0 }}>
-          <Link href={`/proizvod/${product.slug}`} className="hover:underline hover:underline-offset-4">{product.name}</Link>
+          <Link href={href} className="hover:underline hover:underline-offset-4">{product.name}</Link>
         </h3>
 
         <div className="flex items-baseline gap-2">
@@ -91,16 +98,29 @@ export function ProductCard({ product, priority = false }: { product: ProductFul
       </div>
 
       {finishes.length > 0 && (
-          <ul className="mt-2.5 flex flex-wrap items-center gap-1.5 px-1 md:px-0" aria-label="Dostupne završne obrade">
-            {finishes.map((v) => (
-              <li key={v.id} title={v.finish_name}>
-                <span
-                  className="block h-[16px] w-[16px] rounded-full ring-1 ring-inset ring-ink/20"
-                  style={{ background: v.finish_swatch ?? '#8C8477' }}
-                />
-                <span className="sr-only">{v.finish_name}</span>
-              </li>
-            ))}
+          <ul className="mt-2 flex flex-wrap items-center gap-0.5 px-0.5 md:px-0" aria-label="Završne obrade">
+            {finishes.map((v) => {
+              const on = v.id === picked;
+              return (
+                <li key={v.id}>
+                  {/* 28 px polje za prst, kružić 16 px; izabran = tamni prsten. */}
+                  <button
+                    type="button" title={v.finish_name} aria-pressed={on}
+                    onClick={() => setPicked(on ? null : v.id)}
+                    className="flex h-7 w-7 items-center justify-center rounded-full"
+                  >
+                    <span
+                      className="block h-[16px] w-[16px] rounded-full ring-1 ring-inset ring-ink/20"
+                      style={{
+                        background: v.finish_swatch ?? '#8C8477',
+                        boxShadow: on ? '0 0 0 2px var(--color-ivory-2), 0 0 0 3px var(--color-ink)' : undefined,
+                      }}
+                    />
+                    <span className="sr-only">{v.finish_name}</span>
+                  </button>
+                </li>
+              );
+            })}
           </ul>
         )}
     </article>

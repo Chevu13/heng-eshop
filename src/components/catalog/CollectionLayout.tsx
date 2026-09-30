@@ -56,11 +56,11 @@ export function CollectionLayout({
       </section>
 
       <nav aria-label="Kategorije" className="bg-ivory-2 pt-10 lg:pt-12">
-        <ul className="flex gap-3 overflow-x-auto px-5 pb-2 [scrollbar-width:none] sm:justify-center sm:gap-6 lg:gap-8">
+        <ul className="flex gap-3 overflow-x-auto px-5 pb-2 [scrollbar-width:none] sm:gap-6 lg:gap-8">
           {categories.map((c) => {
             const active = c.slug === activeCategory;
             return (
-              <li key={c.id} className="shrink-0">
+              <li key={c.id} className="shrink-0 first:ml-auto last:mr-auto">
                 <Link
                   href={active ? '/kolekcija' : `/kolekcija/${c.slug}`}
                   aria-current={active ? 'page' : undefined}

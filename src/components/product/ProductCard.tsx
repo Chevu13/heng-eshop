@@ -29,7 +29,8 @@ export function ProductCard({ product, priority = false }: { product: ProductFul
       className="group"
     >
       <Link href={href} className="block">
-        <div className="relative aspect-square overflow-hidden rounded-sm bg-ivory">
+        {/* 4:5 i object-contain: naslovna fotografija se vidi cela. */}
+        <div className="relative aspect-[4/5] overflow-hidden rounded-sm bg-ivory">
           {cover ? (
             <>
               <Image
@@ -38,7 +39,7 @@ export function ProductCard({ product, priority = false }: { product: ProductFul
                 fill
                 priority={priority}
                 sizes="(max-width: 768px) 48vw, (max-width: 1024px) 32vw, 24vw"
-                className="object-cover transition-[opacity,transform] duration-[900ms] ease-heng"
+                className="object-contain transition-[opacity,transform] duration-[900ms] ease-heng"
                 style={{
                   opacity: hover && secondary ? 0 : 1,
                   transform: hover ? 'scale(1.035)' : 'scale(1)',
@@ -51,7 +52,7 @@ export function ProductCard({ product, priority = false }: { product: ProductFul
                   fill
                   aria-hidden="true"
                   sizes="(max-width: 768px) 48vw, (max-width: 1024px) 32vw, 24vw"
-                  className="object-cover transition-[opacity,transform] duration-[900ms] ease-heng"
+                  className="object-contain transition-[opacity,transform] duration-[900ms] ease-heng"
                   style={{ opacity: hover ? 1 : 0, transform: hover ? 'scale(1.035)' : 'scale(1)' }}
                 />
               )}

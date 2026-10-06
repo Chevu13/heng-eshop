@@ -4,7 +4,6 @@ import Link from 'next/link';
 import { useEffect, useMemo, useState } from 'react';
 import type { ProductFull } from '@/types';
 import { ProductGallery } from './ProductGallery';
-import { FinishSwatch } from './FinishSwatch';
 import { Accordion } from './Accordion';
 import { useCart } from '@/components/cart/CartProvider';
 import { resolvePrice } from '@/lib/pricing';
@@ -45,7 +44,6 @@ export function ProductDetail({ product }: { product: ProductFull }) {
   }, [product.id, product.name, product.media, variant]);
 
   const details = [
-    product.description && { title: 'Opis', body: product.description },
     product.technical_info && { title: 'Tehničke informacije', body: product.technical_info },
     product.installation_info && { title: 'Montaža', body: product.installation_info },
     product.delivery_info && { title: 'Isporuka', body: product.delivery_info },
@@ -66,185 +64,126 @@ export function ProductDetail({ product }: { product: ProductFull }) {
   }
 
   return (
-    <>
-      <section className="bg-ivory-2 pb-24">
-        <div className="heng-container">
-          <div className="grid gap-10 lg:grid-cols-12 lg:gap-14">
-            <div className="lg:col-span-7">
-              {/* key: nova obrada = galerija kreće od prve (njene) fotografije. */}
-              <ProductGallery key={variant?.id ?? 'bez-obrade'} media={media} productName={product.name} />
-            </div>
+    <section className="bg-ivory-2 px-5 pb-24 pt-6 lg:px-10 lg:pt-10">
+      <div className="grid gap-6 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)] lg:gap-12">
+        {/* key: nova obrada = galerija kreće od prve (njene) fotografije. */}
+        <ProductGallery key={variant?.id ?? 'bez-obrade'} media={media} productName={product.name} />
 
-            <div className="lg:col-span-5">
-              <div className="lg:sticky lg:top-28">
+        <div>
+          <div className="font-body lg:sticky lg:top-28">
+            <nav aria-label="Putanja">
+              <ol className="flex flex-wrap items-center gap-1.5 text-[12px] text-ink/55">
+                <li><Link href="/kolekcija" className="hover:underline">Proizvodi</Link></li>
                 {product.category && (
-                  <Link
-                    href={`/kolekcija/${product.category.slug}`}
-                    className="heng-eyebrow link-gold"
-                    style={{ color: 'var(--color-gold)' }}
-                  >
-                    {product.category.title}
-                  </Link>
+                  <li className="flex items-center gap-1.5">
+                    <span aria-hidden="true">›</span>
+                    <Link href={`/kolekcija/${product.category.slug}`} className="hover:underline">{product.category.title}</Link>
+                  </li>
                 )}
+                <li className="flex items-center gap-1.5">
+                  <span aria-hidden="true">›</span>
+                  <span aria-current="page">{product.name}</span>
+                </li>
+              </ol>
+            </nav>
 
-                <h1
-                  className="display-caps mt-4 text-[clamp(1.8rem,4vw,2.6rem)]"
-                >
-                  {product.name}
-                </h1>
+            <h1 className="title-bold mt-3 text-[24px] lg:text-[28px]">{product.name}</h1>
 
-                <div className="mt-4 flex items-baseline gap-3">
-                  {price.onRequest ? (
-                    <span className="font-display text-[22px]" style={{ fontWeight: 600 }}>
-                      {CENA_NA_UPIT}
-                    </span>
-                  ) : (
-                    <>
-                      <span
-                        className="font-display text-[24px]"
-                        style={{ fontWeight: 600, color: price.sale !== null ? 'var(--color-magenta)' : undefined }}
-                      >
-                        {formatRsd(price.effective)}
-                      </span>
-                      {price.sale !== null && (
-                        <span className="font-body text-[15px] text-ink/40 line-through">
-                          {formatRsd(price.regular)}
-                        </span>
-                      )}
-                    </>
+            <div className="mt-2 flex items-baseline gap-3 text-[16px]">
+              {price.onRequest ? (
+                <span>{CENA_NA_UPIT}</span>
+              ) : (
+                <>
+                  <span style={{ color: price.sale !== null ? 'var(--color-magenta)' : undefined }}>
+                    {formatRsd(price.effective)}
+                  </span>
+                  {price.sale !== null && (
+                    <span className="text-[14px] text-ink/40 line-through">{formatRsd(price.regular)}</span>
                   )}
-                </div>
-
-                {product.short_description && (
-                  <p className="mt-5 font-body text-[15px] leading-[1.7] text-ink/68">
-                    {product.short_description}
-                  </p>
-                )}
-
-                <div className="heng-rule my-8" />
-
-                {variants.length > 0 && (
-                  <div>
-                    <p className="field-label">
-                      Završna obrada
-                      <span className="ml-2 normal-case tracking-normal text-ink/45">
-                        {variant?.finish_name}
-                      </span>
-                    </p>
-                    <div
-                      className="grid gap-3 sm:gap-5"
-                      style={{ gridTemplateColumns: `repeat(${Math.min(variants.length, 4)}, minmax(0, 1fr))` }}
-                      role="group"
-                      aria-label="Izbor završne obrade"
-                    >
-                      {variants.map((v, i) => (
-                        <FinishSwatch
-                          key={v.id}
-                          name={v.finish_name}
-                          color={v.finish_swatch ?? '#8C8477'}
-                          selected={i === variantIdx}
-                          onSelect={() => setVariantIdx(i)}
-                        />
-                      ))}
-                    </div>
-                  </div>
-                )}
-
-                <dl className="mt-8 grid grid-cols-2 gap-x-6 gap-y-4">
-                  {sku && (
-                    <div>
-                      <dt className="field-label mb-1">Šifra</dt>
-                      <dd className="font-body text-[14px] text-ink/75">{sku}</dd>
-                    </div>
-                  )}
-                  {dimensions && (
-                    <div>
-                      <dt className="field-label mb-1">Dimenzije</dt>
-                      <dd className="font-body text-[14px] tabular-nums text-ink/75">{dimensions}</dd>
-                    </div>
-                  )}
-                  {product.material && (
-                    <div className="col-span-2">
-                      <dt className="field-label mb-1">Materijal</dt>
-                      <dd className="font-body text-[14px] text-ink/75">{product.material}</dd>
-                    </div>
-                  )}
-                </dl>
-
-                {price.onRequest && (
-                  <p className="mt-6 flex items-center gap-2 font-body text-[13px] text-ink/55">
-                    <span aria-hidden="true" className="block h-1.5 w-1.5 rounded-pill bg-ink/30" />
-                    Dostupnost se potvrđuje pri upitu
-                  </p>
-                )}
-
-                <div className="mt-7 flex flex-wrap items-stretch gap-3">
-                  <div className="flex items-center rounded-sm border border-ink/16">
-                    <button
-                      onClick={() => setQty((q) => Math.max(1, q - 1))}
-                      className="px-4 py-3 font-body text-[15px] hover:text-maroon"
-                      aria-label="Smanji količinu"
-                    >−</button>
-                    <span className="min-w-[34px] text-center font-body text-[14px] tabular-nums" aria-live="polite">
-                      {qty}
-                    </span>
-                    <button
-                      onClick={() => setQty((q) => Math.min(99, q + 1))}
-                      className="px-4 py-3 font-body text-[15px] hover:text-maroon"
-                      aria-label="Povećaj količinu"
-                    >+</button>
-                  </div>
-
-                  <button onClick={addToCart} className="btn btn-primary flex-1">
-                    Dodaj u korpu
-                  </button>
-                </div>
-
-                <Link
-                  href={`/kontakt?proizvod=${encodeURIComponent(product.name)}`}
-                  className="btn btn-outline mt-3 w-full"
-                >
-                  Zatraži informacije
-                </Link>
-
-                {price.onRequest && (
-                  <p className="mt-4 font-body text-[13px] leading-relaxed text-ink/52">
-                    Cena za ovaj model se formira prema količini i obradi. Dodajte proizvod u korpu i
-                    pošaljite porudžbinu — javljamo se sa ponudom pre isporuke.
-                  </p>
-                )}
-
-                {details.length > 0 && (
-                  <div className="mt-10">
-                    <Accordion items={details} />
-                  </div>
-                )}
-              </div>
+                </>
+              )}
             </div>
-          </div>
-        </div>
-      </section>
 
-      {/* Mobilna lepljiva akcija */}
-      <div
-        className="fixed inset-x-0 bottom-0 z-30 border-t border-ink/10 bg-ivory-2/96 px-4 py-3 lg:hidden"
-        style={{ paddingBottom: 'max(12px, env(safe-area-inset-bottom))' }}
-      >
-        <div className="flex items-center gap-3">
-          <div className="min-w-0 flex-1">
-            <p className="truncate font-body text-[12px] text-ink/50">
-              {product.name}{variant ? ` — ${variant.finish_name}` : ''}
-            </p>
-            <p className="font-display text-[15px]" style={{ fontWeight: 600 }}>
-              {price.onRequest ? CENA_NA_UPIT : formatRsd(price.effective)}
-            </p>
+            {variants.length > 0 && (
+              <div className="mt-7">
+                <p className="text-[13px] text-ink/70">
+                  Završna obrada: <span className="text-ink">{variant?.finish_name}</span>
+                </p>
+                <div className="mt-2.5 flex flex-wrap gap-2.5" role="group" aria-label="Izbor završne obrade">
+                  {variants.map((v, i) => (
+                    <button
+                      key={v.id} type="button" title={v.finish_name}
+                      aria-label={v.finish_name} aria-pressed={i === variantIdx}
+                      onClick={() => setVariantIdx(i)}
+                      className="h-9 w-9 rounded-full ring-1 ring-inset ring-ink/20"
+                      style={{
+                        background: v.finish_swatch ?? '#8C8477',
+                        boxShadow: i === variantIdx ? '0 0 0 2px var(--color-ivory-2), 0 0 0 3.5px var(--color-ink)' : undefined,
+                      }}
+                    />
+                  ))}
+                </div>
+              </div>
+            )}
+
+            <div className="mt-7 flex items-stretch gap-3">
+              <div className="flex items-center border border-ink/20">
+                <button
+                  onClick={() => setQty((q) => Math.max(1, q - 1))}
+                  className="px-4 py-3 text-[15px]" aria-label="Smanji količinu"
+                >−</button>
+                <span className="min-w-[30px] text-center text-[14px] tabular-nums" aria-live="polite">{qty}</span>
+                <button
+                  onClick={() => setQty((q) => Math.min(99, q + 1))}
+                  className="px-4 py-3 text-[15px]" aria-label="Povećaj količinu"
+                >+</button>
+              </div>
+              <button
+                onClick={addToCart}
+                className="flex-1 bg-maroon-deep px-6 py-3.5 text-[15px] font-semibold text-ivory transition-opacity hover:opacity-90"
+              >
+                Dodaj u korpu
+              </button>
+            </div>
+            <Link
+              href={`/kontakt?proizvod=${encodeURIComponent(product.name)}`}
+              className="mt-3 block border border-ink/25 px-6 py-3.5 text-center text-[15px] font-semibold transition-colors hover:border-ink"
+            >
+              Zatraži informacije
+            </Link>
+
+            {price.onRequest && (
+              <p className="mt-4 text-[13px] leading-relaxed text-ink/60">
+                Cena za ovaj model se formira prema količini i obradi. Dodajte proizvod u korpu i
+                pošaljite porudžbinu — javljamo se sa ponudom pre isporuke.
+              </p>
+            )}
+
+            <dl className="mt-9 space-y-5 text-[14px]">
+              {[['Šifra', sku], ['Dimenzije', dimensions], ['Materijal', product.material]].map(([label, value]) => value && (
+                <div key={label}>
+                  <dt className="text-[12px] text-ink/55">{label}</dt>
+                  <dd className="mt-1 font-semibold">{value}</dd>
+                </div>
+              ))}
+              {(product.description ?? product.short_description) && (
+                <div>
+                  <dt className="text-[12px] text-ink/55">Opis</dt>
+                  <dd className="mt-1 whitespace-pre-line leading-[1.7] text-ink/80">
+                    {product.description ?? product.short_description}
+                  </dd>
+                </div>
+              )}
+            </dl>
+
+            {details.length > 0 && (
+              <div className="mt-8">
+                <Accordion items={details} defaultOpen={-1} />
+              </div>
+            )}
           </div>
-          <button onClick={addToCart} className="btn btn-primary shrink-0" style={{ padding: '13px 20px' }}>
-            Dodaj u korpu
-          </button>
         </div>
       </div>
-      <div aria-hidden="true" className="h-[76px] lg:hidden" />
-    </>
+    </section>
   );
 }

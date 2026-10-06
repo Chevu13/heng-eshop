@@ -111,6 +111,15 @@
     line-height: 1.16;
   }
 
+  /* Naslov kao u katalozima okova: manja, podebljana velika slova. */
+  .title-bold {
+    font-family: var(--font-body);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    line-height: 1.2;
+  }
+
   .heng-rule {
     height: 1px;
     background: linear-gradient(

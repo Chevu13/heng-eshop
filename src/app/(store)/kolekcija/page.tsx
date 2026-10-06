@@ -42,6 +42,7 @@ export default async function CollectionPage({ searchParams }: PageProps) {
         image="/assets/heng/lifestyle/case-nad-barom-heng.jpg"
         imageAlt="Čaše za vino obešene na HENG nosaču iznad kućnog bara"
         categories={categories}
+        allProducts={products}
         scope={products}
         products={filterProducts(products, filters)}
         filtered={Object.values(filters).some(Boolean)}

@@ -89,32 +89,6 @@ export default async function ProductPage({ params }: PageProps) {
         ])}
       />
 
-      <div className="bg-ivory-2 pb-8 pt-14 lg:pt-20">
-        <div className="heng-container">
-          <nav aria-label="Putanja">
-            <ol className="flex flex-wrap items-center gap-2 font-body text-[12px] text-ink/45">
-              <li><a href="/" className="link-gold">Početna</a></li>
-              <li className="flex items-center gap-2">
-                <span aria-hidden="true" className="text-ink/25">/</span>
-                <a href="/kolekcija" className="link-gold">Kolekcija</a>
-              </li>
-              {product.category && (
-                <li className="flex items-center gap-2">
-                  <span aria-hidden="true" className="text-ink/25">/</span>
-                  <a href={`/kolekcija/${product.category.slug}`} className="link-gold">
-                    {product.category.title}
-                  </a>
-                </li>
-              )}
-              <li className="flex items-center gap-2">
-                <span aria-hidden="true" className="text-ink/25">/</span>
-                <span aria-current="page" className="text-ink/70">{product.name}</span>
-              </li>
-            </ol>
-          </nav>
-        </div>
-      </div>
-
       <ProductDetail product={product} />
 
       {related.length > 0 && (

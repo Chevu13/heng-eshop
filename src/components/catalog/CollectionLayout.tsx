@@ -12,14 +12,23 @@ import { CatalogGrid } from './CatalogGrid';
  * traka sa filterima i sortiranjem → mreža od 4 proizvoda u redu.
  */
 export function CollectionLayout({
-  title, description, image, imageAlt, categories, scope, products, activeCategory, filtered,
+  title, description, image, imageAlt, categories, allProducts, scope, products, activeCategory, filtered,
 }: {
   title: string; description?: string | null; image: string; imageAlt: string;
   categories: Category[];
+  /** Svi proizvodi sajta — rezervna slika za krug kategorije. */
+  allProducts: ProductFull[];
   /** Svi proizvodi strane (pre filtera) — za broj pored svake opcije. */
   scope: ProductFull[];
   products: ProductFull[]; activeCategory?: string; filtered: boolean;
 }) {
+  // Kategorija bez naslovne slike dobija fotografiju svog prvog proizvoda.
+  const circleImage = (c: Category) => {
+    if (c.cover_image) return c.cover_image;
+    const media = allProducts.find((p) => p.category?.slug === c.slug && p.media.length)?.media;
+    return (media?.find((m) => m.is_cover) ?? media?.[0])?.url;
+  };
+
   const facets: Facet[] = [
     {
       key: 'finish', label: 'Završna obrada',
@@ -41,11 +50,11 @@ export function CollectionLayout({
     <>
       <section className="grid bg-maroon-deep md:min-h-[440px] md:grid-cols-2 lg:min-h-[540px]">
         <div className="flex flex-col justify-center px-6 py-12 sm:px-8 md:py-16 lg:px-12 xl:px-16">
-          <h1 className="display-caps text-[clamp(1.9rem,3.6vw,2.9rem)] text-ivory" style={{ fontWeight: 500 }}>
+          <h1 className="title-bold text-[clamp(1.4rem,2.2vw,1.9rem)] text-ivory">
             {title}
           </h1>
           {description && (
-            <p className="mt-5 max-w-[46ch] font-body text-[15px] font-light leading-[1.75] text-ivory/80 sm:text-[16px]">
+            <p className="mt-4 max-w-[46ch] font-body text-[15px] leading-[1.75] text-ivory/85 sm:text-[16px]">
               {description}
             </p>
           )}
@@ -70,9 +79,9 @@ export function CollectionLayout({
                     className="relative block h-[76px] w-[76px] overflow-hidden rounded-full bg-ivory transition sm:h-[150px] sm:w-[150px]"
                     style={{ boxShadow: active ? '0 0 0 2px var(--color-gold)' : undefined }}
                   >
-                    {c.cover_image && (
+                    {circleImage(c) && (
                       <Image
-                        src={c.cover_image} alt="" fill sizes="150px"
+                        src={circleImage(c)!} alt="" fill sizes="150px"
                         className="object-cover transition-transform duration-700 ease-heng group-hover:scale-[1.06]"
                       />
                     )}

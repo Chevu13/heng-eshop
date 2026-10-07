@@ -22,14 +22,13 @@ export function Accordion({ items, defaultOpen = 0 }: { items: AccordionItem[]; 
                 aria-controls={`panel-${i}`}
                 className="flex w-full items-center justify-between gap-4 py-5 text-left"
               >
-                <span className="font-body text-[13px] uppercase tracking-eyebrow text-ink/75">
+                <span className="font-body text-[14px] text-ink/80">
                   {item.title}
                 </span>
                 <span
                   aria-hidden="true"
                   className="shrink-0 font-body text-[16px] transition-transform duration-300 ease-heng"
                   style={{
-                    color: 'var(--color-gold)',
                     transform: isOpen ? 'rotate(45deg)' : 'rotate(0deg)',
                   }}
                 >

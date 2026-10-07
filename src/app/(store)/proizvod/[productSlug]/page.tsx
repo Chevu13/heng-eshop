@@ -95,7 +95,7 @@ export default async function ProductPage({ params }: PageProps) {
         <section className="bg-ivory py-24">
           <div className="heng-container">
             <Reveal>
-              <h2 className="font-display text-[26px]" style={{ fontWeight: 600 }}>
+              <h2 className="title-bold text-[18px]">
                 Iz iste kolekcije
               </h2>
             </Reveal>

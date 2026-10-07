@@ -1,10 +1,10 @@
-import Image from 'next/image';
 import Link from 'next/link';
 import { Suspense } from 'react';
 import type { Category, ProductFull } from '@/types';
 import { FINISHES } from '@/lib/data/fixtures';
 import { CatalogFilters, type Facet } from './CatalogFilters';
 import { CatalogGrid } from './CatalogGrid';
+import { FallbackImage } from '@/components/ui/FallbackImage';
 
 /**
  * Zajednički raspored za /kolekcija i /kolekcija/[kategorija]:
@@ -22,12 +22,13 @@ export function CollectionLayout({
   scope: ProductFull[];
   products: ProductFull[]; activeCategory?: string; filtered: boolean;
 }) {
-  // Kategorija bez naslovne slike dobija fotografiju svog prvog proizvoda.
-  const circleImage = (c: Category) => {
-    if (c.cover_image) return c.cover_image;
-    const media = allProducts.find((p) => p.category?.slug === c.slug && p.media.length)?.media;
+  // Rezerva kad kategorija nema naslovnu sliku ili je fajl obrisan:
+  // fotografija njenog prvog proizvoda.
+  const productImage = (slug?: string) => {
+    const media = allProducts.find((p) => p.category?.slug === slug && p.media.length)?.media;
     return (media?.find((m) => m.is_cover) ?? media?.[0])?.url;
   };
+  const DEFAULT_BANNER = '/assets/heng/lifestyle/case-nad-barom-heng.jpg';
 
   const facets: Facet[] = [
     {
@@ -60,7 +61,10 @@ export function CollectionLayout({
           )}
         </div>
         <div className="relative aspect-[4/3] md:aspect-auto">
-          <Image src={image} alt={imageAlt} fill priority quality={82} sizes="(max-width: 768px) 100vw, 50vw" className="object-cover" />
+          <FallbackImage
+            src={image} fallback={productImage(activeCategory) ?? DEFAULT_BANNER}
+            alt={imageAlt} fill priority quality={82} sizes="(max-width: 768px) 100vw, 50vw" className="object-cover"
+          />
         </div>
       </section>
 
@@ -79,9 +83,10 @@ export function CollectionLayout({
                     className="relative block h-[76px] w-[76px] overflow-hidden rounded-full bg-ivory transition sm:h-[150px] sm:w-[150px]"
                     style={{ boxShadow: active ? '0 0 0 2px var(--color-gold)' : undefined }}
                   >
-                    {circleImage(c) && (
-                      <Image
-                        src={circleImage(c)!} alt="" fill sizes="150px"
+                    {(c.cover_image || productImage(c.slug)) && (
+                      <FallbackImage
+                        src={c.cover_image || productImage(c.slug)!} fallback={productImage(c.slug)}
+                        alt="" fill sizes="150px"
                         className="object-cover transition-transform duration-700 ease-heng group-hover:scale-[1.06]"
                       />
                     )}

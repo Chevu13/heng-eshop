@@ -5,6 +5,8 @@ export interface HeroContent {
   eyebrow?: string; heading?: string; body?: string;
   primaryLabel?: string; primaryHref?: string;
   mediaUrl?: string; mediaAlt?: string;
+  /** Kadar fotografije na računaru, npr. „center 60%” (podrazumevano „center 30%”). */
+  mediaPosition?: string;
   /** Opciona uspravna slika za telefon. */
   mediaUrlMobile?: string | null;
   videoUrl?: string | null; videoPoster?: string | null;
@@ -22,6 +24,7 @@ export function Hero({ content }: { content: HeroContent }) {
           imageUrl={content.mediaUrl}
           imageUrlMobile={content.mediaUrlMobile}
           imageAlt={content.mediaAlt ?? ''}
+          imagePosition={content.mediaPosition}
           videoUrl={content.videoUrl ?? null}
           videoPoster={content.videoPoster ?? null}
         />

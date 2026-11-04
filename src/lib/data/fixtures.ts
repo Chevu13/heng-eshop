@@ -274,8 +274,9 @@ export const HOMEPAGE_SECTIONS: HomepageSection[] = [
       body: 'HENG proizvodi spajaju funkciju, vrhunsku izradu i savremenu estetiku — ' +
         'za prostor koji se izdvaja.',
       primaryLabel: 'Prodavnica', primaryHref: '/kolekcija',
-      mediaUrl: '/assets/heng/lifestyle/zlatna-letva-sa-casama-hero.jpg',
-      mediaAlt: 'Čaše obešene na zlatnoj HENG letvi ispod kuhinjskog elementa',
+      mediaUrl: '/assets/heng/interiors/mermerni-zid-flase-i-case.jpg',
+      mediaAlt: 'Mermerni zid sa HENG nosačima za flaše i čaše',
+      mediaPosition: 'center 62%',
       videoUrl: null, videoPoster: null,
     },
   },

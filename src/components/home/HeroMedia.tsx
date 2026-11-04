@@ -10,9 +10,9 @@ import { ArtImage } from '@/components/ui/ArtImage';
  * vezama prikazuje se poster/fotografija — bez skidanja video fajla.
  */
 export function HeroMedia({
-  imageUrl, imageUrlMobile, imageAlt, videoUrl, videoPoster,
+  imageUrl, imageUrlMobile, imageAlt, imagePosition, videoUrl, videoPoster,
 }: {
-  imageUrl?: string; imageUrlMobile?: string | null; imageAlt: string;
+  imageUrl?: string; imageUrlMobile?: string | null; imageAlt: string; imagePosition?: string;
   videoUrl: string | null; videoPoster: string | null;
 }) {
   const reduce = useReducedMotion();
@@ -68,7 +68,7 @@ export function HeroMedia({
       priority
       sizes="100vw"
       className="object-cover"
-      style={{ objectPosition: imageUrlMobile ? 'center' : 'center 30%' }}
+      style={{ objectPosition: imagePosition ?? (imageUrlMobile ? 'center' : 'center 30%') }}
     />
   );
 }

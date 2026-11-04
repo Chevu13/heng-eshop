@@ -273,7 +273,7 @@ export const HOMEPAGE_SECTIONS: HomepageSection[] = [
       heading: 'Detalji koji znače.',
       body: 'HENG proizvodi spajaju funkciju, vrhunsku izradu i savremenu estetiku — ' +
         'za prostor koji se izdvaja.',
-      primaryLabel: 'Pogledaj proizvode', primaryHref: '/kolekcija',
+      primaryLabel: 'Prodavnica', primaryHref: '/kolekcija',
       mediaUrl: '/assets/heng/lifestyle/zlatna-letva-sa-casama-hero.jpg',
       mediaAlt: 'Čaše obešene na zlatnoj HENG letvi ispod kuhinjskog elementa',
       videoUrl: null, videoPoster: null,
@@ -283,6 +283,7 @@ export const HOMEPAGE_SECTIONS: HomepageSection[] = [
     // 01 — KATEGORIJE: dva vizuala jedan pored drugog.
     id: 'hs-categories', key: 'categories', title: 'Kategorije', is_visible: true, sort_order: 1,
     content: {
+      heading: 'Kolekcija.',
       items: [
         {
           title: 'Ručke od prirodnog kamena',
@@ -306,10 +307,31 @@ export const HOMEPAGE_SECTIONS: HomepageSection[] = [
     },
   },
   {
+    id: 'hs-why', key: 'why', title: 'Zašto HENG', is_visible: true, sort_order: 2,
+    content: {
+      heading: 'Zašto HENG',
+      items: [
+        { icon: 'help', title: 'Pomoć pri izboru', text: 'Niste sigurni koja obrada ili dužina odgovara vašem prostoru? Pišite nam pre kupovine.' },
+        { icon: 'shield', title: 'Izrada koja traje', text: 'Eloksirani aluminijum i prirodni kamen — obrada je deo materijala i ne ljušti se.' },
+        { icon: 'ruler', title: 'Rešenja po meri', text: 'Za vinske zidove, barove i restorane pravimo raspored prema vašem prostoru.' },
+        { icon: 'truck', title: 'Isporuka u celoj Srbiji', text: 'Plaćanje pouzećem ili po predračunu.' },
+      ],
+    },
+  },
+  {
+    id: 'hs-story', key: 'story', title: 'Priča o brendu', is_visible: true, sort_order: 3,
+    content: {
+      heading: 'HENG — detalj koji nosi prostor.',
+      body: 'HENG pravi nosače za vino i čaše i ručke od prirodnog kamena za kuhinje, barove i ' +
+        'enterijere po meri. Sveden oblik, pažljivo birane završne obrade i materijali koji traju.',
+      ctaLabel: 'Naša priča', ctaHref: '/o-nama',
+    },
+  },
+  {
     id: 'hs-material', key: 'material', title: 'Držači za vino i čaše', is_visible: true, sort_order: 2,
     content: {
       eyebrow: 'MATERIJAL',
-      heading: 'Oblikovano da traje.',
+      heading: 'Držači za vino i čaše.',
       body: 'HENG sistemi izrađeni su od eloksirane legure aluminijuma, sa završnim obradama koje se ' +
         'uklapaju u savremene kuhinje, vinske kutke i enterijere po meri.',
       points: [
@@ -317,8 +339,8 @@ export const HOMEPAGE_SECTIONS: HomepageSection[] = [
         { title: 'Preciznost u svakom detalju', text: 'Prorezi, radijusi i otvori za montažu izvedeni su u istoj toleranciji na svakom komadu.' },
         { title: 'Skrivena montaža', text: 'Vidljiv ostaje samo profil — pričvršćenje se povlači u pozadinu.' },
       ],
-      mediaUrl: '/assets/heng/products/model-01/model-01-sve-obrade.jpg',
-      mediaAlt: 'Model 01 — sve dostupne završne obrade jedna uz drugu',
+      mediaUrl: '/assets/heng/lifestyle/case-nad-barom-heng.jpg',
+      mediaAlt: 'Čaše obešene na HENG letvi iznad barskog elementa',
       ctaLabel: 'Istraži držače', ctaHref: '/kolekcija',
     },
   },
@@ -328,7 +350,7 @@ export const HOMEPAGE_SECTIONS: HomepageSection[] = [
     id: 'hs-handles', key: 'handles', title: 'Ručke od prirodnog kamena', is_visible: true, sort_order: 3,
     content: {
       eyebrow: 'RUČKE OD PRIRODNOG KAMENA',
-      heading: 'Svaki komad je original.',
+      heading: 'Ručke od prirodnog kamena.',
       body: 'Kamen se ne proizvodi — vadi se, seče i polira. Zato nijedna ručka nije ista: ' +
         'šara, ton i zrno ostaju onakvi kakvim ih je blok ostavio.',
       points: [
@@ -339,6 +361,16 @@ export const HOMEPAGE_SECTIONS: HomepageSection[] = [
       mediaUrl: '/assets/heng/lifestyle/rucke-od-prirodnog-kamena.jpg',
       mediaAlt: 'Okrugle ručke od prirodnog kamena na frontu kuhinjskog elementa',
       ctaLabel: 'Istraži ručke', ctaHref: '/kolekcija',
+    },
+  },
+  {
+    id: 'hs-bespoke', key: 'bespoke', title: 'Projekti po meri', is_visible: true, sort_order: 6,
+    content: {
+      heading: 'Projekti po meri.',
+      body: 'Vinski zidovi, barovi i restorani — predlažemo raspored i obradu prema vašem prostoru.',
+      mediaUrl: '/assets/heng/interiors/vinski-zid-sa-slikom.jpg',
+      mediaAlt: 'Vinski zid sa HENG nosačima i slikom u enterijeru',
+      ctaLabel: 'Pogledaj projekte', ctaHref: '/projekti',
     },
   },
 ];

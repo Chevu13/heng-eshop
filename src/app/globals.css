@@ -120,6 +120,15 @@
     line-height: 1.2;
   }
 
+  /* Naslovi početne (kao plookdesign.com): običan sans, bez velikih slova. */
+  .home-heading {
+    font-family: var(--font-body);
+    font-weight: 400;
+    letter-spacing: -0.015em;
+    line-height: 1.15;
+    color: var(--color-ink);
+  }
+
   .heng-rule {
     height: 1px;
     background: linear-gradient(

@@ -9,14 +9,17 @@ export const metadata: Metadata = { title: 'Početna strana' };
 export const dynamic = 'force-dynamic';
 
 /**
- * Početna strana ima tačno četiri sekcije. Galerija i članci strane
+ * Sekcije početne strane, redom kojim se prikazuju. Članci strane
  * /u-prostoru uređuju se na /admin/u-prostoru. Ostali stari redovi se ne prikazuju.
  */
 const LABELS: Record<string, string> = {
   hero: 'Hero sekcija',
   categories: '01 — Kategorije',
-  material: '02 — Držači za vino i čaše',
-  handles: '03 — Ručke od prirodnog kamena',
+  why: '02 — Zašto HENG (ikonice: help, shield, ruler, truck)',
+  story: '03 — Priča o brendu',
+  material: '04 — Blok: Držači za vino i čaše',
+  handles: '05 — Blok: Ručke od prirodnog kamena',
+  bespoke: '06 — Blok: Projekti po meri',
 };
 
 export default async function AdminHomepagePage() {

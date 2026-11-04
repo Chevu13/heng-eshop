@@ -1,4 +1,5 @@
 import 'server-only';
+import { HOMEPAGE_SECTIONS } from '@/lib/data/fixtures';
 import { createServerSupabase } from '@/lib/supabase/server';
 import type {
   Category, HomepageSection, Order, ProductFull, ProjectInquiry, SiteSettings,
@@ -66,7 +67,17 @@ export async function adminInquiries(status?: string): Promise<ProjectInquiry[]>
 export async function adminHomepage(): Promise<HomepageSection[]> {
   const { data, error } = await sb().from('homepage_sections').select('*').order('sort_order');
   if (error) throw error;
-  return (data ?? []) as HomepageSection[];
+  const rows = (data ?? []) as HomepageSection[];
+
+  // Sekcije dodate u kodu posle redizajna upisuju se u bazu iz seed sadržaja,
+  // da bi mogle da se uređuju. Postojeći redovi se ne diraju.
+  const known = new Set(rows.map((r) => r.key));
+  const missing = HOMEPAGE_SECTIONS.filter((s) => !known.has(s.key))
+    .map(({ key, title, is_visible, sort_order, content }) => ({ key, title, is_visible, sort_order, content }));
+  if (!rows.length || !missing.length) return rows;
+  const { error: insertError } = await sb().from('homepage_sections').insert(missing);
+  if (insertError) throw insertError;
+  return adminHomepage();
 }
 
 /** Članci strane „U prostoru” (seed dok red ne postoji u bazi). */

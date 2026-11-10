@@ -120,7 +120,7 @@ export function ProductForm({ product, categories }: {
               <Field label="SEO opis" wide hint="Preporuka: do 160 karaktera.">
                 <textarea name="seo_description" rows={3} className="field resize-y" maxLength={300} defaultValue={product?.seo_description ?? ''} />
               </Field>
-              <Field label="OG slika" wide hint="Putanja iz Medija ili /assets/... adresa.">
+              <Field label="OG slika" wide hint="Slika pri deljenju linka (Facebook, Viber…): 1200 × 630 px. Putanja iz Medija ili /assets/... adresa. Prazno = naslovna fotografija proizvoda.">
                 <input name="og_image" className="field" defaultValue={product?.og_image ?? ''} />
               </Field>
             </div>

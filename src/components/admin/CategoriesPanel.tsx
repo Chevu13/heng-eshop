@@ -41,6 +41,7 @@ function CategoryFields({ category }: { category: Category | null }) {
           placeholder="/assets/heng/... ili putanja iz Medija"
           defaultValue={category?.cover_image ?? ''}
         />
+        <p className="mt-1.5 font-body text-[12px] text-ink/45">1600 × 1200 px (4:3), motiv na sredini. Ista slika je baner na strani kategorije i krug na strani Proizvodi (u krugu se vidi samo sredina).</p>
       </div>
       <div>
         <label className="field-label">Redosled</label>

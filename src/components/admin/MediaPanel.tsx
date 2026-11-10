@@ -40,6 +40,7 @@ export function MediaPanel({ productId, media, variants }: {
                   name="url" required className="field"
                   placeholder="/assets/heng/products/model-01/model-01-crna-mat.jpg"
                 />
+                <p className="mt-1.5 font-body text-[12px] text-ink/45">Fotografije proizvoda: 1600 × 2000 px (4:5, uspravna), proizvod na sredini. Tako se vide cele, bez traka sa strane.</p>
               </div>
               <div>
                 <label className="field-label">Tip</label>
@@ -58,6 +59,7 @@ export function MediaPanel({ productId, media, variants }: {
               <div className="sm:col-span-2">
                 <label className="field-label">Poster (za video)</label>
                 <input name="poster_url" className="field" placeholder="Obavezno kada je tip video" />
+                <p className="mt-1.5 font-body text-[12px] text-ink/45">1600 × 2000 px (4:5), kao i fotografije.</p>
               </div>
               <div className="sm:col-span-2">
                 <label className="field-label">Alt tekst *</label>

@@ -8,10 +8,13 @@ import { Badge } from './AdminUI';
 
 /** Opis polja po sekciji — pomaže administratoru da zna šta sme da menja. */
 const HINTS: Record<string, string> = {
-  hero: 'eyebrow, heading, body · primaryLabel/primaryHref · mediaUrl, mediaAlt · mediaUrlMobile (opciono, slika za telefon 1080 × 1920) · videoUrl, videoPoster (kada postoji video).',
-  categories: 'items — niz {title, body, href, ctaLabel, mediaUrl, mediaUrlMobile (opciono, za telefon 1080 × 1680), mediaAlt, mediaPosition}. Predviđena su dva vizuala.',
-  material: 'eyebrow, heading, body · points — niz {title, text} · mediaUrl, mediaAlt · ctaLabel, ctaHref.',
-  handles: 'ista polja kao „material”. Sekcija se prikazuje u obrnutom rasporedu (tekst levo, fotografija desno).',
+  hero: 'heading, body · primaryLabel/primaryHref · mediaUrl — SLIKA 2400 × 1250 px (široka; sredinu pokriva okvir sa tekstom, motiv neka bude levo i desno) · mediaPosition (kadar, npr. „center 60%”) · mediaUrlMobile — opciono, SLIKA ZA TELEFON 1200 × 1400 px · mediaAlt · videoUrl, videoPoster.',
+  categories: 'heading · items — niz {title, href, mediaUrl, mediaAlt, mediaPosition}. SLIKE 1600 × 1600 px (kvadrat). href npr. /kolekcija/kamene-rucke.',
+  why: 'heading · items — niz {icon, title, text}; icon: help, shield, ruler ili truck. Bez slike.',
+  story: 'heading, body · ctaLabel, ctaHref. Bez slike.',
+  material: 'heading, body · mediaUrl — SLIKA 1800 × 1350 px (4:3, motiv na sredini) · mediaAlt · ctaLabel, ctaHref.',
+  handles: 'ista polja kao blok „Držači”: SLIKA 1800 × 1350 px (4:3, motiv na sredini).',
+  bespoke: 'ista polja kao blok „Držači”: SLIKA 1800 × 1350 px (4:3, motiv na sredini).',
 };
 
 export function SectionEditor({ section, label }: { section: HomepageSection; label: string }) {

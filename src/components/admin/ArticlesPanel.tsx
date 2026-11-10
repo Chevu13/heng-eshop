@@ -57,6 +57,7 @@ function ArticleForm({ article, onDone }: { article?: Article; onDone?: () => vo
                 placeholder="katalog/moja-fotografija.jpg"
               />
               <p className="mt-1.5 font-body text-[12px] text-ink/45">
+                1920 × 1080 px (16:9), motiv na sredini — na kartici se seku ivice levo i desno.
                 Otpremite je u <a href="/admin/mediji" target="_blank" className="link-gold">Medije</a> i
                 nalepite kopiranu putanju.
               </p>

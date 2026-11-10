@@ -13,6 +13,18 @@ import { Badge } from './AdminUI';
 export interface MediaFile { path: string; name: string; size: number; type: string }
 export interface LocalAsset { path: string; alt: string; group: string; original: string }
 
+/** Dimenzije slika po mestu na sajtu — ista uputstva stoje i pored svakog polja. */
+const SIZES: [string, string][] = [
+  ['Početna — veliki baner', '2400 × 1250'],
+  ['Početna — baner za telefon (opciono)', '1200 × 1400'],
+  ['Početna — kartice „Kolekcija”', '1600 × 1600'],
+  ['Početna — blokovi slika + tekst', '1800 × 1350'],
+  ['Kategorija (baner i krug)', '1600 × 1200'],
+  ['Fotografije proizvoda i obrada', '1600 × 2000'],
+  ['Članci (U prostoru)', '1920 × 1080'],
+  ['Slika za deljenje linka (OG)', '1200 × 630'],
+];
+
 function kb(bytes: number) {
   return bytes > 1024 * 1024
     ? `${(bytes / 1024 / 1024).toFixed(1)} MB`
@@ -89,6 +101,16 @@ export function MediaLibrary({ files, error, local }: {
         <p className="mx-auto mt-2 max-w-md font-body text-[13px] text-ink/55">
           JPG, PNG, WEBP, AVIF, MP4 ili WEBM — do 25 MB po fajlu.
         </p>
+        <details className="mx-auto mt-4 max-w-md text-left font-body text-[13px] text-ink/65">
+          <summary className="cursor-pointer text-center text-ink/80 underline underline-offset-4">Preporučene dimenzije slika</summary>
+          <ul className="mt-3 space-y-1.5">
+            {SIZES.map(([where, size]) => (
+              <li key={where} className="flex justify-between gap-4 border-b border-ink/8 pb-1.5">
+                <span>{where}</span><span className="shrink-0 tabular-nums text-ink">{size}</span>
+              </li>
+            ))}
+          </ul>
+        </details>
         <button
           onClick={() => inputRef.current?.click()}
           disabled={pending}

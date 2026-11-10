@@ -78,6 +78,7 @@ function VariantFields({ variant }: { variant: ProductVariant | null }) {
           placeholder="/assets/heng/products/model-01/model-01-crna-mat.jpg ili putanja iz Medija"
           defaultValue={variant?.main_image ?? ''}
         />
+        <p className="mt-1.5 font-body text-[12px] text-ink/45">1600 × 2000 px (4:5, uspravna), proizvod na sredini, ista pozadina kao ostale fotografije proizvoda.</p>
       </div>
       <div className="sm:col-span-2 lg:col-span-3">
         <label className="flex cursor-pointer items-center gap-3 rounded-sm border border-ink/12 p-4">

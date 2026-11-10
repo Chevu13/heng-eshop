@@ -78,7 +78,7 @@ export function ProductForm({ product, categories }: {
               <Field label="Šifra (SKU)">
                 <input name="sku" className="field" defaultValue={product?.sku ?? ''} />
               </Field>
-              <Field label="Kratak opis" wide hint="Prikazuje se ispod naziva na stranici proizvoda.">
+              <Field label="Kratak opis" wide hint="Opis za Google i deljenje linka. Na stranici proizvoda se prikazuje samo ako je Pun opis prazan.">
                 <textarea name="short_description" rows={3} className="field resize-y" defaultValue={product?.short_description ?? ''} />
               </Field>
               <Field label="Pun opis" wide>

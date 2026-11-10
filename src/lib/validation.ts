@@ -84,6 +84,21 @@ export const ALLOWED_MEDIA_TYPES = [
   'image/jpeg', 'image/png', 'image/webp', 'image/avif', 'video/mp4', 'video/webm',
 ];
 
+const MEDIA_BY_EXT: Record<string, string> = {
+  jpg: 'image/jpeg', jpeg: 'image/jpeg', jfif: 'image/jpeg', png: 'image/png',
+  webp: 'image/webp', avif: 'image/avif', mp4: 'video/mp4', webm: 'video/webm',
+};
+
+/**
+ * Vrsta medija po nastavku imena, pa tek onda po onome što javi pregledač —
+ * Windows za .jpg ume da prijavi „image/pjpeg”, „image/jpg” ili ništa.
+ */
+export function mediaType(name: string, reported: string): string | null {
+  const byExt = MEDIA_BY_EXT[name.split('.').pop()?.toLowerCase() ?? ''];
+  if (byExt) return byExt;
+  return ALLOWED_MEDIA_TYPES.includes(reported) ? reported : null;
+}
+
 /** Uklanja kontrolne karaktere i skraćuje unos pre upisa u bazu. */
 export function sanitize(input: string, max = 4000): string {
   return input.replace(/[\u0000-\u001F\u007F]/g, ' ').trim().slice(0, max);

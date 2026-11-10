@@ -29,27 +29,21 @@ export default async function InSpacePage({
     <>
       <JsonLd data={breadcrumbLd([{ name: 'U prostoru', url: '/u-prostoru' }])} />
 
-      <section className="grid bg-maroon-deep lg:min-h-[74svh] lg:grid-cols-12">
-        <div className="heng-container flex flex-col justify-end pb-14 pt-32 lg:col-span-5 lg:pb-20 lg:pr-10 lg:pt-40">
-          <p className="heng-eyebrow mb-5" style={{ color: 'var(--color-gold)' }}>
-            Ideje. Saveti. Priče.
-          </p>
-          <h1 className="display-caps text-[clamp(2.2rem,5.4vw,3.6rem)] text-ivory">U prostoru</h1>
-          <p className="mt-6 max-w-[44ch] font-body text-[15px] font-light leading-[1.75] text-ivory/74 sm:text-[16px]">
+      {/* Isti baner kao na strani Proizvodi: tekst levo, fotografija desno. */}
+      <section className="grid bg-maroon-deep md:min-h-[440px] md:grid-cols-2 lg:min-h-[540px]">
+        <div className="flex flex-col justify-center px-6 py-12 sm:px-8 md:py-16 lg:px-12 xl:px-16">
+          <h1 className="title-bold text-[clamp(1.4rem,2.2vw,1.9rem)] text-ivory">U prostoru</h1>
+          <p className="mt-4 max-w-[46ch] font-body text-[15px] leading-[1.75] text-ivory/85 sm:text-[16px]">
             Istražite kako HENG proizvodi nalaze svoje mesto u različitim enterijerima — od modernih do
             klasičnih, uz praktične savete i inspirativne priče.
           </p>
-          <a href="#clanci" className="link-arrow mt-10">
-            <span>Istraži članke</span>
-            <span className="link-arrow__line" aria-hidden="true" />
-          </a>
         </div>
-        <div className="relative aspect-[4/3] lg:col-span-7 lg:aspect-auto">
+        <div className="relative aspect-[4/3] md:aspect-auto">
           <Image
             src="/assets/heng/interiors/mermer-detalj-flase-i-case.jpg"
             alt="Mermerni zid sa HENG nosačima za flaše i letvom za čaše"
             fill priority quality={82}
-            sizes="(max-width: 1024px) 100vw, 58vw"
+            sizes="(max-width: 768px) 100vw, 50vw"
             className="object-cover"
           />
         </div>

@@ -6,7 +6,7 @@ import { requireAdmin } from '@/lib/auth';
 import { createAdminSupabase, createServerSupabase } from '@/lib/supabase/server';
 import { sendMail } from '@/lib/mail';
 import { isEmailConfigured, SITE_URL } from '@/lib/env';
-import { sanitize, ALLOWED_MEDIA_TYPES, MAX_UPLOAD_BYTES } from '@/lib/validation';
+import { sanitize, mediaType, MAX_UPLOAD_BYTES } from '@/lib/validation';
 import { slugify } from '@/lib/format';
 import { publicMediaUrl, resolveMediaUrl } from '@/lib/admin/media';
 import { ASSET_MANIFEST } from '@/lib/data/asset-manifest';
@@ -260,22 +260,27 @@ export async function uploadMedia(fd: FormData): Promise<ActionResult> {
     if (file.size > MAX_UPLOAD_BYTES * 2.5) {
       return FAIL(`„${file.name}” je veći od dozvoljenih 25 MB.`);
     }
-    if (!ALLOWED_MEDIA_TYPES.includes(file.type)) {
-      return FAIL(`Format „${file.type || 'nepoznat'}” nije podržan.`);
-    }
+    const type = mediaType(file.name, file.type);
+    if (!type) return FAIL(`Format fajla „${file.name}” nije podržan.`);
     const ext = file.name.split('.').pop()?.toLowerCase().replace(/[^a-z0-9]/g, '') ?? 'bin';
     const base = slugify(file.name.replace(/\.[^.]+$/, '')) || 'medij';
     const path = `katalog/${base}-${Date.now().toString(36)}.${ext}`;
 
     const { error } = await sb.storage
       .from('heng-media')
-      .upload(path, await file.arrayBuffer(), { contentType: file.type, upsert: false });
+      .upload(path, await file.arrayBuffer(), { contentType: type, upsert: false });
     if (error) return FAIL(`Otpremanje „${file.name}” nije uspelo.`);
     urls.push(publicMediaUrl(path));
   }
 
   revalidatePath('/admin/mediji');
   return { ...OK(`Otpremljeno: ${files.length} ${files.length === 1 ? 'fajl' : 'fajla'}.`), urls };
+}
+
+/** Posle otpremanja iz pregledača (MediaLibrary) osvežava listu medija. */
+export async function mediaUploaded(): Promise<void> {
+  await client();
+  revalidatePath('/admin/mediji');
 }
 
 export interface PickerImage { url: string; name: string }

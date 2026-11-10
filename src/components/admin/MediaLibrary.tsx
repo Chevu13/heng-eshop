@@ -2,7 +2,10 @@
 
 import Image from 'next/image';
 import { useRef, useState, useTransition } from 'react';
-import { uploadMedia, deleteMediaFile } from '@/lib/admin/actions';
+import { mediaUploaded, deleteMediaFile } from '@/lib/admin/actions';
+import { createClient } from '@/lib/supabase/client';
+import { slugify } from '@/lib/format';
+import { mediaType } from '@/lib/validation';
 import { publicMediaUrl } from '@/lib/admin/media';
 import { ActionButton } from './FormShell';
 import { Badge } from './AdminUI';
@@ -45,13 +48,26 @@ export function MediaLibrary({ files, error, local }: {
   const inputRef = useRef<HTMLInputElement>(null);
   const [tab, setTab] = useState<'storage' | 'lokalni'>('storage');
 
+  // Fajlovi idu iz pregledača pravo u Supabase Storage (kao prijavljen admin),
+  // mimo servera — Vercel ne prima zahteve veće od 4,5 MB.
   function upload(list: FileList | null) {
     if (!list?.length) return;
-    const fd = new FormData();
-    Array.from(list).forEach((f) => fd.append('files', f));
+    const files = Array.from(list);
     start(async () => {
-      const res = await uploadMedia(fd);
-      setMessage({ ok: res.ok, text: res.message });
+      const sb = createClient();
+      if (!sb) { setMessage({ ok: false, text: 'Supabase nije podešen.' }); return; }
+      for (const file of files) {
+        const type = mediaType(file.name, file.type);
+        if (!type) { setMessage({ ok: false, text: `Format fajla „${file.name}” nije podržan.` }); return; }
+        if (file.size > 25 * 1024 * 1024) { setMessage({ ok: false, text: `„${file.name}” je veći od 25 MB.` }); return; }
+        const ext = file.name.split('.').pop()?.toLowerCase().replace(/[^a-z0-9]/g, '') || 'bin';
+        const base = slugify(file.name.replace(/\.[^.]+$/, '')) || 'medij';
+        const path = `katalog/${base}-${Date.now().toString(36)}.${ext}`;
+        const { error } = await sb.storage.from('heng-media').upload(path, file, { contentType: type, upsert: false });
+        if (error) { setMessage({ ok: false, text: `Otpremanje „${file.name}” nije uspelo: ${error.message}` }); return; }
+      }
+      await mediaUploaded();
+      setMessage({ ok: true, text: `Otpremljeno: ${files.length} ${files.length === 1 ? 'fajl' : 'fajla'}.` });
     });
   }
 
@@ -82,7 +98,7 @@ export function MediaLibrary({ files, error, local }: {
         </button>
         <input
           ref={inputRef} type="file" multiple className="sr-only"
-          accept="image/jpeg,image/png,image/webp,image/avif,video/mp4,video/webm"
+          accept=".jpg,.jpeg,.jfif,.png,.webp,.avif,.mp4,.webm,image/jpeg,image/png,image/webp,image/avif,video/mp4,video/webm"
           onChange={(e) => upload(e.target.files)}
         />
         {message && (

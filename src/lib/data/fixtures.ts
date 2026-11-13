@@ -374,6 +374,17 @@ export const HOMEPAGE_SECTIONS: HomepageSection[] = [
       ctaLabel: 'Pogledaj projekte', ctaHref: '/projekti',
     },
   },
+  {
+    // Baner na vrhu strane /u-prostoru — uređuje se na /admin/u-prostoru.
+    id: 'hs-inspace-banner', key: 'inspace_banner', title: 'U prostoru — baner', is_visible: true, sort_order: 90,
+    content: {
+      heading: 'U prostoru',
+      body: 'Istražite kako HENG proizvodi nalaze svoje mesto u različitim enterijerima — od modernih do ' +
+        'klasičnih, uz praktične savete i inspirativne priče.',
+      mediaUrl: '/assets/heng/interiors/mermer-detalj-flase-i-case.jpg',
+      mediaAlt: 'Mermerni zid sa HENG nosačima za flaše i letvom za čaše',
+    },
+  },
 ];
 
 export const SITE_SETTINGS: SiteSettings = {

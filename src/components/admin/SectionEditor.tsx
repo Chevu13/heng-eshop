@@ -15,6 +15,7 @@ const HINTS: Record<string, string> = {
   material: 'heading, body · mediaUrl — SLIKA 1800 × 1350 px (4:3, motiv na sredini) · mediaAlt · ctaLabel, ctaHref.',
   handles: 'ista polja kao blok „Držači”: SLIKA 1800 × 1350 px (4:3, motiv na sredini).',
   bespoke: 'ista polja kao blok „Držači”: SLIKA 1800 × 1350 px (4:3, motiv na sredini).',
+  inspace_banner: 'heading (naslov), body (tekst) · mediaUrl — SLIKA 1600 × 1200 px (4:3, motiv na sredini) · mediaAlt (opis slike).',
 };
 
 export function SectionEditor({ section, label }: { section: HomepageSection; label: string }) {

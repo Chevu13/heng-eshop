@@ -4,7 +4,9 @@ import Link from 'next/link';
 import { ArticleCard } from '@/components/journal/ArticleCard';
 import { Reveal } from '@/components/ui/Reveal';
 import { breadcrumbLd, JsonLd } from '@/lib/seo';
-import { getArticles } from '@/lib/data/repository';
+import { getArticles, getSection } from '@/lib/data/repository';
+import { HOMEPAGE_SECTIONS } from '@/lib/data/fixtures';
+import { resolveMediaUrl } from '@/lib/admin/media';
 import { ARTICLE_CATEGORIES } from '@/lib/data/articles';
 
 export const revalidate = 600;
@@ -20,7 +22,11 @@ export default async function InSpacePage({
   searchParams,
 }: { searchParams: { kategorija?: string } }) {
   const active = ARTICLE_CATEGORIES.find((c) => c.slug === searchParams.kategorija)?.slug;
-  const all = await getArticles();
+  const [all, bannerRow] = await Promise.all([getArticles(), getSection('inspace_banner')]);
+  const banner = {
+    ...(HOMEPAGE_SECTIONS.find((s) => s.key === 'inspace_banner')?.content ?? {}),
+    ...(bannerRow?.content ?? {}),
+  } as { heading?: string; body?: string; mediaUrl?: string; mediaAlt?: string };
   const articles = active ? all.filter((a) => a.category === active) : all;
 
   const tabs = [{ slug: undefined, label: 'Sve' }, ...ARTICLE_CATEGORIES];
@@ -32,16 +38,17 @@ export default async function InSpacePage({
       {/* Isti baner kao na strani Proizvodi: tekst levo, fotografija desno. */}
       <section className="grid bg-maroon-deep md:min-h-[440px] md:grid-cols-2 lg:min-h-[540px]">
         <div className="flex flex-col justify-center px-6 py-12 sm:px-8 md:py-16 lg:px-12 xl:px-16">
-          <h1 className="title-bold text-[clamp(1.4rem,2.2vw,1.9rem)] text-ivory">U prostoru</h1>
-          <p className="mt-4 max-w-[46ch] font-body text-[15px] leading-[1.75] text-ivory/85 sm:text-[16px]">
-            Istražite kako HENG proizvodi nalaze svoje mesto u različitim enterijerima — od modernih do
-            klasičnih, uz praktične savete i inspirativne priče.
-          </p>
+          <h1 className="title-bold text-[clamp(1.4rem,2.2vw,1.9rem)] text-ivory">{banner.heading}</h1>
+          {banner.body && (
+            <p className="mt-4 max-w-[46ch] font-body text-[15px] leading-[1.75] text-ivory/85 sm:text-[16px]">
+              {banner.body}
+            </p>
+          )}
         </div>
         <div className="relative aspect-[4/3] md:aspect-auto">
           <Image
-            src="/assets/heng/interiors/mermer-detalj-flase-i-case.jpg"
-            alt="Mermerni zid sa HENG nosačima za flaše i letvom za čaše"
+            src={resolveMediaUrl(banner.mediaUrl ?? '/assets/heng/interiors/mermer-detalj-flase-i-case.jpg')}
+            alt={banner.mediaAlt ?? ''}
             fill priority quality={82}
             sizes="(max-width: 768px) 100vw, 50vw"
             className="object-cover"

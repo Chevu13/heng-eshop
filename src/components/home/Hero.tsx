@@ -24,7 +24,7 @@ export function Hero({ content }: { content: HeroContent }) {
           imageUrl={content.mediaUrl}
           imageUrlMobile={content.mediaUrlMobile}
           imageAlt={content.mediaAlt ?? ''}
-          imagePosition={content.mediaPosition}
+          imagePosition={content.mediaPosition || undefined}
           videoUrl={content.videoUrl ?? null}
           videoPoster={content.videoPoster ?? null}
         />

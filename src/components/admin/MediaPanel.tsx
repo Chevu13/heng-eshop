@@ -6,6 +6,7 @@ import type { ProductMedia, ProductVariant } from '@/types';
 import { FormShell, ActionButton } from './FormShell';
 import { attachMedia, detachMedia, updateMedia } from '@/lib/admin/actions';
 import { resolveMediaUrl } from '@/lib/admin/media';
+import { ImagePicker } from './ImagePicker';
 
 export function MediaPanel({ productId, media, variants }: {
   productId: string; media: ProductMedia[]; variants: ProductVariant[];
@@ -35,12 +36,10 @@ export function MediaPanel({ productId, media, variants }: {
           <FormShell action={(fd) => attachMedia(productId, fd)} submitLabel="Dodaj u galeriju">
             <div className="grid gap-5 sm:grid-cols-2">
               <div className="sm:col-span-2">
-                <label className="field-label">URL ili putanja *</label>
-                <input
-                  name="url" required className="field"
-                  placeholder="/assets/heng/products/model-01/model-01-crna-mat.jpg"
+                <ImagePicker
+                  label="Fotografija ili video *" name="url" accept="image/*,video/mp4,video/webm,.jpg,.jpeg,.jfif,.mp4,.webm"
+                  hint="Fotografije proizvoda: 1600 × 2000 px (4:5, uspravna), proizvod na sredini. Tako se vide cele, bez traka sa strane."
                 />
-                <p className="mt-1.5 font-body text-[12px] text-ink/45">Fotografije proizvoda: 1600 × 2000 px (4:5, uspravna), proizvod na sredini. Tako se vide cele, bez traka sa strane.</p>
               </div>
               <div>
                 <label className="field-label">Tip</label>
@@ -57,9 +56,10 @@ export function MediaPanel({ productId, media, variants }: {
                 </select>
               </div>
               <div className="sm:col-span-2">
-                <label className="field-label">Poster (za video)</label>
-                <input name="poster_url" className="field" placeholder="Obavezno kada je tip video" />
-                <p className="mt-1.5 font-body text-[12px] text-ink/45">1600 × 2000 px (4:5), kao i fotografije.</p>
+                <ImagePicker
+                  label="Poster (samo za video)" name="poster_url"
+                  hint="Slika koja stoji dok se video ne pokrene: 1600 × 2000 px (4:5)."
+                />
               </div>
               <div className="sm:col-span-2">
                 <label className="field-label">Alt tekst *</label>

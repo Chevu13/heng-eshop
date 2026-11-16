@@ -7,6 +7,7 @@ import { FormShell, ActionButton } from './FormShell';
 import { saveVariant, deleteVariant } from '@/lib/admin/actions';
 import { resolveMediaUrl } from '@/lib/admin/media';
 import { FINISHES } from '@/lib/data/fixtures';
+import { ImagePicker } from './ImagePicker';
 
 function VariantFields({ variant }: { variant: ProductVariant | null }) {
   const [swatch, setSwatch] = useState(variant?.finish_swatch ?? '#1C1416');
@@ -72,13 +73,10 @@ function VariantFields({ variant }: { variant: ProductVariant | null }) {
         <input name="sort_order" type="number" className="field" defaultValue={variant?.sort_order ?? 0} />
       </div>
       <div className="sm:col-span-2 lg:col-span-3">
-        <label className="field-label">Glavna fotografija</label>
-        <input
-          name="main_image" className="field"
-          placeholder="/assets/heng/products/model-01/model-01-crna-mat.jpg ili putanja iz Medija"
-          defaultValue={variant?.main_image ?? ''}
+        <ImagePicker
+          label="Glavna fotografija" name="main_image" defaultValue={variant?.main_image ?? ''}
+          hint="1600 × 2000 px (4:5, uspravna), proizvod na sredini, ista pozadina kao ostale fotografije proizvoda."
         />
-        <p className="mt-1.5 font-body text-[12px] text-ink/45">1600 × 2000 px (4:5, uspravna), proizvod na sredini, ista pozadina kao ostale fotografije proizvoda.</p>
       </div>
       <div className="sm:col-span-2 lg:col-span-3">
         <label className="flex cursor-pointer items-center gap-3 rounded-sm border border-ink/12 p-4">

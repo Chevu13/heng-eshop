@@ -3,9 +3,7 @@
 import Image from 'next/image';
 import { useRef, useState, useTransition } from 'react';
 import { mediaUploaded, deleteMediaFile } from '@/lib/admin/actions';
-import { createClient } from '@/lib/supabase/client';
-import { slugify } from '@/lib/format';
-import { mediaType } from '@/lib/validation';
+import { uploadMediaFile } from '@/lib/admin/upload';
 import { publicMediaUrl } from '@/lib/admin/media';
 import { ActionButton } from './FormShell';
 import { Badge } from './AdminUI';
@@ -66,17 +64,11 @@ export function MediaLibrary({ files, error, local }: {
     if (!list?.length) return;
     const files = Array.from(list);
     start(async () => {
-      const sb = createClient();
-      if (!sb) { setMessage({ ok: false, text: 'Supabase nije podešen.' }); return; }
-      for (const file of files) {
-        const type = mediaType(file.name, file.type);
-        if (!type) { setMessage({ ok: false, text: `Format fajla „${file.name}” nije podržan.` }); return; }
-        if (file.size > 25 * 1024 * 1024) { setMessage({ ok: false, text: `„${file.name}” je veći od 25 MB.` }); return; }
-        const ext = file.name.split('.').pop()?.toLowerCase().replace(/[^a-z0-9]/g, '') || 'bin';
-        const base = slugify(file.name.replace(/\.[^.]+$/, '')) || 'medij';
-        const path = `katalog/${base}-${Date.now().toString(36)}.${ext}`;
-        const { error } = await sb.storage.from('heng-media').upload(path, file, { contentType: type, upsert: false });
-        if (error) { setMessage({ ok: false, text: `Otpremanje „${file.name}” nije uspelo: ${error.message}` }); return; }
+      try {
+        for (const file of files) await uploadMediaFile(file);
+      } catch (e) {
+        setMessage({ ok: false, text: (e as Error).message });
+        return;
       }
       await mediaUploaded();
       setMessage({ ok: true, text: `Otpremljeno: ${files.length} ${files.length === 1 ? 'fajl' : 'fajla'}.` });

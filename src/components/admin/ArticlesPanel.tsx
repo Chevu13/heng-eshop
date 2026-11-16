@@ -5,6 +5,7 @@ import { deleteArticle, saveArticle } from '@/lib/admin/actions';
 import { resolveMediaUrl } from '@/lib/admin/media';
 import { ARTICLE_CATEGORIES, categoryLabel, formatArticleDate, type Article } from '@/lib/data/articles';
 import { ActionButton, FormShell } from './FormShell';
+import { ImagePicker } from './ImagePicker';
 
 function Thumb({ url }: { url: string }) {
   return url ? (
@@ -47,28 +48,14 @@ function ArticleForm({ article, onDone }: { article?: Article; onDone?: () => vo
           <textarea name="excerpt" rows={2} className="field resize-y" defaultValue={article?.excerpt} />
           <p className="mt-1.5 font-body text-[12px] text-ink/45">Prikazuje se na kartici i u Google rezultatima.</p>
         </div>
-        <div className="grid gap-5 sm:col-span-2 sm:grid-cols-[1fr_120px]">
-          <div className="space-y-5">
-            <div>
-              <label className="field-label">Fotografija (URL ili putanja) *</label>
-              <input
-                name="mediaUrl" required className="field" value={media}
-                onChange={(e) => setMedia(e.target.value)}
-                placeholder="katalog/moja-fotografija.jpg"
-              />
-              <p className="mt-1.5 font-body text-[12px] text-ink/45">
-                1920 × 1080 px (16:9), motiv na sredini — na kartici se seku ivice levo i desno.
-                Otpremite je u <a href="/admin/mediji" target="_blank" className="link-gold">Medije</a> i
-                nalepite kopiranu putanju.
-              </p>
-            </div>
-            <div>
-              <label className="field-label">Opis fotografije (alt)</label>
-              <input name="mediaAlt" className="field" defaultValue={article?.mediaAlt} />
-            </div>
-          </div>
-          <div className="hidden aspect-square overflow-hidden rounded-sm bg-ink/5 sm:block">
-            <Thumb url={media} />
+        <div className="space-y-5 sm:col-span-2">
+          <ImagePicker
+            label="Fotografija *" name="mediaUrl" value={media} onChange={setMedia}
+            hint="1920 × 1080 px (16:9), motiv na sredini — na kartici se seku ivice levo i desno."
+          />
+          <div>
+            <label className="field-label">Opis fotografije (alt)</label>
+            <input name="mediaAlt" className="field" defaultValue={article?.mediaAlt} />
           </div>
         </div>
         <div className="sm:col-span-2">

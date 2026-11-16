@@ -7,6 +7,7 @@ import { FormShell, ActionButton } from './FormShell';
 import { saveCategory, deleteCategory } from '@/lib/admin/actions';
 import { resolveMediaUrl } from '@/lib/admin/media';
 import { Badge } from './AdminUI';
+import { ImagePicker } from './ImagePicker';
 import { slugify } from '@/lib/format';
 
 function CategoryFields({ category }: { category: Category | null }) {
@@ -35,13 +36,10 @@ function CategoryFields({ category }: { category: Category | null }) {
         <textarea name="description" rows={3} className="field resize-y" defaultValue={category?.description ?? ''} />
       </div>
       <div className="sm:col-span-2">
-        <label className="field-label">Naslovna fotografija</label>
-        <input
-          name="cover_image" className="field"
-          placeholder="/assets/heng/... ili putanja iz Medija"
-          defaultValue={category?.cover_image ?? ''}
+        <ImagePicker
+          label="Naslovna fotografija" name="cover_image" defaultValue={category?.cover_image ?? ''}
+          hint="1600 × 1200 px (4:3), motiv na sredini. Ista slika je baner na strani kategorije i krug na strani Proizvodi (u krugu se vidi samo sredina)."
         />
-        <p className="mt-1.5 font-body text-[12px] text-ink/45">1600 × 1200 px (4:3), motiv na sredini. Ista slika je baner na strani kategorije i krug na strani Proizvodi (u krugu se vidi samo sredina).</p>
       </div>
       <div>
         <label className="field-label">Redosled</label>

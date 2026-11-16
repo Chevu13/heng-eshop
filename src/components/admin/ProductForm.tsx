@@ -6,6 +6,7 @@ import type { Category, ProductFull } from '@/types';
 import { FormShell } from './FormShell';
 import { saveProduct } from '@/lib/admin/actions';
 import { slugify } from '@/lib/format';
+import { ImagePicker } from './ImagePicker';
 
 function Field({ label, children, hint, wide = false }: {
   label: string; children: React.ReactNode; hint?: string; wide?: boolean;
@@ -120,9 +121,12 @@ export function ProductForm({ product, categories }: {
               <Field label="SEO opis" wide hint="Preporuka: do 160 karaktera.">
                 <textarea name="seo_description" rows={3} className="field resize-y" maxLength={300} defaultValue={product?.seo_description ?? ''} />
               </Field>
-              <Field label="OG slika" wide hint="Slika pri deljenju linka (Facebook, Viber…): 1200 × 630 px. Putanja iz Medija ili /assets/... adresa. Prazno = naslovna fotografija proizvoda.">
-                <input name="og_image" className="field" defaultValue={product?.og_image ?? ''} />
-              </Field>
+              <div className="sm:col-span-2">
+                <ImagePicker
+                  label="OG slika (opciono)" name="og_image" defaultValue={product?.og_image ?? ''}
+                  hint="Slika pri deljenju linka (Facebook, Viber…): 1200 × 630 px. Prazno = naslovna fotografija proizvoda."
+                />
+              </div>
             </div>
           </section>
         </div>

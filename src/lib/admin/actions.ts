@@ -309,48 +309,58 @@ export async function deleteMediaFile(path: string): Promise<ActionResult> {
   return OK('Fajl je obrisan.');
 }
 
-export async function attachMedia(productId: string, fd: FormData): Promise<ActionResult> {
+/** Više fajlova odjednom (prevlačenje u galeriju); dodaju se na kraj. */
+export async function attachMediaMany(
+  productId: string, urls: string[], variantId: string | null, alt: string,
+): Promise<ActionResult> {
   const sb = await client();
-  const url = str(fd, 'url', 500);
-  if (!url) return FAIL('Unesite URL medija.');
+  const clean = urls.filter((u) => typeof u === 'string' && u.trim()).slice(0, 50);
+  if (!clean.length) return FAIL('Nema fajlova za dodavanje.');
 
-  const { count } = await sb
-    .from('product_media').select('id', { count: 'exact', head: true }).eq('product_id', productId);
+  const { data: last } = await sb
+    .from('product_media').select('sort_order').eq('product_id', productId)
+    .order('sort_order', { ascending: false }).limit(1);
+  const start = (last?.[0]?.sort_order ?? -1) + 1;
 
-  const { error } = await sb.from('product_media').insert({
+  const { error } = await sb.from('product_media').insert(clean.map((u, i) => ({
     product_id: productId,
-    variant_id: str(fd, 'variant_id', 60),
-    url,
-    kind: fd.get('kind') === 'video' ? 'video' : 'image',
-    poster_url: str(fd, 'poster_url', 500),
-    alt: str(fd, 'alt', 240),
-    is_cover: bool(fd, 'is_cover'),
-    sort_order: count ?? 0,
-  });
-  if (error) return FAIL('Medij nije dodat.');
+    variant_id: variantId || null,
+    url: sanitize(u, 500),
+    kind: /\.(mp4|webm)(\?|$)/i.test(u) ? 'video' : 'image',
+    alt: sanitize(alt, 240) || null,
+    is_cover: false,
+    sort_order: start + i,
+  })));
+  if (error) return FAIL('Fotografije nisu dodate.');
 
   revalidateStore();
   revalidatePath(`/admin/proizvodi/${productId}`);
-  return OK('Medij je dodat.');
+  return OK(clean.length === 1 ? 'Fotografija je dodata.' : `Dodato fotografija: ${clean.length}.`);
+}
+
+/** Čuva redosled galerije; prva fotografija postaje naslovna (kartica u katalogu). */
+export async function reorderMedia(productId: string, ids: string[]): Promise<ActionResult> {
+  const sb = await client();
+  for (const [i, id] of ids.entries()) {
+    const { error } = await sb
+      .from('product_media').update({ sort_order: i, is_cover: i === 0 })
+      .eq('id', id).eq('product_id', productId);
+    if (error) return FAIL('Redosled nije sačuvan.');
+  }
+  revalidateStore();
+  revalidatePath(`/admin/proizvodi/${productId}`);
+  return OK('Redosled je sačuvan.');
 }
 
 export async function updateMedia(
   productId: string, mediaId: string, fd: FormData,
 ): Promise<ActionResult> {
   const sb = await client();
-  const isCover = bool(fd, 'is_cover');
-
-  if (isCover) {
-    await sb.from('product_media').update({ is_cover: false }).eq('product_id', productId);
-  }
+  // Redosled i naslovna se menjaju strelicama/prevlačenjem (reorderMedia).
   const { error } = await sb
     .from('product_media')
-    .update({
-      alt: str(fd, 'alt', 240),
-      is_cover: isCover,
-      sort_order: Math.trunc(num(fd, 'sort_order') ?? 0),
-    })
-    .eq('id', mediaId);
+    .update({ alt: str(fd, 'alt', 240), variant_id: str(fd, 'variant_id', 60) })
+    .eq('id', mediaId).eq('product_id', productId);
   if (error) return FAIL('Izmena nije sačuvana.');
 
   revalidateStore();

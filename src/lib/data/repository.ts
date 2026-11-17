@@ -57,8 +57,9 @@ function sortProduct(p: ProductFull): ProductFull {
     variants: [...(p.variants ?? [])]
       .sort((a, b) => a.sort_order - b.sort_order)
       .map((v) => ({ ...v, main_image: src(v.main_image) })),
+    // Naslovna uvek prva, zatim po redosledu iz admina.
     media: [...(p.media ?? [])]
-      .sort((a, b) => a.sort_order - b.sort_order)
+      .sort((a, b) => Number(b.is_cover) - Number(a.is_cover) || a.sort_order - b.sort_order)
       .map((m) => ({ ...m, url: resolveMediaUrl(m.url), poster_url: src(m.poster_url) })),
   };
 }

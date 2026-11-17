@@ -50,7 +50,7 @@ export default async function EditProductPage({ params }: { params: { id: string
 
       <div className="mt-10 space-y-8">
         <VariantsPanel productId={product.id} variants={variants} />
-        <MediaPanel productId={product.id} media={product.media ?? []} variants={variants} />
+        <MediaPanel productId={product.id} productName={product.name} media={product.media ?? []} variants={variants} />
         <DangerZone productId={product.id} productName={product.name} isArchived={product.is_archived} />
       </div>
     </>

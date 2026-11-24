@@ -109,6 +109,9 @@ export interface Order {
   internal_note: string | null;
   invoice_path?: string | null;
   invoice_sent_at?: string | null;
+  company_name?: string | null;
+  company_pib?: string | null;
+  company_address?: string | null;
   created_at: string;
   items?: OrderItem[];
 }

@@ -71,25 +71,44 @@ export async function POST(request: Request) {
     );
   }
 
-  const { data: order, error } = await sb
-    .from('orders')
-    .insert({
-      reference,
-      full_name: sanitize(input.full_name, 120),
-      phone: sanitize(input.phone, 30),
-      email: sanitize(input.email, 160).toLowerCase(),
-      address: sanitize(input.address, 240),
-      city: sanitize(input.city, 80),
-      postal_code: sanitize(input.postal_code, 10),
-      note: input.note ? sanitize(input.note, 1000) : null,
-      payment: input.payment,
-      subtotal_rsd: priced.subtotal,
-      delivery_rsd: priced.delivery,
-      total_rsd: priced.total,
-      has_request_items: priced.hasRequestItems,
-    })
-    .select('id, reference')
-    .single();
+  const company = input.payment === 'predracun'
+    ? {
+        company_name: sanitize(input.company_name ?? '', 160),
+        company_pib: (input.company_pib ?? '').replace(/\s/g, ''),
+        company_address: sanitize(input.company_address ?? '', 240),
+      }
+    : null;
+  const companyText = company
+    ? `Firma: ${company.company_name}\nPIB: ${company.company_pib}\nAdresa firme: ${company.company_address}`
+    : '';
+
+  const row = {
+    reference,
+    full_name: sanitize(input.full_name, 120),
+    phone: sanitize(input.phone, 30),
+    email: sanitize(input.email, 160).toLowerCase(),
+    address: sanitize(input.address, 240),
+    city: sanitize(input.city, 80),
+    postal_code: sanitize(input.postal_code, 10),
+    note: input.note ? sanitize(input.note, 1000) : null,
+    payment: input.payment,
+    subtotal_rsd: priced.subtotal,
+    delivery_rsd: priced.delivery,
+    total_rsd: priced.total,
+    has_request_items: priced.hasRequestItems,
+  };
+
+  let { data: order, error } = await sb
+    .from('orders').insert({ ...row, ...(company ?? {}) })
+    .select('id, reference').single();
+
+  // Kolone za firmu još ne postoje (migracija 0006 nije puštena):
+  // podaci o firmi idu u napomenu, porudžbina se ne gubi.
+  if (error && company && /company_|PGRST204|42703/.test(`${error.code} ${error.message}`)) {
+    ({ data: order, error } = await sb
+      .from('orders').insert({ ...row, note: [companyText, row.note].filter(Boolean).join('\n\n') })
+      .select('id, reference').single());
+  }
 
   if (error || !order) {
     console.error('[porudzbine] upis nije uspeo', error);
@@ -120,7 +139,8 @@ export async function POST(request: Request) {
   await notify(
     `Nova porudžbina ${order.reference}`,
     `${input.full_name} · ${input.phone}\nUkupno: ${formatRsd(priced.total)}` +
-      (priced.hasRequestItems ? '\nSadrži stavke sa cenom na upit.' : ''),
+      (priced.hasRequestItems ? '\nSadrži stavke sa cenom na upit.' : '') +
+      (company ? `\n\nPlaćanje profakturom — pošaljite instrukcije za plaćanje.\n${companyText}` : ''),
   );
 
   return NextResponse.json({ reference: order.reference }, { status: 201 });

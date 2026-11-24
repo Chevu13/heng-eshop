@@ -90,6 +90,28 @@ export default async function AdminOrderPage({ params }: { params: { id: string 
             )}
           </Card>
 
+          {order.company_name && (
+            <Card>
+              <h2 className="mb-1 font-display text-[18px]" style={{ fontWeight: 600 }}>Podaci o firmi</h2>
+              <p className="mb-5 font-body text-[13px] text-ink/55">
+                Plaćanje profakturom — kupcu pošaljite instrukcije za plaćanje na{' '}
+                <a href={`mailto:${order.email}`} className="link-gold">{order.email}</a>.
+              </p>
+              <dl className="grid gap-5 sm:grid-cols-2">
+                {[
+                  { k: 'Naziv firme', v: order.company_name },
+                  { k: 'PIB', v: order.company_pib },
+                  { k: 'Adresa sedišta', v: order.company_address },
+                ].map((row) => (
+                  <div key={row.k} className={row.k === 'Naziv firme' ? 'sm:col-span-2' : ''}>
+                    <dt className="field-label mb-1">{row.k}</dt>
+                    <dd className="font-body text-[14px] tabular-nums">{row.v || '—'}</dd>
+                  </div>
+                ))}
+              </dl>
+            </Card>
+          )}
+
           <Card>
             <h2 className="mb-5 font-display text-[18px]" style={{ fontWeight: 600 }}>Kupac</h2>
             <dl className="grid gap-5 sm:grid-cols-2">

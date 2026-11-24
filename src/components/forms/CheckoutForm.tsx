@@ -52,6 +52,9 @@ export function CheckoutForm({
       city: String(fd.get('city') ?? ''),
       postal_code: String(fd.get('postal_code') ?? ''),
       note: String(fd.get('note') ?? ''),
+      company_name: String(fd.get('company_name') ?? ''),
+      company_pib: String(fd.get('company_pib') ?? ''),
+      company_address: String(fd.get('company_address') ?? ''),
       website: String(fd.get('website') ?? ''),
       payment,
       items: lines.map((l) => ({
@@ -77,7 +80,9 @@ export function CheckoutForm({
       }
 
       clear();
-      router.push(`/porudzbina-uspesna?ref=${encodeURIComponent(data.reference)}`);
+      router.push(
+        `/porudzbina-uspesna?ref=${encodeURIComponent(data.reference)}${payment === 'predracun' ? '&placanje=profaktura' : ''}`,
+      );
     } catch {
       setFormError('Veza sa serverom nije uspostavljena. Pokušajte ponovo.');
       setBusy(false);
@@ -138,13 +143,40 @@ export function CheckoutForm({
                   <span className="mt-1 block font-body text-[13px] text-ink/55">
                     {m === 'pouzecem'
                       ? 'Iznos se izmiruje kuriru pri preuzimanju pošiljke.'
-                      : 'Šaljemo predračun na email; isporuka sledi nakon uplate.'}
+                      : 'Samo za pravna lica. Instrukcije za plaćanje šaljemo na email; isporuka sledi nakon uplate.'}
                   </span>
                 </span>
               </label>
             ))}
           </div>
         </fieldset>
+
+        {payment === 'predracun' && (
+          <div className="mt-6 rounded-sm border p-5 sm:p-6" style={{ borderColor: 'var(--color-gold)' }}>
+            <h3 className="font-display text-[17px]" style={{ fontWeight: 600 }}>Podaci o firmi</h3>
+            <p className="mt-1 font-body text-[13px] text-ink/55">
+              Profaktura se izdaje na pravno lice. Upišite podatke firme na koju glasi.
+            </p>
+            <div className="mt-5 grid gap-5 sm:grid-cols-2">
+              <div className="sm:col-span-2">
+                <TextField
+                  label="Naziv firme" name="company_name" required autoComplete="organization"
+                  error={errors.company_name}
+                />
+              </div>
+              <TextField
+                label="PIB" name="company_pib" required inputMode="numeric" maxLength={9}
+                hint="9 cifara" error={errors.company_pib}
+              />
+              <div className="sm:col-span-2">
+                <TextField
+                  label="Adresa sedišta firme" name="company_address" required
+                  placeholder="Ulica i broj, grad" error={errors.company_address}
+                />
+              </div>
+            </div>
+          </div>
+        )}
       </div>
 
       <aside className="lg:col-span-5">

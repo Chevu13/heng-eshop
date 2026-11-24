@@ -10,9 +10,10 @@ export const metadata: Metadata = {
 
 export default async function OrderSuccessPage({
   searchParams,
-}: { searchParams: { ref?: string } }) {
+}: { searchParams: { ref?: string; placanje?: string } }) {
   const settings = await getSettings();
   const reference = searchParams.ref;
+  const proforma = searchParams.placanje === 'profaktura';
 
   return (
     <section
@@ -41,6 +42,19 @@ export default async function OrderSuccessPage({
               <p className="font-display text-[24px] tabular-nums text-ivory" style={{ fontWeight: 600 }}>
                 {reference}
               </p>
+            </div>
+          </Reveal>
+        )}
+
+        {proforma && (
+          <Reveal delay={0.15}>
+            <div
+              role="status"
+              className="mx-auto mt-8 max-w-[52ch] rounded-sm border px-6 py-5 font-body text-[16px] leading-[1.6] text-ivory"
+              style={{ borderColor: 'var(--color-gold)', background: 'rgba(184,147,79,0.12)' }}
+            >
+              U najkraćem roku na email ćete dobiti <b>instrukcije za plaćanje</b> (profakturu).
+              Isporuka sledi nakon uplate.
             </div>
           </Reveal>
         )}

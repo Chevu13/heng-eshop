@@ -24,8 +24,23 @@ export const checkoutSchema = z.object({
       }),
     )
     .min(1, 'Korpa je prazna.'),
+  // Profaktura (predracun) je samo za pravna lica — podaci o firmi.
+  company_name: z.string().trim().max(160).optional().or(z.literal('')),
+  company_pib: z.string().trim().max(20).optional().or(z.literal('')),
+  company_address: z.string().trim().max(240).optional().or(z.literal('')),
   // Honeypot — popunjava ga samo bot.
   website: z.string().max(0).optional().or(z.literal('')),
+}).superRefine((d, ctx) => {
+  if (d.payment !== 'predracun') return;
+  if (!d.company_name || d.company_name.length < 2) {
+    ctx.addIssue({ code: 'custom', path: ['company_name'], message: 'Unesite naziv firme.' });
+  }
+  if (!/^[0-9]{9}$/.test((d.company_pib ?? '').replace(/\s/g, ''))) {
+    ctx.addIssue({ code: 'custom', path: ['company_pib'], message: 'PIB ima tačno 9 cifara.' });
+  }
+  if (!d.company_address || d.company_address.length < 4) {
+    ctx.addIssue({ code: 'custom', path: ['company_address'], message: 'Unesite adresu sedišta firme.' });
+  }
 });
 export type CheckoutInput = z.infer<typeof checkoutSchema>;
 

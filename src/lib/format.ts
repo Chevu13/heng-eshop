@@ -54,5 +54,5 @@ export function statusLabel(status: string): string {
 }
 
 export function paymentLabel(method: string): string {
-  return method === 'predracun' ? 'Plaćanje po predračunu' : 'Plaćanje pouzećem';
+  return method === 'predracun' ? 'Plaćanje profakturom' : 'Plaćanje pouzećem';
 }

@@ -3,7 +3,7 @@ import { HeroMedia } from './HeroMedia';
 
 export interface HeroContent {
   eyebrow?: string; heading?: string; body?: string;
-  /** Natpis o akciji na vrhu slike; prazno = ne prikazuje se. */
+  /** Traka sa akcijom iznad menija (prikazuje je StoreShell). */
   notice?: string; noticeHref?: string;
   primaryLabel?: string; primaryHref?: string;
   mediaUrl?: string; mediaAlt?: string;
@@ -20,15 +20,6 @@ export interface HeroContent {
  */
 export function Hero({ content }: { content: HeroContent }) {
   return (
-    <>
-    {/* Crna traka sa akcijom iznad hero slike; prazno polje = nema trake. */}
-    {content.notice && (
-      content.noticeHref ? (
-        <Link href={content.noticeHref} className="hero-notice hover:text-gold">{content.notice}</Link>
-      ) : (
-        <p className="hero-notice">{content.notice}</p>
-      )
-    )}
     <section className="relative bg-ivory-2">
       <div className="relative h-[118vw] max-h-[560px] overflow-hidden bg-maroon-deep md:h-[52vw] md:max-h-[760px]">
         <HeroMedia
@@ -60,6 +51,5 @@ export function Hero({ content }: { content: HeroContent }) {
         </div>
       </div>
     </section>
-    </>
   );
 }

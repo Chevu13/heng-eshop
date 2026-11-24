@@ -179,7 +179,7 @@ export function Header({
         {menuOpen && (
           <motion.div
             id="mobilni-meni"
-            className="fixed inset-0 z-40 flex flex-col justify-start px-8 pt-[104px] lg:hidden"
+            className="fixed inset-0 z-40 flex flex-col justify-start px-8 pt-[calc(104px+var(--notice-h,0px))] lg:hidden"
             style={{ background: 'var(--color-maroon-deep)' }}
             initial={{ opacity: 0, y: reduce ? 0 : -12 }}
             animate={{ opacity: 1, y: 0 }}

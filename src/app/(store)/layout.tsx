@@ -1,12 +1,13 @@
 import { CartProvider } from '@/components/cart/CartProvider';
 import { StoreShell } from '@/components/layout/StoreShell';
 import { Footer } from '@/components/layout/Footer';
-import { getCategories, getSettings } from '@/lib/data/repository';
+import { getCategories, getSection, getSettings } from '@/lib/data/repository';
 import { JsonLd } from '@/lib/seo';
 import { SITE_URL } from '@/lib/env';
 
 export default async function StoreLayout({ children }: { children: React.ReactNode }) {
-  const [settings, categories] = await Promise.all([getSettings(), getCategories()]);
+  const [settings, categories, hero] = await Promise.all([getSettings(), getCategories(), getSection('hero')]);
+  const { notice, noticeHref } = (hero?.content ?? {}) as { notice?: string; noticeHref?: string };
 
   const orgLd = {
     '@context': 'https://schema.org',
@@ -29,7 +30,7 @@ export default async function StoreLayout({ children }: { children: React.ReactN
       >
         Preskoči na sadržaj
       </a>
-      <StoreShell instagramUrl={settings.instagram_url} />
+      <StoreShell instagramUrl={settings.instagram_url} notice={notice?.trim() || null} noticeHref={noticeHref?.trim() || null} />
       <main id="glavni-sadrzaj">{children}</main>
       <Footer settings={settings} categories={categories} />
       <JsonLd data={orgLd} />

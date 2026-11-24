@@ -44,7 +44,7 @@ const PAGE_BANNER: Schema = {
 const SCHEMAS: Record<string, Schema> = {
   hero: {
     fields: [
-      { k: 'notice', label: 'Obaveštenje o akciji (opciono)', placeholder: '-20% na sve nosače do 1. decembra', hint: 'Crna traka iznad velike slike na početnoj. Obrišite tekst da se traka ne prikazuje.' },
+      { k: 'notice', label: 'Obaveštenje o akciji (opciono)', placeholder: '-20% na sve nosače do 1. decembra', hint: 'Crna traka na vrhu sajta, iznad menija, na svim stranama. Obrišite tekst da se traka ne prikazuje.' },
       { k: 'noticeHref', label: 'Link obaveštenja (opciono)', hint: LINK_HINT },
       { k: 'mediaUrl', label: 'Slika — računar', type: 'image', hint: '2400 × 1250 px. Sredinu pokriva okvir sa tekstom, glavni motiv neka bude levo i desno.' },
       { k: 'mediaUrlMobile', label: 'Slika — telefon (opciono)', type: 'image', hint: '1200 × 1400 px. Bez nje telefon prikazuje sliku za računar, isečenu.' },

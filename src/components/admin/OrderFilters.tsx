@@ -7,7 +7,6 @@ const STATUSES = [
   { value: '', label: 'Svi' },
   { value: 'nova', label: 'Nova' },
   { value: 'potvrdjena', label: 'Potvrđena' },
-  { value: 'u_pripremi', label: 'U pripremi' },
   { value: 'poslata', label: 'Poslata' },
   { value: 'zavrsena', label: 'Završena' },
   { value: 'otkazana', label: 'Otkazana' },

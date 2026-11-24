@@ -385,6 +385,45 @@ export const HOMEPAGE_SECTIONS: HomepageSection[] = [
       mediaAlt: 'Mermerni zid sa HENG nosačima za flaše i letvom za čaše',
     },
   },
+  {
+    // Baner na vrhu strane /kolekcija — uređuje se na /admin/proizvodi.
+    id: 'hs-collection-banner', key: 'collection_banner', title: 'Proizvodi — baner', is_visible: true, sort_order: 91,
+    content: {
+      heading: 'Svi proizvodi',
+      body: 'Nosači za vinske flaše i čaše i ručke od prirodnog kamena — ista geometrija, pažljivo birane ' +
+        'završne obrade, za kuhinje, barove i enterijere po meri.',
+      mediaUrl: '/assets/heng/lifestyle/case-nad-barom-heng.jpg',
+      mediaAlt: 'Čaše za vino obešene na HENG nosaču iznad kućnog bara',
+    },
+  },
+  {
+    // Strana /o-nama — uređuje se na /admin/o-nama.
+    id: 'hs-about', key: 'about', title: 'O nama', is_visible: true, sort_order: 92,
+    content: {
+      heroImage: '/assets/heng/lifestyle/heng-cheers-kljucni-vizual.jpg',
+      heroAlt: 'HENG wordmark preko fotografije bara sa obešenim čašama',
+      heading: 'Detalji koji prostoru daju karakter.',
+      lead: 'HENG je srpski brend koji pravi nosače za vinske flaše i čaše od eloksirane legure aluminijuma.',
+      body: 'Polica zauzima prostor. Nosač ga oslobađa. Ta razlika je početna tačka svega što radimo — ' +
+        'umesto elementa koji se dodaje enterijeru, tražimo liniju koja iz njega proizlazi.\n\n' +
+        'Svaki model rešava tačno jedan zadatak: flašu, čašu ili niz koji od zida pravi vinski kutak. ' +
+        'Geometrija je svedena namerno — profil, prorez i dva otvora za montažu. Sve ostalo ostaje ' +
+        'fotografiji, materijalu i svetlu.\n\n' +
+        'Radimo sa arhitektama, dizajnerima enterijera, izvođačima i vlasnicima prostora koji od detalja ' +
+        'očekuju istu preciznost kao od konstrukcije.',
+      quote: 'Dizajn koji ne zauzima prostor — već ga oblikuje.',
+      image: '/assets/heng/interiors/vitrina-sa-casama.jpg',
+      imageAlt: 'Zatamnjena vitrina sa policama i nosačima za čaše',
+      approachHeading: 'Oblikovano da traje.',
+      approachBody: 'Materijal, obrada i tolerancija biraju se tako da detalj izdrži svakodnevnu upotrebu ' +
+        'i ostane dosledan kroz celu postavku.',
+      items: [
+        { title: 'Materijal', text: 'Eloksirana legura aluminijuma' },
+        { title: 'Završne obrade', text: 'Crna mat · Grafit · Zlatna · Saten zlatna' },
+        { title: 'Primena', text: 'Kuhinje, barovi, vinski zidovi, enterijeri po meri' },
+      ],
+    },
+  },
 ];
 
 export const SITE_SETTINGS: SiteSettings = {

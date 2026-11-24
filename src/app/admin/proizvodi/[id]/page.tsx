@@ -43,7 +43,7 @@ export default async function EditProductPage({ params }: { params: { id: string
             ? <Badge tone="neutral">Objavljen</Badge>
             : <Badge tone="muted">Nacrt</Badge>}
         {product.is_featured && <Badge tone="gold">Izdvojen</Badge>}
-        {product.price_on_request && <Badge tone="gold">Cena na upit</Badge>}
+        {product.price_on_request && <Badge tone="gold">Nije na stanju</Badge>}
       </div>
 
       <ProductForm product={product} categories={categories} />

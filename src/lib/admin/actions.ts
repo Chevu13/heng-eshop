@@ -57,7 +57,7 @@ export async function saveProduct(id: string | null, fd: FormData): Promise<Acti
   const salePrice = num(fd, 'sale_price_rsd');
 
   if (!priceOnRequest && price === null) {
-    return FAIL('Unesite redovnu cenu ili uključite „Cena na upit”.');
+    return FAIL('Unesite redovnu cenu ili uključite „Nije na stanju”.');
   }
   if (salePrice !== null && price !== null && salePrice >= price) {
     return FAIL('Akcijska cena mora biti niža od redovne.');

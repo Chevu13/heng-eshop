@@ -7,7 +7,7 @@ import { ProductGallery } from './ProductGallery';
 import { Accordion } from './Accordion';
 import { useCart } from '@/components/cart/CartProvider';
 import { resolvePrice } from '@/lib/pricing';
-import { formatRsd, CENA_NA_UPIT } from '@/lib/format';
+import { formatRsd, NIJE_NA_STANJU } from '@/lib/format';
 
 export function ProductDetail({ product }: { product: ProductFull }) {
   const variants = product.variants.filter((v) => v.is_active);
@@ -89,36 +89,42 @@ export function ProductDetail({ product }: { product: ProductFull }) {
 
             <h1 className="title-bold mt-3 text-[24px] lg:text-[28px]">{product.name}</h1>
 
-            <div className="mt-2 flex items-baseline gap-3 text-[16px]">
+            <div className="mt-3 flex items-baseline gap-3">
               {price.onRequest ? (
-                <span>{CENA_NA_UPIT}</span>
+                <span className="inline-flex items-center gap-2 rounded-full bg-ink/[0.06] px-3.5 py-1.5 text-[13px] font-medium text-ink/75">
+                  <span aria-hidden="true" className="h-1.5 w-1.5 rounded-full" style={{ background: 'var(--color-magenta)' }} />
+                  {NIJE_NA_STANJU}
+                </span>
               ) : (
                 <>
-                  <span style={{ color: price.sale !== null ? 'var(--color-magenta)' : undefined }}>
+                  <span
+                    className="text-[22px] font-medium tabular-nums"
+                    style={{ color: price.sale !== null ? 'var(--color-magenta)' : undefined }}
+                  >
                     {formatRsd(price.effective)}
                   </span>
                   {price.sale !== null && (
-                    <span className="text-[14px] text-ink/40 line-through">{formatRsd(price.regular)}</span>
+                    <span className="text-[15px] text-ink/40 line-through">{formatRsd(price.regular)}</span>
                   )}
                 </>
               )}
             </div>
 
             {variants.length > 0 && (
-              <div className="mt-7">
-                <p className="text-[13px] text-ink/70">
-                  Završna obrada: <span className="text-ink">{variant?.finish_name}</span>
+              <div className="mt-8">
+                <p className="text-[13px] text-ink/60">
+                  Završna obrada: <span className="font-medium text-ink">{variant?.finish_name}</span>
                 </p>
-                <div className="mt-2.5 flex flex-wrap gap-2.5" role="group" aria-label="Izbor završne obrade">
+                <div className="mt-3 flex flex-wrap gap-3" role="group" aria-label="Izbor završne obrade">
                   {variants.map((v, i) => (
                     <button
                       key={v.id} type="button" title={v.finish_name}
                       aria-label={v.finish_name} aria-pressed={i === variantIdx}
                       onClick={() => setVariantIdx(i)}
-                      className="h-9 w-9 rounded-full ring-1 ring-inset ring-ink/20"
+                      className="h-10 w-10 rounded-full ring-1 ring-inset ring-ink/15 transition-transform duration-200 hover:scale-110"
                       style={{
                         background: v.finish_swatch ?? '#8C8477',
-                        boxShadow: i === variantIdx ? '0 0 0 2px var(--color-ivory-2), 0 0 0 3.5px var(--color-ink)' : undefined,
+                        boxShadow: i === variantIdx ? '0 0 0 3px var(--color-ivory-2), 0 0 0 4.5px var(--color-maroon)' : undefined,
                       }}
                     />
                   ))}
@@ -126,38 +132,49 @@ export function ProductDetail({ product }: { product: ProductFull }) {
               </div>
             )}
 
-            <div className="mt-7 flex items-stretch gap-3">
-              <div className="flex items-center border border-ink/20">
-                <button
-                  onClick={() => setQty((q) => Math.max(1, q - 1))}
-                  className="px-4 py-3 text-[15px]" aria-label="Smanji količinu"
-                >−</button>
-                <span className="min-w-[30px] text-center text-[14px] tabular-nums" aria-live="polite">{qty}</span>
-                <button
-                  onClick={() => setQty((q) => Math.min(99, q + 1))}
-                  className="px-4 py-3 text-[15px]" aria-label="Povećaj količinu"
-                >+</button>
-              </div>
+            {price.onRequest ? (
               <button
-                onClick={addToCart}
-                className="flex-1 bg-maroon-deep px-6 py-3.5 text-[15px] font-semibold text-ivory transition-opacity hover:opacity-90"
+                disabled
+                className="mt-8 flex h-[54px] w-full cursor-not-allowed items-center justify-center rounded-full bg-ink/10 text-[15px] font-semibold text-ink/50"
               >
-                Dodaj u korpu
+                {NIJE_NA_STANJU}
               </button>
-            </div>
+            ) : (
+              <div className="mt-8 flex gap-3">
+                <div className="flex h-[54px] items-center rounded-full border border-ink/15 bg-white/70 px-1">
+                  <button
+                    onClick={() => setQty((q) => Math.max(1, q - 1))}
+                    className="flex h-11 w-11 items-center justify-center rounded-full text-[18px] transition-colors hover:bg-ink/[0.06]"
+                    aria-label="Smanji količinu"
+                  >−</button>
+                  <span className="min-w-[28px] text-center text-[15px] tabular-nums" aria-live="polite">{qty}</span>
+                  <button
+                    onClick={() => setQty((q) => Math.min(99, q + 1))}
+                    className="flex h-11 w-11 items-center justify-center rounded-full text-[18px] transition-colors hover:bg-ink/[0.06]"
+                    aria-label="Povećaj količinu"
+                  >+</button>
+                </div>
+                <button
+                  onClick={addToCart}
+                  className="flex h-[54px] flex-1 items-center justify-center gap-2.5 rounded-full bg-maroon text-[15px] font-semibold text-ivory shadow-[0_10px_28px_-14px_rgba(75,38,45,0.9)] transition-all duration-200 hover:bg-maroon-deep active:scale-[0.98]"
+                >
+                  <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M6 7h12l-1 13H7L6 7Z" /><path d="M9 7a3 3 0 0 1 6 0" />
+                  </svg>
+                  Dodaj u korpu
+                </button>
+              </div>
+            )}
+
             <Link
               href={`/kontakt?proizvod=${encodeURIComponent(product.name)}`}
-              className="mt-3 block border border-ink/25 px-6 py-3.5 text-center text-[15px] font-semibold transition-colors hover:border-ink"
+              className="mt-4 inline-flex items-center gap-2 rounded-full border border-ink/15 px-4 py-2 text-[13px] text-ink/75 transition-colors hover:border-ink/40 hover:text-ink"
             >
+              <svg aria-hidden="true" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12Z" />
+              </svg>
               Zatraži informacije
             </Link>
-
-            {price.onRequest && (
-              <p className="mt-4 text-[13px] leading-relaxed text-ink/60">
-                Cena za ovaj model se formira prema količini i obradi. Dodajte proizvod u korpu i
-                pošaljite porudžbinu — javljamo se sa ponudom pre isporuke.
-              </p>
-            )}
 
             <dl className="mt-9 space-y-5 text-[14px]">
               {[['Šifra', sku], ['Dimenzije', dimensions], ['Materijal', product.material]].map(([label, value]) => value && (

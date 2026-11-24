@@ -117,11 +117,10 @@ export const getFeaturedProducts = cache(async (): Promise<ProductFull[]> => {
 export const getRelatedProducts = cache(
   async (product: ProductFull): Promise<ProductFull[]> => {
     const all = await getProducts();
-    const sameCat = all.filter(
-      (p) => p.id !== product.id && p.category_id === product.category_id,
-    );
-    const rest = all.filter((p) => p.id !== product.id && p.category_id !== product.category_id);
-    return [...sameCat, ...rest].slice(0, 3);
+    // Samo iz iste kategorije: uz nosač se preporučuju nosači, uz ručku ručke.
+    return all
+      .filter((p) => p.id !== product.id && p.category_id === product.category_id)
+      .slice(0, 3);
   },
 );
 

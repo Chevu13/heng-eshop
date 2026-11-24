@@ -2,10 +2,11 @@ import Link from 'next/link';
 import Image from 'next/image';
 import type { Metadata } from 'next';
 import { requireAdmin } from '@/lib/auth';
-import { adminProducts } from '@/lib/admin/queries';
+import { adminHomepage, adminProducts } from '@/lib/admin/queries';
+import { SectionEditor } from '@/components/admin/SectionEditor';
 import { AdminHeading, Badge, TableEmpty } from '@/components/admin/AdminUI';
 import { ProductRowActions } from '@/components/admin/ProductRowActions';
-import { formatRsd, CENA_NA_UPIT } from '@/lib/format';
+import { formatRsd, NIJE_NA_STANJU } from '@/lib/format';
 import { resolveMediaUrl } from '@/lib/admin/media';
 
 export const metadata: Metadata = { title: 'Proizvodi' };
@@ -13,7 +14,8 @@ export const dynamic = 'force-dynamic';
 
 export default async function AdminProductsPage() {
   await requireAdmin();
-  const products = await adminProducts();
+  const [products, sections] = await Promise.all([adminProducts(), adminHomepage()]);
+  const banner = sections.find((s) => s.key === 'collection_banner');
 
   return (
     <>
@@ -22,6 +24,10 @@ export default async function AdminProductsPage() {
         description="Katalog, varijante obrada, cene i vidljivost na sajtu."
         action={<Link href="/admin/proizvodi/novi" className="btn btn-primary">Novi proizvod</Link>}
       />
+
+      {banner && (
+        <ul className="mb-8"><SectionEditor section={banner} label="Baner na vrhu strane Proizvodi" /></ul>
+      )}
 
       {products.length === 0 ? (
         <TableEmpty
@@ -69,7 +75,7 @@ export default async function AdminProductsPage() {
                     </td>
                     <td className="px-4 py-3 font-body text-[13px] tabular-nums">
                       {p.price_on_request || p.price_rsd === null
-                        ? <span className="text-ink/50">{CENA_NA_UPIT}</span>
+                        ? <span className="text-ink/50">{NIJE_NA_STANJU}</span>
                         : formatRsd(Number(p.price_rsd))}
                     </td>
                     <td className="px-4 py-3">

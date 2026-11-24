@@ -4,6 +4,16 @@ import Link from 'next/link';
 import { Reveal, ImageReveal } from '@/components/ui/Reveal';
 import { SectionHeading } from '@/components/ui/SectionHeading';
 import { breadcrumbLd, JsonLd } from '@/lib/seo';
+import { getSection } from '@/lib/data/repository';
+import { HOMEPAGE_SECTIONS } from '@/lib/data/fixtures';
+import { resolveMediaUrl } from '@/lib/admin/media';
+
+interface AboutContent {
+  heroImage?: string; heroAlt?: string; heading?: string; lead?: string; body?: string;
+  quote?: string; image?: string; imageAlt?: string;
+  approachHeading?: string; approachBody?: string;
+  items?: { title?: string; text?: string }[];
+}
 
 export const revalidate = 3600;
 
@@ -14,15 +24,20 @@ export const metadata: Metadata = {
   alternates: { canonical: '/o-nama' },
 };
 
-export default function AboutPage() {
+export default async function AboutPage() {
+  const row = await getSection('about');
+  const seed = (HOMEPAGE_SECTIONS.find((s) => s.key === 'about')?.content ?? {}) as AboutContent;
+  const c: AboutContent = { ...seed, ...((row?.content ?? {}) as AboutContent) };
+  const paragraphs = (c.body ?? '').split(/\n\s*\n/).map((p) => p.trim()).filter(Boolean);
+
   return (
     <>
       <JsonLd data={breadcrumbLd([{ name: 'O nama', url: '/o-nama' }])} />
 
       <section className="relative flex min-h-[64svh] items-end overflow-hidden" style={{ background: 'var(--color-maroon-deep)' }}>
         <Image
-          src="/assets/heng/lifestyle/heng-cheers-kljucni-vizual.jpg"
-          alt="HENG wordmark preko fotografije bara sa obešenim čašama"
+          src={resolveMediaUrl(c.heroImage || seed.heroImage || '')}
+          alt={c.heroAlt ?? ''}
           fill priority quality={82} sizes="100vw"
           className="object-cover"
         />
@@ -36,7 +51,7 @@ export default function AboutPage() {
           <h1
             className="display-caps max-w-[16ch] text-[clamp(2rem,5.4vw,3.3rem)] text-ivory"
           >
-            Detalji koji prostoru daju karakter.
+            {c.heading}
           </h1>
         </div>
       </section>
@@ -47,8 +62,7 @@ export default function AboutPage() {
             <div className="lg:col-span-7">
               <Reveal>
                 <p className="font-display text-[clamp(1.4rem,2.6vw,1.75rem)] leading-[1.4]" style={{ fontWeight: 500 }}>
-                  HENG je srpski brend koji pravi nosače za vinske flaše i čaše od eloksirane legure
-                  aluminijuma.
+                  {c.lead}
                 </p>
               </Reveal>
               <Reveal delay={0.08}>
@@ -56,38 +70,27 @@ export default function AboutPage() {
               </Reveal>
               <Reveal delay={0.12}>
                 <div className="space-y-5 font-body text-[16px] leading-[1.75] text-ink/68">
-                  <p>
-                    Polica zauzima prostor. Nosač ga oslobađa. Ta razlika je početna tačka svega što
-                    radimo — umesto elementa koji se dodaje enterijeru, tražimo liniju koja iz njega
-                    proizlazi.
-                  </p>
-                  <p>
-                    Svaki model rešava tačno jedan zadatak: flašu, čašu ili niz koji od zida pravi
-                    vinski kutak. Geometrija je svedena namerno — profil, prorez i dva otvora za
-                    montažu. Sve ostalo ostaje fotografiji, materijalu i svetlu.
-                  </p>
-                  <p>
-                    Radimo sa arhitektama, dizajnerima enterijera, izvođačima i vlasnicima prostora
-                    koji od detalja očekuju istu preciznost kao od konstrukcije.
-                  </p>
+                  {paragraphs.map((p, i) => <p key={i} className="whitespace-pre-line">{p}</p>)}
                 </div>
               </Reveal>
 
-              <Reveal delay={0.18}>
-                <p
-                  className="mt-10 font-display text-[20px] italic leading-snug"
-                  style={{ color: 'var(--color-maroon)', fontWeight: 500 }}
-                >
-                  Dizajn koji ne zauzima prostor — već ga oblikuje.
-                </p>
-              </Reveal>
+              {c.quote && (
+                <Reveal delay={0.18}>
+                  <p
+                    className="mt-10 font-display text-[20px] italic leading-snug"
+                    style={{ color: 'var(--color-maroon)', fontWeight: 500 }}
+                  >
+                    {c.quote}
+                  </p>
+                </Reveal>
+              )}
             </div>
 
             <div className="lg:col-span-5">
               <ImageReveal className="relative aspect-[4/5] overflow-hidden rounded-sm lg:sticky lg:top-28">
                 <Image
-                  src="/assets/heng/interiors/vitrina-sa-casama.jpg"
-                  alt="Zatamnjena vitrina sa policama i nosačima za čaše"
+                  src={resolveMediaUrl(c.image || seed.image || '')}
+                  alt={c.imageAlt ?? ''}
                   fill sizes="(max-width: 1024px) 92vw, 40vw"
                   className="object-cover"
                 />
@@ -101,22 +104,18 @@ export default function AboutPage() {
         <div className="heng-container">
           <SectionHeading
             eyebrow="PRISTUP"
-            heading="Oblikovano da traje."
-            body="Materijal, obrada i tolerancija biraju se tako da detalj izdrži svakodnevnu upotrebu i ostane dosledan kroz celu postavku."
+            heading={c.approachHeading ?? ''}
+            body={c.approachBody}
             tone="light"
             align="center"
           />
 
           <div className="mx-auto mt-16 grid max-w-4xl gap-px sm:grid-cols-3" style={{ background: 'rgba(184,147,79,0.28)' }}>
-            {[
-              { k: 'Materijal', v: 'Eloksirana legura aluminijuma' },
-              { k: 'Završne obrade', v: 'Crna mat · Grafit · Zlatna · Saten zlatna' },
-              { k: 'Primena', v: 'Kuhinje, barovi, vinski zidovi, enterijeri po meri' },
-            ].map((item, i) => (
-              <Reveal key={item.k} delay={i * 0.08}>
+            {(c.items ?? []).map((item, i) => (
+              <Reveal key={i} delay={i * 0.08}>
                 <div className="h-full px-6 py-8 text-center" style={{ background: 'var(--color-maroon)' }}>
-                  <p className="heng-eyebrow mb-3" style={{ color: 'var(--color-gold)' }}>{item.k}</p>
-                  <p className="font-body text-[14px] leading-relaxed text-ivory/78">{item.v}</p>
+                  <p className="heng-eyebrow mb-3" style={{ color: 'var(--color-gold)' }}>{item.title}</p>
+                  <p className="font-body text-[14px] leading-relaxed text-ivory/78">{item.text}</p>
                 </div>
               </Reveal>
             ))}

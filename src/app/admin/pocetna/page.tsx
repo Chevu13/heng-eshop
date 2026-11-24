@@ -15,7 +15,7 @@ export const dynamic = 'force-dynamic';
 const LABELS: Record<string, string> = {
   hero: 'Hero sekcija',
   categories: '01 — Kategorije',
-  why: '02 — Zašto HENG (ikonice: help, shield, ruler, truck)',
+  why: '02 — Zašto HENG',
   story: '03 — Priča o brendu',
   material: '04 — Blok: Držači za vino i čaše',
   handles: '05 — Blok: Ručke od prirodnog kamena',
@@ -30,7 +30,7 @@ export default async function AdminHomepagePage() {
     <>
       <AdminHeading
         title="Početna strana"
-        description="Tekstovi, medij, vidljivost i redosled sekcija. Svaka sekcija ima sopstvena polja u JSON obliku."
+        description="Tekstovi, slike i vidljivost sekcija."
         action={<Link href="/" target="_blank" className="btn btn-outline">Pogledaj sajt</Link>}
       />
 

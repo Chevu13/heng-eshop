@@ -67,6 +67,9 @@ export async function priceOrder(
     }
 
     const price = resolvePrice(product, variant);
+    if (price.onRequest) {
+      throw new OrderError(`„${product.name}” trenutno nije na stanju. Uklonite ga iz korpe.`);
+    }
 
     items.push({
       productId: product.id,

@@ -7,7 +7,6 @@ import type { OrderStatus } from '@/types';
 const STATUSES: { value: OrderStatus; label: string; hint: string }[] = [
   { value: 'nova', label: 'Nova', hint: 'Primljena, još nije obrađena.' },
   { value: 'potvrdjena', label: 'Potvrđena', hint: 'Kupac je potvrdio iznos i rok.' },
-  { value: 'u_pripremi', label: 'U pripremi', hint: 'Priprema se za slanje.' },
   { value: 'poslata', label: 'Poslata', hint: 'Predata kurirskoj službi.' },
   { value: 'zavrsena', label: 'Završena', hint: 'Isporučena i naplaćena.' },
   { value: 'otkazana', label: 'Otkazana', hint: 'Ne ulazi u zbir vrednosti.' },

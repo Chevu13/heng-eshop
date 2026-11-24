@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { useState } from 'react';
 import type { ProductFull } from '@/types';
 import { startingPrice } from '@/lib/pricing';
-import { formatRsd, CENA_NA_UPIT } from '@/lib/format';
+import { formatRsd, NIJE_NA_STANJU } from '@/lib/format';
 
 export function ProductCard({ product, priority = false }: { product: ProductFull; priority?: boolean }) {
   const [hover, setHover] = useState(false);
@@ -82,7 +82,7 @@ export function ProductCard({ product, priority = false }: { product: ProductFul
 
         <div className="flex items-baseline gap-2">
           {price.onRequest ? (
-            <span className="font-body text-[14px] text-ink/65">{CENA_NA_UPIT}</span>
+            <span className="font-body text-[14px] text-ink/65">{NIJE_NA_STANJU}</span>
           ) : (
             <>
               <span className="font-body text-[14px] text-ink/80 md:text-[15px]">

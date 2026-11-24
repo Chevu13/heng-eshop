@@ -79,9 +79,19 @@ export function InquiryForm({ compact = false, prefill }: { compact?: boolean; p
         )}
 
         <div className="sm:col-span-2">
+          {compact && prefill && (
+            <>
+              <input type="hidden" name="desired_products" value={prefill} />
+              <p className="mb-4 font-body text-[14px] text-ink/70">
+                Upit za proizvod: <span className="font-semibold text-ink">{prefill}</span>
+              </p>
+            </>
+          )}
           <TextAreaField
-            label="Kratak opis projekta" name="description" required rows={compact ? 5 : 6}
-            hint="Vrsta prostora, približne mere zida ili niše, željeni broj flaša i čaša."
+            label={compact ? 'Tekst upita' : 'Kratak opis projekta'} name="description" required rows={compact ? 5 : 6}
+            hint={compact
+              ? 'Napišite šta vas zanima: obrada, količina, rok isporuke…'
+              : 'Vrsta prostora, približne mere zida ili niše, željeni broj flaša i čaša.'}
             error={errors.description}
           />
         </div>

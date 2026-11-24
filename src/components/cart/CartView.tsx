@@ -142,8 +142,8 @@ export function CartView({ deliveryCost, freeThreshold }: {
             </p>
           )}
 
-          <Link href="/porucivanje" className="btn btn-primary mt-7 w-full">
-            Poručivanje
+          <Link href="/porucivanje" className="btn btn-brand mt-7 w-full">
+            Poruči
           </Link>
         </div>
       </aside>

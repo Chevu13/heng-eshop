@@ -157,14 +157,15 @@ export function ProductForm({ product, categories }: {
                 className="mt-0.5 accent-[color:var(--color-maroon)]"
               />
               <span>
-                <span className="block font-body text-[14px]">Cena na upit</span>
+                <span className="block font-body text-[14px]">Nije na stanju</span>
                 <span className="mt-1 block font-body text-[12px] text-ink/50">
-                  Na sajtu se prikazuje „Cena na upit”, bez iznosa.
+                  Na sajtu se umesto cene prikazuje „Nije na stanju” i proizvod ne može da se poruči.
+                  Cenu možete ostaviti upisanu — vraća se kad isključite ovo polje.
                 </span>
               </span>
             </label>
 
-            <div className="mt-5 space-y-5" style={{ opacity: onRequest ? 0.45 : 1 }}>
+            <div className="mt-5 space-y-5">
               <Field label="Redovna cena (RSD)">
                 <input
                   name="price_rsd" type="number" step="0.01" min="0" className="field"

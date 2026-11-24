@@ -121,11 +121,11 @@ export function CartDrawer() {
                       Korpa sadrži stavke sa cenom na upit — konačan iznos potvrđujemo pre isporuke.
                     </p>
                   )}
-                  <Link href="/korpa" onClick={closeDrawer} className="btn btn-primary mt-5 w-full">
-                    Pregled korpe
+                  <Link href="/porucivanje" onClick={closeDrawer} className="btn btn-brand mt-5 w-full">
+                    Poruči
                   </Link>
-                  <Link href="/porucivanje" onClick={closeDrawer} className="btn btn-outline mt-3 w-full">
-                    Poručivanje
+                  <Link href="/korpa" onClick={closeDrawer} className="btn btn-outline mt-3 w-full">
+                    Pregled korpe
                   </Link>
                 </footer>
               </>

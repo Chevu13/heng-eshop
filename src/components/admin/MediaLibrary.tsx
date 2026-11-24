@@ -17,6 +17,8 @@ const SIZES: [string, string][] = [
   ['Početna — baner za telefon (opciono)', '1200 × 1400'],
   ['Početna — kartice „Kolekcija”', '1600 × 1600'],
   ['Početna — blokovi slika + tekst', '1800 × 1350'],
+  ['Baner strane Proizvodi', '1600 × 1200'],
+  ['Baner strane U prostoru', '1600 × 1200'],
   ['Kategorija (baner i krug)', '1600 × 1200'],
   ['Fotografije proizvoda i obrada', '1600 × 2000'],
   ['Članci (U prostoru)', '1920 × 1080'],

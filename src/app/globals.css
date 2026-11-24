@@ -159,6 +159,25 @@
     border-color: var(--color-gold);
     transform: translateX(3px);
   }
+  /* Obaveštenje o akciji na hero slici */
+  .hero-notice {
+    @apply rounded-full px-5 py-2 text-center font-body text-[13px] font-medium text-ivory
+           shadow-lg backdrop-blur transition-colors md:px-6 md:text-[15px];
+    background: rgba(75, 38, 45, 0.92);
+    letter-spacing: 0.02em;
+  }
+
+  /* Poručivanje: bordo boja brenda */
+  .btn-brand {
+    background: var(--color-maroon);
+    color: var(--color-ivory);
+    border-color: var(--color-maroon);
+  }
+  .btn-brand:hover:not(:disabled) {
+    background: var(--color-maroon-deep);
+    border-color: var(--color-maroon-deep);
+    transform: translateX(3px);
+  }
   .btn-outline {
     background: transparent;
     color: var(--color-ink);

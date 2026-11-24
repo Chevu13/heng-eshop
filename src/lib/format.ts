@@ -1,4 +1,6 @@
 export const CENA_NA_UPIT = 'Cena na upit';
+/** Proizvod sa uključenim „Nije na stanju” (polje price_on_request) ne može da se poruči. */
+export const NIJE_NA_STANJU = 'Nije na stanju';
 
 export function formatRsd(value: number | null | undefined): string {
   if (value === null || value === undefined) return CENA_NA_UPIT;

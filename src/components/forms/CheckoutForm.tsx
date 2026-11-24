@@ -201,7 +201,7 @@ export function CheckoutForm({
             </p>
           )}
 
-          <button type="submit" disabled={busy} className="btn btn-primary mt-6 w-full">
+          <button type="submit" disabled={busy} className="btn btn-brand mt-6 w-full">
             {busy ? 'Slanje…' : 'Pošalji porudžbinu'}
           </button>
 

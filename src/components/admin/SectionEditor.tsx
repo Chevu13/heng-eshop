@@ -32,9 +32,20 @@ const BLOCK: Schema = {
   ],
 };
 
+const PAGE_BANNER: Schema = {
+  fields: [
+    { k: 'mediaUrl', label: 'Slika banera', type: 'image', hint: '1600 × 1200 px (4:3), motiv na sredini. Na računaru se malo seku gornja i donja ivica.' },
+    { k: 'mediaAlt', label: 'Opis slike' },
+    { k: 'heading', label: 'Naslov' },
+    { k: 'body', label: 'Tekst', type: 'textarea' },
+  ],
+};
+
 const SCHEMAS: Record<string, Schema> = {
   hero: {
     fields: [
+      { k: 'notice', label: 'Obaveštenje o akciji (opciono)', placeholder: '-20% na sve nosače do 1. decembra', hint: 'Natpis na vrhu velike slike na početnoj. Obrišite tekst da se ne prikazuje.' },
+      { k: 'noticeHref', label: 'Link obaveštenja (opciono)', hint: LINK_HINT },
       { k: 'mediaUrl', label: 'Slika — računar', type: 'image', hint: '2400 × 1250 px. Sredinu pokriva okvir sa tekstom, glavni motiv neka bude levo i desno.' },
       { k: 'mediaUrlMobile', label: 'Slika — telefon (opciono)', type: 'image', hint: '1200 × 1400 px. Bez nje telefon prikazuje sliku za računar, isečenu.' },
       { k: 'mediaAlt', label: 'Opis slike', hint: 'Kratko, za Google i čitače ekrana.' },
@@ -79,13 +90,28 @@ const SCHEMAS: Record<string, Schema> = {
   material: BLOCK,
   handles: BLOCK,
   bespoke: BLOCK,
-  inspace_banner: {
+  inspace_banner: PAGE_BANNER,
+  collection_banner: PAGE_BANNER,
+  about: {
     fields: [
-      { k: 'mediaUrl', label: 'Slika banera', type: 'image', hint: '1600 × 1200 px (4:3), motiv na sredini.' },
-      { k: 'mediaAlt', label: 'Opis slike' },
+      { k: 'heroImage', label: 'Velika slika na vrhu', type: 'image', hint: '2400 × 1350 px (16:9). Tekst stoji dole levo, preko tamnog prelaza.' },
+      { k: 'heroAlt', label: 'Opis velike slike' },
       { k: 'heading', label: 'Naslov' },
-      { k: 'body', label: 'Tekst', type: 'textarea' },
+      { k: 'lead', label: 'Uvodna rečenica', type: 'textarea' },
+      { k: 'body', label: 'Tekst', type: 'textarea', hint: 'Prazan red između pasusa pravi novi pasus.' },
+      { k: 'quote', label: 'Istaknuta rečenica (opciono)' },
+      { k: 'image', label: 'Slika pored teksta', type: 'image', hint: '1600 × 2000 px (4:5, uspravna).' },
+      { k: 'imageAlt', label: 'Opis slike pored teksta' },
+      { k: 'approachHeading', label: 'Naslov bordo sekcije' },
+      { k: 'approachBody', label: 'Tekst bordo sekcije', type: 'textarea' },
     ],
+    list: {
+      label: 'Kartice u bordo sekciji', item: 'Kartica',
+      fields: [
+        { k: 'title', label: 'Naslov' },
+        { k: 'text', label: 'Tekst' },
+      ],
+    },
   },
 };
 

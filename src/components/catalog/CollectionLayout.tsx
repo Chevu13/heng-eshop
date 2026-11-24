@@ -39,9 +39,9 @@ export function CollectionLayout({
       })),
     },
     {
-      key: 'availability', label: 'Cena',
+      key: 'availability', label: 'Dostupnost',
       options: [{
-        value: 'na-upit', label: 'Cena na upit',
+        value: 'na-upit', label: 'Nije na stanju',
         count: scope.filter((p) => p.price_on_request || p.price_rsd === null).length,
       }],
     },

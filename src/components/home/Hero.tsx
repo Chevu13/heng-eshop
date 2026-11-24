@@ -3,6 +3,8 @@ import { HeroMedia } from './HeroMedia';
 
 export interface HeroContent {
   eyebrow?: string; heading?: string; body?: string;
+  /** Natpis o akciji na vrhu slike; prazno = ne prikazuje se. */
+  notice?: string; noticeHref?: string;
   primaryLabel?: string; primaryHref?: string;
   mediaUrl?: string; mediaAlt?: string;
   /** Kadar fotografije na računaru, npr. „center 60%” (podrazumevano „center 30%”). */
@@ -28,6 +30,15 @@ export function Hero({ content }: { content: HeroContent }) {
           videoUrl={content.videoUrl ?? null}
           videoPoster={content.videoPoster ?? null}
         />
+        {content.notice && (
+          <div className="absolute inset-x-0 top-0 z-10 flex justify-center px-4 pt-4 md:pt-6">
+            {content.noticeHref ? (
+              <Link href={content.noticeHref} className="hero-notice hover:bg-maroon-deep">{content.notice}</Link>
+            ) : (
+              <p className="hero-notice">{content.notice}</p>
+            )}
+          </div>
+        )}
       </div>
 
       <div className="md:pointer-events-none md:absolute md:inset-0 md:flex md:items-center md:justify-center">

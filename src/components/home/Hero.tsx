@@ -43,7 +43,7 @@ export function Hero({ content }: { content: HeroContent }) {
           {content.primaryLabel && content.primaryHref && (
             <Link
               href={content.primaryHref}
-              className="mt-8 inline-block border border-maroon px-10 py-3.5 font-body text-[16px] text-maroon transition-colors hover:bg-maroon hover:text-ivory"
+              className="mt-8 inline-block border border-maroon bg-maroon px-10 py-3.5 font-body text-[16px] text-ivory transition-colors hover:border-maroon-deep hover:bg-maroon-deep"
             >
               {content.primaryLabel}
             </Link>

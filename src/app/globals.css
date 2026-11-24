@@ -159,12 +159,12 @@
     border-color: var(--color-gold);
     transform: translateX(3px);
   }
-  /* Obaveštenje o akciji na hero slici */
+  /* Crna traka sa akcijom iznad hero slike */
   .hero-notice {
-    @apply rounded-full px-5 py-2 text-center font-body text-[13px] font-medium text-ivory
-           shadow-lg backdrop-blur transition-colors md:px-6 md:text-[15px];
-    background: rgba(75, 38, 45, 0.92);
-    letter-spacing: 0.02em;
+    @apply block px-4 py-2.5 text-center font-body text-[12px] font-semibold uppercase text-ivory
+           transition-colors md:text-[13px];
+    background: var(--color-ink);
+    letter-spacing: 0.12em;
   }
 
   /* Poručivanje: bordo boja brenda */

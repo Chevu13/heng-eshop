@@ -20,6 +20,15 @@ export interface HeroContent {
  */
 export function Hero({ content }: { content: HeroContent }) {
   return (
+    <>
+    {/* Crna traka sa akcijom iznad hero slike; prazno polje = nema trake. */}
+    {content.notice && (
+      content.noticeHref ? (
+        <Link href={content.noticeHref} className="hero-notice hover:text-gold">{content.notice}</Link>
+      ) : (
+        <p className="hero-notice">{content.notice}</p>
+      )
+    )}
     <section className="relative bg-ivory-2">
       <div className="relative h-[118vw] max-h-[560px] overflow-hidden bg-maroon-deep md:h-[52vw] md:max-h-[760px]">
         <HeroMedia
@@ -30,15 +39,6 @@ export function Hero({ content }: { content: HeroContent }) {
           videoUrl={content.videoUrl ?? null}
           videoPoster={content.videoPoster ?? null}
         />
-        {content.notice && (
-          <div className="absolute inset-x-0 top-0 z-10 flex justify-center px-4 pt-4 md:pt-6">
-            {content.noticeHref ? (
-              <Link href={content.noticeHref} className="hero-notice hover:bg-maroon-deep">{content.notice}</Link>
-            ) : (
-              <p className="hero-notice">{content.notice}</p>
-            )}
-          </div>
-        )}
       </div>
 
       <div className="md:pointer-events-none md:absolute md:inset-0 md:flex md:items-center md:justify-center">
@@ -60,5 +60,6 @@ export function Hero({ content }: { content: HeroContent }) {
         </div>
       </div>
     </section>
+    </>
   );
 }
